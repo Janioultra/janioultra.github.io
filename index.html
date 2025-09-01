@@ -95,7 +95,7 @@
     
             <div class="max-w-screen-2xl mx-auto">
                 <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 no-print">
-                    <h1 id="main-title" class="text-3xl md:text-4xl font-extrabold text-gray-800 text-center md:text-left">Simulador de Potência Óptica</h1>
+                    <h1 id="main-title" class="text-3xl md:text-4xl font-extrabold text-gray-800 text-center md:text-left">Cálculo de Splittagem, Potência, Materiais e Mapeamento</h1>
             
                     <div class="flex items-center gap-2 flex-wrap justify-center">
                         <button onclick="shareProject()" title="Compartilhar Projeto" class="cta-button">
@@ -116,12 +116,6 @@
                         <button onclick="saveProject()" title="Salvar o projeto atual como um arquivo .json" class="top-button">
                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v10a2 2 0 01-2 2H7a2 2 0 01-2-2V4zm3 1a1 1 0 00-1 1v6a1 1 0 102 0V6a1 1 0 00-1-1z" /></svg>
                             Salvar Projeto
-                        </button>
-                        <button onclick="saveAsHtml()" title="Salvar como um arquivo HTML autônomo" class="top-button">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
-                            </svg>
-                            Salvar Relatório HTML
                         </button>
                     </div>
                 </div>
@@ -252,7 +246,7 @@
                         </div>
 
                         <div class="bg-white p-2 md:p-4 rounded-lg shadow-xl printable-area">
-                          <h2 class="text-2xl font-bold text-center text-gray-700 mb-4">Lista de Materiais e Ferragens</h2>
+                          <h2 class="text-2xl font-bold text-center text-gray-700 mb-4">Lista de Materiais e Orçamento</h2>
                            <p class="text-center text-sm text-gray-500 mb-4">A lista é calculada com base na aba de rede que está ativa (<span id="active-network-label" class="font-bold"></span>).</p>
                           <div class="max-w-4xl mx-auto">
                             <table class="w-full text-sm" id="materials-table"></table>
@@ -320,6 +314,7 @@
         let fiberColor = '';
         let fiberRuns = [{ type: 'Fibra Óptica 12 FO', length: 0 }];
         let manualMaterials = {};
+        let materialPrices = {};
         let activeTab = 'desbalanceada';
         
         // Estado para a Rede Desbalanceada
@@ -532,7 +527,8 @@
         function updateMaterialsList() {
             document.getElementById('active-network-label').textContent = activeTab === 'desbalanceada' ? 'Desbalanceada' : 'Balanceada';
             const table = document.getElementById('materials-table');
-            let html = `<thead class="bg-gray-100"><tr><th class="py-2 px-4 text-left w-3/4">Item</th><th class="py-2 px-4 text-right w-1/4">Quantidade</th></tr></thead><tbody>`;
+            let html = `<thead class="bg-gray-100"><tr><th class="py-2 px-4 text-left">Item</th><th class="py-2 px-4 text-center">Valor Unit.</th><th class="py-2 px-4 text-center">Qtde.</th><th class="py-2 px-4 text-right">Subtotal</th></tr></thead><tbody>`;
+            let grandTotal = 0;
             
             let ctoCount = 0;
             const hubSplitterCounts = {}, ctoSplitterCounts = {};
@@ -560,39 +556,82 @@
                     if (parts.length === 2) { totalAcopladores += (parseInt(parts[1], 10) || 0) * ctoCount; }
                 }
             }
+            
+            const fiberTotals = {};
+            fiberRuns.forEach(run => {
+                if (!fiberTotals[run.type]) {
+                    fiberTotals[run.type] = 0;
+                }
+                fiberTotals[run.type] += run.length || 0;
+            });
 
-            const totalLaunchedFiber = fiberRuns.reduce((sum, run) => sum + run.length, 0);
-            const ctoReserveFiber = ctoCount * 16;
-            const totalBaseLength = totalLaunchedFiber + ctoReserveFiber;
-            const finalCableLength = (totalBaseLength * 1.05).toFixed(0);
-            const poleCount = totalLaunchedFiber > 0 ? Math.ceil(totalLaunchedFiber / 43) : 0;
+            const fiberMaterialItems = Object.keys(fiberTotals).map(type => {
+                const totalLength = fiberTotals[type];
+                return {
+                    id: `cabo_${type.replace(/[^a-z0-9]/gi, '_')}`,
+                    name: `${type} (Lançada)`,
+                    qty: `${totalLength} m`,
+                    numericQty: totalLength,
+                    editable: false,
+                };
+            });
 
-            const allMaterials = [
-                { id: 'cabo_total', name: 'Total de Cabo Necessário', qty: `${finalCableLength} m`, editable: false }, 
-                { id: 'cto_total', name: 'Total de CTOs', qty: ctoCount, editable: false }, 
-                ...Object.entries(hubSplitterCounts).map(([name, count]) => ({ id: `hub_${name.replace(/[^a-zA-Z0-9]/g, '')}`, name: `Splitter ${activeTab === 'balanceada' ? 'Primário' : 'Desb.'} ${name}`, qty: count, editable: false })), 
-                ...Object.entries(ctoSplitterCounts).map(([name, count]) => ({ id: `cto_${name.replace(/[^a-zA-Z0-9]/g, '')}`, name: `Splitter de CTO ${name}`, qty: count, editable: false })), 
-                { id: 'acoplador', name: 'Acoplador Óptico SC/APC', qty: totalAcopladores, editable: false },
-                { id: 'bap', name: 'Braçadeira BAP', qty: poleCount, editable: true }, 
-                { id: 'supa', name: 'Suporte (SUPA)', qty: poleCount, editable: true }, 
-                { id: 'alca', name: 'Alça Preformada', qty: poleCount * 2, editable: true }, 
-                { id: 'caixa_emenda', name: 'Caixa de Emenda Óptica (Adicional)', qty: manualMaterials['caixa_emenda'] || 0, editable: true, manual: true }, 
-                { id: 'arame', name: 'Arame de Espinar (m)', qty: manualMaterials['arame'] || 0, editable: true, manual: true }, 
-                { id: 'roldana', name: 'Roldana', qty: manualMaterials['roldana'] || 0, editable: true, manual: true }
+            const poleCount = fiberRuns.reduce((sum, run) => sum + run.length, 0) > 0 ? Math.ceil(fiberRuns.reduce((sum, run) => sum + run.length, 0) / 43) : 0;
+
+            const otherMaterials = [
+                { id: 'cto_total', name: 'Total de CTOs', qty: ctoCount, numericQty: ctoCount, editable: false }, 
+                ...Object.entries(hubSplitterCounts).map(([name, count]) => ({ id: `hub_${name.replace(/[^a-zA-Z0-9]/g, '')}`, name: `Splitter ${activeTab === 'balanceada' ? 'Primário' : 'Desb.'} ${name}`, qty: count, numericQty: count, editable: false })), 
+                ...Object.entries(ctoSplitterCounts).map(([name, count]) => ({ id: `cto_${name.replace(/[^a-zA-Z0-9]/g, '')}`, name: `Splitter de CTO ${name}`, qty: count, numericQty: count, editable: false })), 
+                { id: 'acoplador', name: 'Acoplador Óptico SC/APC', qty: totalAcopladores, numericQty: totalAcopladores, editable: false },
+                { id: 'bap', name: 'Braçadeira BAP', qty: poleCount, numericQty: poleCount, editable: true }, 
+                { id: 'supa', name: 'Suporte (SUPA)', qty: poleCount, numericQty: poleCount, editable: true }, 
+                { id: 'alca', name: 'Alça Preformada', qty: poleCount * 2, numericQty: poleCount * 2, editable: true }, 
+                { id: 'caixa_emenda', name: 'Caixa de Emenda Óptica (Adicional)', qty: 0, numericQty: 0, editable: true, manual: true }, 
+                { id: 'arame', name: 'Arame de Espinar (m)', qty: 0, numericQty: 0, editable: true, manual: true }, 
+                { id: 'roldana', name: 'Roldana', qty: 0, numericQty: 0, editable: true, manual: true }
             ];
+            
+            const allMaterials = [...fiberMaterialItems, ...otherMaterials];
 
             allMaterials.forEach(item => {
-                html += `<tr class="border-b"><td class="py-2 px-4 font-semibold align-middle">${item.name}</td><td class="py-2 px-4 text-right align-middle">`;
+                const unitPrice = materialPrices[item.id] || 0;
+                let itemQty = item.editable ? (manualMaterials[item.id] !== undefined ? parseInt(manualMaterials[item.id], 10) || 0 : item.numericQty) : item.numericQty;
+                
+                 if(item.manual) itemQty = manualMaterials[item.id] || 0;
+                
+                const subtotal = itemQty * unitPrice;
+                grandTotal += subtotal;
+
+                const qtyDisplay = item.qty.toString().includes('m') ? item.qty : itemQty;
+
+                html += `<tr class="border-b">
+                    <td class="py-2 px-4 font-semibold align-middle">${item.name}</td>
+                    <td class="py-2 px-4 align-middle">
+                        <input type="text" id="price-${item.id}" oninput="saveMaterialPrice(event, '${item.id}', this.value)" value="${unitPrice > 0 ? unitPrice.toFixed(2).replace('.', ',') : ''}" placeholder="0,00" class="w-24 text-center font-bold p-1 border rounded bg-gray-50 focus:bg-white">
+                    </td>
+                    <td class="py-2 px-4 text-center align-middle">`;
+
                 if (item.editable) {
-                    const onInputHandler = `oninput="saveManualMaterial('${item.id}', this.value)"`;
+                    const onInputHandler = `oninput="saveManualMaterial(event, '${item.id}', this.value)"`;
                     let qtyValue = manualMaterials[item.id] !== undefined ? manualMaterials[item.id] : item.qty;
-                    html += `<div class="flex items-center justify-end gap-2"><input type="text" id="input-${item.id}" value="${qtyValue}" ${onInputHandler} class="w-20 text-center font-bold p-1 border rounded bg-gray-50 focus:bg-white"><button onclick="document.getElementById('input-${item.id}').focus();" title="Editar quantidade" class="p-1.5 bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 transition-colors no-print"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L14.732 3.732z" /></svg></button></div>`;
+                     if(item.manual) qtyValue = manualMaterials[item.id] || 0;
+
+                    html += `<input type="number" id="input-${item.id}" value="${qtyValue}" ${onInputHandler} class="w-20 text-center font-bold p-1 border rounded bg-gray-50 focus:bg-white">`;
                 } else {
-                    html += `<span class="font-bold text-lg">${item.qty}</span>`;
+                    html += `<span class="font-bold text-lg">${qtyDisplay}</span>`;
                 }
-                html += `</td></tr>`;
+                
+                html += `</td>
+                    <td class="py-2 px-4 text-right align-middle font-bold">${subtotal.toFixed(2).replace('.',',')}</td>
+                </tr>`;
             });
-            html += '</tbody>';
+            html += `</tbody>
+                <tfoot class="bg-gray-100 font-bold">
+                    <tr>
+                        <td colspan="3" class="py-3 px-4 text-right text-lg">Custo Total:</td>
+                        <td class="py-3 px-4 text-right text-lg">${grandTotal.toFixed(2).replace('.',',')}</td>
+                    </tr>
+                </tfoot>`;
             table.innerHTML = html;
 
             const detailsContainer = document.getElementById('materials-calculation-details');
@@ -601,23 +640,15 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 text-sm bg-gray-50 p-4 rounded-lg">
                     <div class="flex justify-between border-b pb-1">
                         <span class="font-semibold text-gray-600">Total de Fibra Lançada:</span>
-                        <span class="font-bold text-gray-800">${totalLaunchedFiber.toFixed(0)} m</span>
+                        <span class="font-bold text-gray-800">${fiberRuns.reduce((sum, run) => sum + run.length, 0).toFixed(0)} m</span>
                     </div>
                     <div class="flex justify-between border-b pb-1">
                         <span class="font-semibold text-gray-600">Total de Postes (1 a cada 43m):</span>
                         <span class="font-bold text-gray-800">${poleCount}</span>
                     </div>
-                    <div class="flex justify-between border-b pb-1">
-                        <span class="font-semibold text-gray-600">Reserva Técnica por CTO (16m/CTO):</span>
-                        <span class="font-bold text-gray-800">${ctoReserveFiber.toFixed(0)} m</span>
-                    </div>
-                    <div class="flex justify-between border-b pb-1">
-                        <span class="font-semibold text-gray-600">Folga de Segurança (5%):</span>
-                        <span class="font-bold text-gray-800">${(totalBaseLength * 0.05).toFixed(0)} m</span>
-                    </div>
-                    <div class="flex justify-between pt-2 md:col-span-2 text-base mt-2">
-                        <span class="font-bold text-gray-700">Comprimento Total de Cabo:</span>
-                        <span class="font-extrabold text-indigo-600 text-lg">${finalCableLength} m</span>
+                    <div class="flex justify-between border-b pb-1 md:col-span-2">
+                        <span class="font-semibold text-gray-600">Folga de Segurança (5% por tipo de cabo):</span>
+                        <span class="font-bold text-gray-800">Calculado individualmente</span>
                     </div>
                 </div>
             `;
@@ -696,8 +727,9 @@
         }
         
         function handleProjectNameChange(name) {
+            document.title = name.trim() ? name.trim() : 'Cálculo de Splittagem, Potência, Materiais e Mapeamento';
             projectName = name.trim();
-            document.getElementById('main-title').innerText = projectName ? `Projeto: ${projectName}` : 'Simulador de Potência Óptica';
+            document.getElementById('main-title').innerText = projectName ? `Projeto: ${projectName}` : 'Cálculo de Splittagem, Potência, Materiais e Mapeamento';
             document.getElementById('main-title-print').innerText = projectName ? `Projeto: ${projectName}` : 'Relatório de Projeto Óptico';
         }
     
@@ -730,7 +762,7 @@
                 }
                 
                 if (networkType === 'unbalanced' && field === 'splitterCto') {
-                    for (let i = index; i < networkSegments.length; i++) { networkSegments[i].splitterCto = value; }
+                    // This was the part causing the issue. Now it is removed.
                 }
 
                 if (networkType === 'unbalanced') recalculateUnbalanced();
@@ -875,6 +907,11 @@
             }
             message += `\n`;
             
+            const grandTotalElement = document.querySelector('#materials-table tfoot tr td:last-child');
+            if (grandTotalElement) {
+                message += `*Custo Total Estimado:* ${grandTotalElement.textContent}\n\n`;
+            }
+            
             message += `--- *SIMULAÇÃO REDE BALANCEADA* ---\n`;
             message += `Splitter Primário: ${balancedConfig.primarySplitter}\n`;
             message += `Splitter Secundário: ${balancedConfig.secondarySplitter}\n\n`;
@@ -910,9 +947,9 @@
         
         function saveProject() {
             const projectData = { 
-                version: "4.2", projectName, technicianName, oltPower, googleMapsUrl,
+                version: "4.3", projectName, technicianName, oltPower, googleMapsUrl,
                 oltPortNumber, dioGroup, fiberColor, fiberRuns, 
-                networkSegments, balancedConfig, balancedNetworkCtos, manualMaterials 
+                networkSegments, balancedConfig, balancedNetworkCtos, manualMaterials, materialPrices 
             };
             const blob = new Blob([JSON.stringify(projectData, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -946,6 +983,7 @@
                     balancedConfig = data.balancedConfig || { primarySplitter: '1:8', secondarySplitter: '1:8' };
                     balancedNetworkCtos = data.balancedNetworkCtos || [{ distance: 0, spliceCount: 0, geo: null, description: '', colorGroup: 0 }];
                     manualMaterials = data.manualMaterials || {};
+                    materialPrices = data.materialPrices || {};
 
                     event.target.value = '';
                     updateUIWithLoadedData();
@@ -966,7 +1004,7 @@
             const container = document.getElementById('fiber-runs-container');
             container.innerHTML = fiberRuns.map((run, index) => `
                 <div class="flex items-center justify-center gap-4 p-2 border rounded-lg">
-                    <div class="flex-1 flex flex-col items-center">
+                    <div class="flex flex-col items-center">
                         <label class="font-semibold text-gray-600">Tipo de Fibra</label>
                         <select onchange="handleFiberRunChange(${index}, 'type', this.value)" class="mt-1 w-full text-center p-1 rounded-md font-bold border-2 border-gray-300 focus:border-indigo-500">
                             ${getFiberTypeOptions(run.type)}
@@ -1004,63 +1042,44 @@
             updateMaterialsList();
         }
 
-        function saveAsHtml() {
-            const currentProjectData = {
-                projectName, technicianName, oltPower, googleMapsUrl, oltPortNumber, dioGroup, fiberColor,
-                fiberRuns, networkSegments, balancedConfig, balancedNetworkCtos, manualMaterials
-            };
-
-            const bodyClone = document.body.cloneNode(true);
-            bodyClone.querySelector('#main-logic-script')?.remove();
-            const cleanBodyHtml = bodyClone.innerHTML;
-
-            const fileContent = `
-                <!DOCTYPE html><html lang="pt-br"><head>${document.head.innerHTML}</head>
-                <body>${cleanBodyHtml}
-                <script id="main-logic-script">
-                    ${document.getElementById('main-logic-script').innerHTML}
-
-                    window.onload = function() {
-                        const savedData = ${JSON.stringify(currentProjectData)};
-                        if (savedData) {
-                            projectName = savedData.projectName || '';
-                            technicianName = savedData.technicianName || '';
-                            oltPower = savedData.oltPower || 7.00;
-                            googleMapsUrl = savedData.googleMapsUrl || '';
-                            oltPortNumber = savedData.oltPortNumber || '';
-                            dioGroup = savedData.dioGroup || '';
-                            fiberColor = savedData.fiberColor || '';
-                            fiberRuns = savedData.fiberRuns || [{ type: 'Fibra Óptica 12 FO', length: 0 }];
-                            networkSegments = savedData.networkSegments || [{ splitterHub: 'Ausente', splitterCto: 'Ausente', distance: 0, spliceCount: 0, geo: null, description: '', colorGroup: 0 }];
-                            balancedConfig = savedData.balancedConfig || { primarySplitter: '1:8', secondarySplitter: '1:8' };
-                            balancedNetworkCtos = savedData.balancedNetworkCtos || [{ distance: 0, spliceCount: 0, geo: null, description: '', colorGroup: 0 }];
-                            manualMaterials = savedData.manualMaterials || {};
-                        }
-                        updateUIWithLoadedData();
-                    };
-                <\/script></body></html>`;
-
-            const blob = new Blob([fileContent.trim()], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = Object.assign(document.createElement('a'), {
-                href: url,
-                download: `SIMULADOR_${projectName.replace(/[^a-z0-9]/gi, '_') || 'Projeto'}.html`
-            });
-            document.body.appendChild(a).click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+        function saveManualMaterial(event, id, value) {
+            const focusedElementId = event.target.id;
+            const selectionStart = event.target.selectionStart;
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                manualMaterials[id] = parseInt(value, 10) || 0;
+                updateMaterialsList();
+                
+                const focusedElement = document.getElementById(focusedElementId);
+                if (focusedElement) {
+                    focusedElement.focus({ preventScroll: true });
+                    focusedElement.setSelectionRange(selectionStart, selectionStart);
+                }
+            }, 500);
         }
-
-        function saveManualMaterial(id, value) {
-            manualMaterials[id] = value;
-            updateMaterialsList();
+        
+        function saveMaterialPrice(event, id, value) {
+            const focusedElementId = event.target.id;
+            const selectionStart = event.target.selectionStart;
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const price = parseFloat(value.replace(',', '.')) || 0;
+                materialPrices[id] = price;
+                updateMaterialsList();
+                
+                const focusedElement = document.getElementById(focusedElementId);
+                if (focusedElement) {
+                    focusedElement.focus({ preventScroll: true });
+                    focusedElement.setSelectionRange(selectionStart, selectionStart);
+                }
+            }, 500);
         }
 
         function addCto() {
             const lastSegment = networkSegments[networkSegments.length - 1];
             networkSegments.push({
                 splitterHub: 'Ausente',
-                splitterCto: lastSegment.splitterCto,
+                splitterCto: 'Ausente', // Alterado para não herdar o splitter
                 distance: 0,
                 spliceCount: 0,
                 geo: null,
@@ -1099,5 +1118,4 @@
 
 </body>
 </html>
-
 
