@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciador de CTOs</title>
+    <title>Gerenciador de CTOs (Versão Demo)</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -82,7 +82,8 @@
        @media print {
             body > .container > header,
             body .border-b.no-print,
-            body .tab-panel:not(.active-for-print) {
+            body .tab-panel:not(.active-for-print),
+            body footer {
                 display: none;
             }
 
@@ -111,25 +112,54 @@
                 <h1 id="main-title" class="text-3xl md:text-4xl font-extrabold text-gray-800 text-left">Gerenciador de CTOs</h1>
                 <p class="text-lg text-gray-500 mt-2 text-left">Planeje e calcule a potência para redes ópticas balanceadas e desbalanceadas.</p>
             </div>
-            <div class="relative">
-                <button id="project-menu-button" class="bg-white text-gray-700 font-bold py-2 px-4 rounded-lg shadow-md hover:bg-gray-100 transition flex items-center border border-gray-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 16a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" />
-                    </svg>
-                    <span>Projeto</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                    </svg>
-                </button>
-                <div id="project-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20 border">
-                    <input type="file" id="file-input" class="hidden" accept=".json" onchange="loadProject(event)">
-                    <label for="file-input" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">Abrir Projeto</label>
-                    <a href="#" onclick="saveProject()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Salvar Projeto</a>
+             <div class="flex items-center gap-4">
+                <div class="relative">
+                    <button id="project-menu-button" class="bg-white text-gray-700 font-bold py-2 px-4 rounded-lg shadow-md hover:bg-gray-100 transition flex items-center border border-gray-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 16a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" />
+                        </svg>
+                        <span>Projeto</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <div id="project-menu" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg z-20 border">
+                        <div class="py-1">
+                            <a href="#" onclick="showPremiumFeatureModal()" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" /></svg>
+                                Abrir Projeto
+                            </a>
+                            <a href="#" onclick="showPremiumFeatureModal()" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v10a2 2 0 01-2 2H7a2 2 0 01-2-2V4zm3 1a1 1 0 00-1 1v6a1 1 0 102 0V6a1 1 0 00-1-1z" /></svg>
+                                Salvar Projeto
+                            </a>
+                        </div>
+                        <div class="border-t border-gray-100"></div>
+                        <div class="py-1">
+                            <a href="#" onclick="showPremiumFeatureModal()" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v6a2 2 0 002 2h12a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7V9h6v3z" clip-rule="evenodd" /></svg>
+                                Imprimir CTOs
+                            </a>
+                            <a href="#" onclick="showPremiumFeatureModal()" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                                Relatório de Campo
+                            </a>
+                            <a href="#" onclick="showPremiumFeatureModal()" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12s-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367 2.684z" /></svg>
+                                Compartilhar
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </header>
+        
+        <div class="section-card mb-8">
+            <label for="project-name-input" class="font-bold text-lg text-gray-600 text-center block mb-2">Nome do Projeto</label>
+            <input id="project-name-input" oninput="projectName = this.value" type="text" placeholder="Ex: Expansão Bairro Centro" class="w-full max-w-md mx-auto p-2 text-center rounded-md font-bold border-2 border-gray-300 focus:border-indigo-500 block">
+        </div>
 
-        <div class="border-b border-gray-200 mt-8 no-print">
+        <div class="border-b border-gray-200 no-print">
             <nav class="-mb-px flex justify-center space-x-4" aria-label="Tabs">
                 <button id="tab-desbalanceada" onclick="switchTab('desbalanceada')" class="tab-button tab-active">Rede Desbalanceada</button>
                 <button id="tab-balanceada" onclick="switchTab('balanceada')" class="tab-button">Rede Balanceada</button>
@@ -143,7 +173,7 @@
                  <div class="max-w-md mx-auto mb-6">
                      <label for="map-link-input-unbalanced" class="font-bold text-lg text-gray-600 text-center block mb-2">Link do Mapa (Google My Maps)</label>
                      <div class="flex items-center">
-                         <input id="map-link-input-unbalanced" oninput="handleMapLinkChange(this)" type="url" placeholder="Cole o link compartilhável do seu mapa aqui" class="w-full p-2 rounded-l-md font-bold border-2 border-gray-300 focus:border-indigo-500">
+                         <input id="map-link-input-unbalanced" oninput="googleMapsUrl = this.value" type="url" placeholder="Cole o link compartilhável do seu mapa aqui" class="w-full p-2 rounded-l-md font-bold border-2 border-gray-300 focus:border-indigo-500">
                          <button onclick="viewProjectMap()" title="Visualizar Mapa" class="bg-blue-600 text-white p-3 rounded-r-md hover:bg-blue-700 transition no-print">
                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.527-1.912 6.01 6.01 0 012.142 4.072 6.01 6.01 0 01-3.668 5.473 1.503 1.503 0 01-1.499.044 2 2 0 00-2.427 0 2 2 0 01-1.527 1.912 6.01 6.01 0 01-3.8-5.57z" clip-rule="evenodd" /></svg>
                          </button>
@@ -157,26 +187,18 @@
                     </div>
                 </div>
                 <div id="network-layout-container" class="flex flex-wrap justify-center gap-4">
-                    <!-- CTO cards for unbalanced network will be inserted here -->
+                    <!-- Cards will be inserted here -->
                 </div>
                 <div class="flex flex-wrap justify-center mt-6 gap-4">
-                    <button onclick="printCtoReport()" class="bg-gradient-to-r from-gray-500 to-gray-600 text-white font-bold py-3 px-5 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v6a2 2 0 002 2h12a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7V9h6v3z" clip-rule="evenodd" /></svg>
-                        Imprimir CTOs
-                    </button>
-                     <button onclick="downloadFieldReport()" class="bg-gradient-to-r from-gray-500 to-gray-600 text-white font-bold py-3 px-5 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                        Relatório de Campo
-                    </button>
-                    <button onclick="shareProject()" class="bg-gradient-to-r from-green-500 to-green-600 text-white font-bold py-3 px-5 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out flex items-center justify-center">
-                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12s-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367 2.684z" /></svg>
-                        Compartilhar
+                    <button onclick="addSpliceBox('unbalanced')" class="bg-gradient-to-r from-teal-500 to-cyan-600 text-white font-bold py-3 px-5 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M9 10h.01M15 10h.01M9 14h.01M15 14h.01M12 6v12" /></svg>
+                        + CEO/CDR
                     </button>
                     <button onclick="addCto()" class="bg-gradient-to-r from-orange-500 to-red-600 text-white font-bold py-3 px-5 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                         </svg>
-                        Adicionar CTO
+                        + CTO
                     </button>
                 </div>
             </div>
@@ -189,7 +211,7 @@
                 <div class="max-w-md mx-auto mb-6">
                      <label for="map-link-input-balanced" class="font-bold text-lg text-gray-600 text-center block mb-2">Link do Mapa (Google My Maps)</label>
                      <div class="flex items-center">
-                         <input id="map-link-input-balanced" oninput="handleMapLinkChange(this)" type="url" placeholder="Cole o link compartilhável do seu mapa aqui" class="w-full p-2 rounded-l-md font-bold border-2 border-gray-300 focus:border-indigo-500">
+                         <input id="map-link-input-balanced" oninput="googleMapsUrl = this.value" type="url" placeholder="Cole o link compartilhável do seu mapa aqui" class="w-full p-2 rounded-l-md font-bold border-2 border-gray-300 focus:border-indigo-500">
                          <button onclick="viewProjectMap()" title="Visualizar Mapa" class="bg-blue-600 text-white p-3 rounded-r-md hover:bg-blue-700 transition no-print">
                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.527-1.912 6.01 6.01 0 012.142 4.072 6.01 6.01 0 01-3.668 5.473 1.503 1.503 0 01-1.499.044 2 2 0 00-2.427 0 2 2 0 01-1.527 1.912 6.01 6.01 0 01-3.8-5.57z" clip-rule="evenodd" /></svg>
                          </button>
@@ -209,26 +231,18 @@
                     </div>
                 </div>
                  <div id="balanced-network-container" class="flex flex-wrap justify-center gap-4">
-                     <!-- CTO cards for balanced network will be inserted here -->
+                     <!-- Cards will be inserted here -->
                  </div>
                  <div class="flex flex-wrap justify-center mt-6 gap-4">
-                    <button onclick="printCtoReport()" class="bg-gradient-to-r from-gray-500 to-gray-600 text-white font-bold py-3 px-5 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v6a2 2 0 002 2h12a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7V9h6v3z" clip-rule="evenodd" /></svg>
-                         Imprimir CTOs
-                     </button>
-                    <button onclick="downloadFieldReport()" class="bg-gradient-to-r from-gray-500 to-gray-600 text-white font-bold py-3 px-5 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                        Relatório de Campo
-                    </button>
-                     <button onclick="shareProject()" class="bg-gradient-to-r from-green-500 to-green-600 text-white font-bold py-3 px-5 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out flex items-center justify-center">
-                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12s-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367 2.684z" /></svg>
-                        Compartilhar
+                     <button onclick="addSpliceBox('balanced')" class="bg-gradient-to-r from-teal-500 to-cyan-600 text-white font-bold py-3 px-5 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M9 10h.01M15 10h.01M9 14h.01M15 14h.01M12 6v12" /></svg>
+                        + CEO/CDR
                     </button>
                      <button onclick="addBalancedCto()" class="bg-gradient-to-r from-orange-500 to-red-600 text-white font-bold py-3 px-5 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out flex items-center justify-center">
                          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                         </svg>
-                         Adicionar CTO
+                         + CTO
                      </button>
                  </div>
              </div>
@@ -267,6 +281,18 @@
         </div>
     </div>
 
+    <footer class="mt-8 pt-8 border-t border-gray-200 text-center text-gray-600 no-print">
+        <div class="max-w-2xl mx-auto">
+            <h3 class="text-xl font-bold text-gray-800">Suporte e Contato</h3>
+            <p class="mt-4 font-semibold">Para dúvidas ou sugestões, entre em contato:</p>
+            <a href="https://wa.me/5575998312170" target="_blank" class="mt-2 inline-flex items-center bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600 transition-colors shadow-md">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.152,4.26C8.24,4.26,6.65,5.85,6.65,7.761c0,0.619,0.161,1.196,0.446,1.714L6.92,9.88l-0.565,1.977l2.03-0.555	C8.75,11.536,9.423,11.69,10.152,11.69c1.91,0,3.5-1.59,3.5-3.5S12.062,4.26,10.152,4.26z M15.654,14.188	c-0.326-0.164-1.932-0.951-2.232-1.062s-0.519-0.164-0.739,0.164s-0.843,1.062-1.033,1.282s-0.38,0.246-0.705,0.082	s-1.378-0.506-2.624-1.619s-1.958-2.26-2.193-2.646s-0.246-0.58,0.156-0.744c0.094-0.037,0.203-0.09,0.301-0.136	c0.237-0.113,0.312-0.188,0.402-0.313c0.113-0.15,0.168-0.281,0.249-0.459c0.082-0.178,0.041-0.329-0.021-0.492	c-0.062-0.164-0.657-1.583-0.9-2.166c-0.237-0.564-0.485-0.485-0.657-0.492c-0.164-0.01-0.348-0.01-0.533-0.01	c-0.185,0-0.485,0.082-0.739,0.41s-0.9,0.884-0.9,2.144s0.923,2.481,1.053,2.646s1.82,2.777,4.416,3.91	c2.596,1.133,2.596,0.754,3.056,0.732c0.46-0.021,1.523-0.621,1.739-1.22c0.216-0.598,0.216-1.107,0.156-1.22	C16.151,14.398,15.98,14.352,15.654,14.188z M10.001,0C4.486,0,0,4.486,0,10.001c0,5.514,4.486,10,10.001,10	c5.514,0,10-4.486,10-10.001C20.001,4.486,15.515,0,10.001,0z M10.001,18.13c-4.48,0-8.128-3.649-8.128-8.129	c0-4.48,3.649-8.128,8.128-8.128c4.48,0,8.129,3.649,8.129,8.128C18.13,14.481,14.481,18.13,10.001,18.13z"/></svg>
+                Chamar no WhatsApp: +55 75 99831-2170
+            </a>
+            <p class="mt-6 text-sm text-gray-500">Desenvolvido por Jânio Carlos 10/08/2025</p>
+        </div>
+    </footer>
+
 
     <script>
         // --- Variáveis de Estado Globais ---
@@ -291,7 +317,7 @@
             { name: 'Laranja', hex: '#fd7e14', text: 'white' }, { name: 'Aqua', hex: '#00ffff', text: 'black' }
         ];
     
-        const UNBALANCED_PARAMETER_ROWS = [
+        const UNBALANCED_CTO_ROWS = [
           { label: 'Sinal Entrada', key: 'sinalEntradaHub', type: 'result' },
           { label: 'Splitter Desb.', key: 'splitterHub', type: 'select_hub' },
           { label: 'Perda Passagem', key: 'perdaPassagemHub', type: 'result_detail' },
@@ -300,9 +326,12 @@
           { label: 'Splitter CTO', key: 'splitterCto', type: 'select_cto' },
           { label: 'Sinal Final CTO', key: 'sinalFinalCto', type: 'result_final' },
         ];
+
+        const UNBALANCED_SPLICE_BOX_ROWS = [];
         
         const splitterLosses = { 
-          'Ausente': { drop: 0, pass: 0 }, '1:2': { drop: 3.7 }, '1:4': { drop: 7.1 }, '1:8': { drop: 10.5 }, '1:16': { drop: 13.7 }, '1:32': { drop: 17.1 }, '1:64': { drop: 20.4 }, '1:128': { drop: 23.9 }, '1:99': { drop: 21.6, pass: 0.3 }, '2:98': { drop: 18.7, pass: 0.4 }, '4:96': { drop: 14.9, pass: 0.4 }, '5:95': { drop: 14.6, pass: 0.5 }, '7:93': { drop: 13.0, pass: 0.6 }, '10:90': { drop: 11.0, pass: 0.7 }, '15:85': { drop: 9.6,  pass: 1.0 }, '20:80': { drop: 7.9,  pass: 1.4 }, '25:75': { drop: 6.95, pass: 1.7 }, '30:70': { drop: 6.0,  pass: 1.9 }, '35:65': { drop: 5.35, pass: 2.3 }, '40:60': { drop: 4.7,  pass: 2.7 }, '45:55': { drop: 4.15, pass: 3.15 }, '50:50': { drop: 3.7,  pass: 2.5 },
+          'Ausente': { drop: 0, pass: 0 }, '1:2': { drop: 3.7 }, '1:4': { drop: 7.1 }, '1:8': { drop: 10.5 }, '1:16': { drop: 13.7 }, '1:32': { drop: 17.1 }, '1:64': { drop: 20.4 }, '1:128': { drop: 23.9 }, 
+          '1:99': { drop: 21.6, pass: 0.3 }, '2:98': { drop: 18.7, pass: 0.4 }, '3:97': { drop: 16.8, pass: 0.4 }, '4:96': { drop: 14.9, pass: 0.4 }, '5:95': { drop: 14.6, pass: 0.5 }, '7:93': { drop: 13.0, pass: 0.6 }, '9:91': { drop: 11.7, pass: 0.65 }, '10:90': { drop: 11.0, pass: 0.7 }, '15:85': { drop: 9.6,  pass: 1.0 }, '20:80': { drop: 7.9,  pass: 1.4 }, '25:75': { drop: 6.95, pass: 1.7 }, '30:70': { drop: 6.0,  pass: 1.9 }, '35:65': { drop: 5.35, pass: 2.3 }, '40:60': { drop: 4.7,  pass: 2.7 }, '45:55': { drop: 4.15, pass: 3.15 }, '50:50': { drop: 3.7,  pass: 2.5 },
         };
         
         function getSignalColorClass(signal) { if (isNaN(signal) || signal === null) return 'bg-gray-100 border-gray-300 text-gray-500'; if (signal < -22) return 'signal-bad'; if (signal < -19) return 'signal-warn'; return 'signal-good'; }
@@ -337,12 +366,20 @@
             
             if(modal) {
                 modalTitle.innerText = title;
-                modalContent.innerText = content;
+                modalContent.innerHTML = content; // Use innerHTML to render the link
                 modal.classList.remove('hidden');
 
                 const okBtn = document.getElementById('ok-btn');
                 okBtn.onclick = () => modal.classList.add('hidden');
             }
+        }
+        
+        function showPremiumFeatureModal() {
+            const contactLink = `<a href="https://wa.me/5575998312170" target="_blank" class="text-blue-600 hover:underline font-bold">clicando aqui</a>`;
+            showModal(
+                "Funcionalidade Premium",
+                `Esta funcionalidade está disponível na versão completa.\n\nPara adquirir ou saber mais, entre em contato pelo WhatsApp ${contactLink}.`
+            );
         }
 
         function showDescriptionModal(index, networkType) {
@@ -372,9 +409,19 @@
         function renderUnbalancedNetwork() {
             const container = document.getElementById('network-layout-container');
             container.innerHTML = ''; 
+            let ctoCounter = 0;
+            let spliceBoxCounter = 0;
             networkSegments.forEach((segment, index) => {
-                const ctoCard = createCtoCard(segment, index, 'unbalanced');
-                container.appendChild(ctoCard);
+                let displayIndex;
+                if(segment.type === 'splice_box'){
+                    spliceBoxCounter++;
+                    displayIndex = spliceBoxCounter;
+                } else {
+                    ctoCounter++;
+                    displayIndex = ctoCounter;
+                }
+                const networkCard = createNetworkCard(segment, index, 'unbalanced', displayIndex);
+                container.appendChild(networkCard);
             });
         }
         
@@ -382,28 +429,54 @@
             const container = document.getElementById('balanced-network-container');
             container.innerHTML = '';
             document.getElementById('balanced-primary-splitter').innerHTML = getSplitterOptions('balanced', balancedConfig.primarySplitter);
-            balancedNetworkCtos.forEach((cto, index) => {
-                const ctoCard = createCtoCard(cto, index, 'balanced');
-                container.appendChild(ctoCard);
+            
+            let ctoCounter = 0;
+            let spliceBoxCounter = 0;
+
+            balancedNetworkCtos.forEach((item, index) => {
+                let displayIndex;
+                if (item.type === 'splice_box') {
+                    spliceBoxCounter++;
+                    displayIndex = spliceBoxCounter;
+                } else {
+                    ctoCounter++;
+                    displayIndex = ctoCounter;
+                }
+                const card = createNetworkCard(item, index, 'balanced', displayIndex);
+                container.appendChild(card);
             });
         }
 
-        function createCtoCard(data, index, networkType) {
+        function createNetworkCard(data, index, networkType, displayIndex) {
             const isUnbalanced = networkType === 'unbalanced';
+            const isSpliceBox = data.type === 'splice_box';
             const geoText = data.geo ? `${data.geo.lat.toFixed(5)}, ${data.geo.lon.toFixed(5)}` : 'N/A';
             const cardIdPrefix = isUnbalanced ? 'U' : 'B';
-            const title = isUnbalanced ? `CTO-${String(index + 1).padStart(2, '0')}` : `CTO Bal.-${String(index + 1).padStart(2, '0')}`;
+            
+            let title = '';
+            const finalIndex = displayIndex || index + 1;
+
+            if (isSpliceBox) {
+                title = `CEO/CDR-${String(finalIndex).padStart(2, '0')}`;
+            } else if (isUnbalanced) {
+                title = `CTO-${String(finalIndex).padStart(2, '0')}`;
+            } else { 
+                title = `CTO Bal.-${String(finalIndex).padStart(2, '0')}`;
+            }
+
             const selectedColor = FIBER_COLORS[data.colorGroup || 0];
             
-            const ctoCard = document.createElement('div');
-            ctoCard.className = "cto-card-print flex flex-col items-center bg-gray-50 rounded-lg shadow-md border p-3";
-            ctoCard.style.width = "280px";
+            const card = document.createElement('div');
+            card.className = "cto-card-print flex flex-col items-center bg-gray-50 rounded-lg shadow-md border p-3";
+            card.style.width = "280px";
             
+            const removeAction = isUnbalanced ? `removeNetworkSegment(${index})` : `removeBalancedItem(${index})`;
+
             let cardHtml = `
             <h3 class="relative text-lg font-bold mb-3 px-4 py-1 rounded-full border border-gray-300" 
                  style="background-color:${selectedColor.hex}; color:${selectedColor.text};">
                 ${title}
-                <button onclick="${isUnbalanced ? 'removeCto' : 'removeBalancedCto'}(${index})" title="Remover CTO" class="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors no-print"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
+                <button onclick="${removeAction}" title="Remover" class="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors no-print"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
             </h3>
             <div class="flex flex-col items-center mb-2 w-full">
                 <span class="text-xs font-semibold text-gray-600">Geolocalização:</span>
@@ -418,26 +491,63 @@
                     <button onclick="saveManualGeo(${index}, '${networkType}')" class="bg-indigo-500 text-white text-xs font-bold p-1.5 rounded-r-md hover:bg-indigo-600 transition">Salvar</button>
                 </div>
             </div>
-            <div class="flex items-center w-full mb-1.5 px-2">
-                <label class="flex-1 text-xs font-semibold text-gray-600">Distancia (m):</label>
-                <input id="cto-${cardIdPrefix}-${index}-distance" type="number" value="${data.distance || 0}" oninput="handleCtoDataChange(event, ${index}, '${networkType}', 'distance')" class="input-field" />
+             <div class="flex items-center justify-start w-full mb-1.5 px-2 gap-4">
+                <div class="flex items-center">
+                    <label class="text-xs font-semibold text-gray-600 mr-1">Dist(m):</label>
+                    <input id="cto-${cardIdPrefix}-${index}-distance" type="number" value="${data.distance || 0}" oninput="handleCtoDataChange(event, ${index}, '${networkType}', 'distance')" class="input-field !w-16" />
+                </div>
+                <div class="flex items-center">
+                    <label class="text-xs font-semibold text-gray-600 mr-1">Fusões:</label>
+                    <input id="cto-${cardIdPrefix}-${index}-spliceCount" type="number" value="${data.spliceCount || 0}" oninput="handleCtoDataChange(event, ${index}, '${networkType}', 'spliceCount')" class="input-field !w-12" />
+                </div>
             </div>
-            <div class="flex items-center w-full mb-1.5 px-2">
-                <label class="flex-1 text-xs font-semibold text-gray-600">Nº de Fusões:</label>
-                <input id="cto-${cardIdPrefix}-${index}-spliceCount" type="number" value="${data.spliceCount || 0}" oninput="handleCtoDataChange(event, ${index}, '${networkType}', 'spliceCount')" class="input-field" />
-            </div>
-            <div class="flex items-center w-full mb-1.5 px-2">
-                <label class="flex-1 text-xs font-semibold text-gray-600">Cor da Fibra:</label>
-                <select id="cto-${cardIdPrefix}-${index}-colorGroup" oninput="handleCtoDataChange(event, ${index}, '${networkType}', 'colorGroup')" class="input-field font-semibold" style="background-color:${selectedColor.hex}; color:${selectedColor.text}; border-color: #999;">
-                    ${FIBER_COLORS.map((color, colorIndex) => `<option value="${colorIndex}" ${colorIndex === (data.colorGroup || 0) ? 'selected' : ''} style="background-color:${color.hex}; color:${color.text};">${colorIndex + 1} - ${color.name}</option>`).join('')}
-                </select>
-            </div>
-            <div class="w-full">`;
+            `;
             
-            const parameterRows = isUnbalanced ? UNBALANCED_PARAMETER_ROWS : [
-                { label: 'Splitter CTO', key: 'splitterCto', type: 'select_cto' },
-                { label: 'Sinal Final CTO', key: 'sinalFinal', type: 'result_final' }
-            ];
+            if (isSpliceBox) {
+                 cardHtml += `<div id="splice-details-${index}" class="w-full mt-2 pt-2 border-t border-gray-300">
+                    <div class="text-xs font-semibold text-gray-600 text-center mb-1">Detalhes da Fusão (Cor a Cor)</div>`;
+                (data.spliceDetails || []).forEach((detail, detailIndex) => {
+                    const color1 = FIBER_COLORS[detail.color1 || 0];
+                    const color2 = FIBER_COLORS[detail.color2 || 0];
+                    cardHtml += `
+                    <div class="flex items-center justify-between w-full mb-1 px-2 gap-1">
+                        <select oninput="handleSpliceDetailChange(event, ${index}, ${detailIndex}, 'color1', '${networkType}')" class="input-field flex-1 font-semibold" style="background-color:${color1.hex}; color:${color1.text}; border-color: #999;">
+                            ${FIBER_COLORS.map((c, i) => `<option value="${i}" ${i === (detail.color1 || 0) ? 'selected' : ''} style="background-color:${c.hex}; color:${c.text};">${c.name}</option>`).join('')}
+                        </select>
+                        <span class="text-xs font-bold">X</span>
+                        <select oninput="handleSpliceDetailChange(event, ${index}, ${detailIndex}, 'color2', '${networkType}')" class="input-field flex-1 font-semibold" style="background-color:${color2.hex}; color:${color2.text}; border-color: #999;">
+                             ${FIBER_COLORS.map((c, i) => `<option value="${i}" ${i === (detail.color2 || 0) ? 'selected' : ''} style="background-color:${c.hex}; color:${c.text};">${c.name}</option>`).join('')}
+                        </select>
+                        <button onclick="removeSpliceDetail(${index}, ${detailIndex}, '${networkType}')" class="p-1 bg-red-100 text-red-600 rounded-md hover:bg-red-200 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg>
+                        </button>
+                    </div>
+                    `;
+                });
+                cardHtml += `<button onclick="addSpliceDetail(${index}, '${networkType}')" class="mt-1 w-full text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-1 px-2 rounded-md transition">+ Adicionar Fusão</button></div>`;
+            } else {
+                cardHtml += `
+                <div class="flex items-center w-full mb-1.5 px-2">
+                    <label class="flex-1 text-xs font-semibold text-gray-600">Cor da Fibra:</label>
+                    <select id="cto-${cardIdPrefix}-${index}-colorGroup" oninput="handleCtoDataChange(event, ${index}, '${networkType}', 'colorGroup')" class="input-field font-semibold" style="background-color:${selectedColor.hex}; color:${selectedColor.text}; border-color: #999;">
+                        ${FIBER_COLORS.map((color, colorIndex) => `<option value="${colorIndex}" ${colorIndex === (data.colorGroup || 0) ? 'selected' : ''} style="background-color:${color.hex}; color:${color.text};">${colorIndex + 1} - ${color.name}</option>`).join('')}
+                    </select>
+                </div>`;
+            }
+
+            cardHtml += `<div class="w-full">`;
+            
+            let parameterRows = [];
+            if (isUnbalanced) {
+                parameterRows = isSpliceBox ? UNBALANCED_SPLICE_BOX_ROWS : UNBALANCED_CTO_ROWS;
+            } else { 
+                if (!isSpliceBox) {
+                    parameterRows = [
+                        { label: 'Splitter CTO', key: 'splitterCto', type: 'select_cto' },
+                        { label: 'Sinal Final CTO', key: 'sinalFinal', type: 'result_final' }
+                    ];
+                }
+            }
             
             parameterRows.forEach(row => {
                 const value = data[row.key];
@@ -461,20 +571,23 @@
             });
             
             cardHtml += `<div class="mt-2 w-full text-center text-xs text-gray-500 font-bold no-print flex items-center justify-between"><span>Sinal Medido em Campo</span><button onclick="showDescriptionModal(${index}, '${networkType}')" class="p-1 rounded-full text-white bg-gray-500 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400" title="Adicionar/Editar Descrição"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button></div><div class="manual-signal-field no-print"><span class="text-xs text-gray-500 italic">${data.description || 'Nenhuma descrição salva.'}</span></div><div class="printable-only-description"><span class="text-xs font-bold text-gray-700">Descrição: </span><span>${data.description || 'N/A'}</span></div></div>`;
-            ctoCard.innerHTML = cardHtml;
-            return ctoCard;
+            card.innerHTML = cardHtml;
+            return card;
         }
     
         function recalculateUnbalanced() {
             let powerForNextSegment = oltPower;
-            let isPathBroken = false;
+            
             networkSegments.forEach((segment) => {
-                if (isPathBroken) {
-                     Object.assign(segment, { sinalEntradaHub: null, perdaPassagemHub: null, sinalSaidaHub: null, perdaTotalTrecho: null, sinalFinalCto: null });
-                     return;
-                }
                 const distanceInKm = (segment.distance || 0) / 1000;
-                const fusionLoss = (segment.spliceCount || 0) * FUSION_SPLICE_LOSS;
+                let fusionLoss;
+
+                if (segment.type === 'splice_box') {
+                    fusionLoss = (segment.spliceDetails?.length || 0) * FUSION_SPLICE_LOSS;
+                } else {
+                     fusionLoss = (segment.spliceCount || 0) * FUSION_SPLICE_LOSS;
+                }
+                
                 const totalSegmentLoss = (distanceInKm * FIBER_LOSS_PER_KM) + fusionLoss;
                 segment.perdaTotalTrecho = totalSegmentLoss.toFixed(2) + ' dB';
 
@@ -487,38 +600,52 @@
                 segment.perdaPassagemHub = (hubSplitter.pass || 0).toFixed(2) + ' dB';
                 
                 const sinalFinalCto = sinalEntradaHub - hubSplitter.drop - ctoSplitter.drop;
-                segment.sinalFinalCto = (segment.splitterCto === 'Ausente') ? null : sinalFinalCto.toFixed(2);
+
+                if (segment.type !== 'splice_box') {
+                    segment.sinalFinalCto = (segment.splitterCto === 'Ausente') ? null : sinalFinalCto.toFixed(2);
+                } else {
+                    segment.sinalFinalCto = null;
+                }
                 
                 const sinalSaidaHub = sinalEntradaHub - hubSplitter.pass;
                 segment.sinalSaidaHub = sinalSaidaHub.toFixed(2);
                 
                 powerForNextSegment = sinalSaidaHub;
-                
-                if (segment.splitterHub === 'Ausente' || isNaN(sinalSaidaHub)) {
-                    isPathBroken = true;
-                    segment.sinalSaidaHub = null;
-                    segment.perdaPassagemHub = null;
-                }
             });
             renderUnbalancedNetwork();
         }
 
         function recalculateBalanced() {
-            const primaryLoss = splitterLosses[balancedConfig.primarySplitter]?.drop || 0;
-            const powerAfterPrimary = oltPower - primaryLoss;
+            let powerForChain = oltPower - (splitterLosses[balancedConfig.primarySplitter]?.drop || 0);
 
-            balancedNetworkCtos.forEach(cto => {
-                const secondaryLoss = splitterLosses[cto.splitterCto]?.drop || 0;
-                const distanceLoss = ((cto.distance || 0) / 1000) * FIBER_LOSS_PER_KM;
-                const spliceLoss = (cto.spliceCount || 0) * FUSION_SPLICE_LOSS;
-                const totalLoss = distanceLoss + spliceLoss + secondaryLoss;
-                const finalSignal = powerAfterPrimary - totalLoss;
-                cto.sinalFinal = finalSignal.toFixed(2);
+            balancedNetworkCtos.forEach(segment => {
+                const inputPower = powerForChain;
+                const distanceLoss = ((segment.distance || 0) / 1000) * FIBER_LOSS_PER_KM;
+
+                if (segment.type === 'splice_box') {
+                    const fusionLoss = (segment.spliceDetails?.length || 0) * FUSION_SPLICE_LOSS;
+                    segment.sinalFinal = null; 
+                    powerForChain = inputPower - distanceLoss - fusionLoss;
+                } else { 
+                    const spliceLoss = (segment.spliceCount || 0) * FUSION_SPLICE_LOSS;
+                    const secondarySplitterLoss = splitterLosses[segment.splitterCto]?.drop || 0;
+                    const finalSignal = inputPower - distanceLoss - spliceLoss - secondarySplitterLoss;
+                    segment.sinalFinal = finalSignal.toFixed(2);
+                    powerForChain = -Infinity;
+                }
             });
+
             renderBalancedNetwork();
         }
     
+       function handleProjectNameChange(name) {
+            projectName = name.trim();
+            document.title = projectName || 'Gerenciador de CTOs';
+            document.getElementById('main-title').innerText = projectName ? `Projeto: ${projectName}` : 'Gerenciador de CTOs';
+        }
+    
         function updateUIWithLoadedData() {
+            document.getElementById('project-name-input').value = projectName;
             document.getElementById('main-title').innerText = projectName ? `Projeto: ${projectName}` : 'Gerenciador de CTOs';
             document.title = projectName || 'Gerenciador de CTOs';
 
@@ -584,7 +711,6 @@
                         focusedElement.setSelectionRange(selectionStart, selectionStart);
                     }
                 }
-
              }, 500);
         }
 
@@ -729,115 +855,45 @@
             }
             showModal("Formato Inválido", "Por favor, insira as coordenadas no formato 'latitude, longitude'. Ex: -12.345, -39.876");
         }
-
-        async function shareProject() {
-            let message = `*Relatório de CTOs*\n\n`;
-            message += `*Potência OLT:* ${oltPower.toFixed(2)} dBm\n`;
-            if (googleMapsUrl) {
-                message += `*Link do Mapa:* ${googleMapsUrl}\n`;
-            }
-            message += `\n`;
-            
-            message += `--- *SIMULAÇÃO REDE BALANCEADA* ---\n`;
-            message += `Splitter Primário: ${balancedConfig.primarySplitter}\n\n`;
-            balancedNetworkCtos.forEach((cto, index) => {
-                message += `*CTO Bal.-${String(index + 1).padStart(2, '0')}*\n`;
-                message += `Dist.: ${cto.distance || 0}m, Fusões: ${cto.spliceCount || 0}\n`;
-                message += `Splitter CTO: ${cto.splitterCto}\n`;
-                message += `*Sinal Final Estimado:* ${cto.sinalFinal} dBm\n`;
-                if (cto.geo) {
-                    message += `Geolocalização: ${cto.geo.lat}, ${cto.geo.lon}\n`;
-                }
-                message += `\n`;
-            });
-
-            message += `--- *SIMULAÇÃO REDE DESBALANCEADA* ---\n\n`;
-            networkSegments.forEach((segment, index) => {
-                if (segment.splitterHub !== 'Ausente') {
-                    const colorInfo = FIBER_COLORS[segment.colorGroup || 0];
-                    message += `*CTO-${String(index + 1).padStart(2, '0')} (${colorInfo.name})*\n`;
-                    message += `Dist.: ${segment.distance || 0}m, Fusões: ${segment.spliceCount || 0}\n`;
-                    message += `Sinal Entrada: ${segment.sinalEntradaHub} dBm\n`;
-                    message += `Splitter Desb.: ${segment.splitterHub}\n`;
-                    message += `Sinal Saída: ${segment.sinalSaidaHub} dBm\n`;
-                    message += `Splitter CTO: ${segment.splitterCto}\n`;
-                    message += `*Sinal Final CTO:* ${segment.sinalFinalCto || '---'} dBm\n`;
-                    if (segment.geo) {
-                        message += `Geolocalização: ${segment.geo.lat}, ${segment.geo.lon}\n`;
-                    }
-                    message += `\n`;
-                }
-            });
-
-            const shareData = { title: `Relatório de CTOs`, text: message };
-            if (navigator.share) {
-                try { await navigator.share(shareData); } catch (err) { console.error('Erro ao compartilhar:', err); }
-            } else {
-                showModal('Compartilhamento Indisponível', 'O seu navegador não suporta a função de compartilhamento. Pode copiar o texto manualmente.');
-            }
-        }
         
-        function saveProject() {
-            const suggestedName = projectName || new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
-            const fileName = prompt("Digite o nome do arquivo para salvar o projeto:", suggestedName);
-            
-            if (fileName === null) return; // User cancelled
-            
-            projectName = fileName; // Update project name
-            
-            const projectData = { 
-                version: "1.0", 
-                projectName,
-                oltPower, 
-                googleMapsUrl, 
-                networkSegments, 
-                balancedConfig, 
-                balancedNetworkCtos
-            };
-
-            const blob = new Blob([JSON.stringify(projectData, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = Object.assign(document.createElement('a'), {
-                href: url,
-                download: `${fileName.replace(/[^a-z0-9]/gi, '_') || 'projeto_cto'}.json`
-            });
-            document.body.appendChild(a).click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            updateUIWithLoadedData(); // Refresh title
-            showModal("Projeto Salvo", `O projeto "${fileName}" foi salvo com sucesso!`);
-        }
-    
-        function loadProject(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    
-                    projectName = data.projectName || '';
-                    oltPower = data.oltPower || 7.00;
-                    googleMapsUrl = data.googleMapsUrl || '';
-                    networkSegments = data.networkSegments || [];
-                    balancedConfig = data.balancedConfig || { primarySplitter: '1:8' };
-                    balancedNetworkCtos = data.balancedNetworkCtos || [];
-                    
-                    event.target.value = ''; // Reset file input
-                    updateUIWithLoadedData();
-                    showModal("Projeto Carregado", `O projeto "${projectName}" foi carregado com sucesso!`);
-                } catch (error) {
-                    showModal("Erro ao Carregar", "O arquivo do projeto pode estar corrompido ou em formato inválido.");
-                    console.error("Load project error:", error);
+        function addSpliceDetail(segmentIndex, networkType) {
+            const network = networkType === 'unbalanced' ? networkSegments : balancedNetworkCtos;
+            if (network[segmentIndex] && network[segmentIndex].type === 'splice_box') {
+                if (!network[segmentIndex].spliceDetails) {
+                    network[segmentIndex].spliceDetails = [];
                 }
-            };
-            reader.readAsText(file);
+                network[segmentIndex].spliceDetails.push({ color1: 0, color2: 0 });
+                if (networkType === 'unbalanced') renderUnbalancedNetwork();
+                else renderBalancedNetwork();
+            }
+        }
+
+        function removeSpliceDetail(segmentIndex, detailIndex, networkType) {
+            const network = networkType === 'unbalanced' ? networkSegments : balancedNetworkCtos;
+            if (network[segmentIndex] && network[segmentIndex].spliceDetails) {
+                network[segmentIndex].spliceDetails.splice(detailIndex, 1);
+                if (networkType === 'unbalanced') renderUnbalancedNetwork();
+                else renderBalancedNetwork();
+            }
+        }
+
+        function handleSpliceDetailChange(event, segmentIndex, detailIndex, colorKey, networkType) {
+            const network = networkType === 'unbalanced' ? networkSegments : balancedNetworkCtos;
+            if (network[segmentIndex] && network[segmentIndex].spliceDetails[detailIndex]) {
+                network[segmentIndex].spliceDetails[detailIndex][colorKey] = parseInt(event.target.value, 10);
+                if (networkType === 'unbalanced') renderUnbalancedNetwork();
+                else renderBalancedNetwork();
+            }
         }
 
         function addCto() {
+            if (networkSegments.length >= 3) {
+                showPremiumFeatureModal();
+                return;
+            }
             const lastSegment = networkSegments.length > 0 ? networkSegments[networkSegments.length - 1] : { colorGroup: -1 };
             networkSegments.push({
+                type: 'cto',
                 splitterHub: 'Ausente',
                 splitterCto: 'Ausente', 
                 distance: 0,
@@ -849,17 +905,46 @@
             recalculateUnbalanced();
         }
 
-        function removeCto(index) {
+        function removeNetworkSegment(index) {
             if (networkSegments.length > 0) {
                 networkSegments.splice(index, 1);
                 recalculateUnbalanced();
             }
         }
+        
+        function addSpliceBox(networkType) {
+             const network = networkType === 'unbalanced' ? networkSegments : balancedNetworkCtos;
+            if (network.length >= 3) {
+                showPremiumFeatureModal();
+                return;
+            }
+            const lastSegment = network.length > 0 ? network[network.length - 1] : { colorGroup: -1, outgoingColorGroup: 0 };
+            const incomingColor = lastSegment.outgoingColorGroup !== undefined ? lastSegment.outgoingColorGroup : (lastSegment.colorGroup + 1) % 12;
+
+            network.push({
+                type: 'splice_box',
+                distance: 0,
+                spliceCount: 0,
+                geo: null,
+                description: '',
+                colorGroup: incomingColor,
+                outgoingColorGroup: (incomingColor + 1) % 12,
+                spliceDetails: []
+            });
+            
+            if(networkType === 'unbalanced') recalculateUnbalanced();
+            else recalculateBalanced();
+        }
 
         function addBalancedCto() {
+            if (balancedNetworkCtos.length >= 3) {
+                showPremiumFeatureModal();
+                return;
+            }
             const lastCto = balancedNetworkCtos.length > 0 ? balancedNetworkCtos[balancedNetworkCtos.length - 1] : { colorGroup: -1 };
             const newColorGroup = lastCto ? (lastCto.colorGroup + 1) % 12 : 0;
             balancedNetworkCtos.push({ 
+                type: 'cto',
                 distance: 0, 
                 spliceCount: 0, 
                 geo: null, 
@@ -870,128 +955,25 @@
             recalculateBalanced();
         }
 
-        function removeBalancedCto(index) {
+        function removeBalancedItem(index) {
             if (balancedNetworkCtos.length > 0) {
                 balancedNetworkCtos.splice(index, 1);
                 recalculateBalanced();
             }
         }
         
-        function printCtoReport() {
-            document.body.classList.add('cto-print-mode');
-            
-            const activePanel = document.getElementById(`tab-panel-${activeTab}`);
-            if(activePanel) activePanel.classList.add('active-for-print');
+        // --- Funções Desativadas (Premium) ---
+        function saveProject() { showPremiumFeatureModal(); }
+        function loadProject() { showPremiumFeatureModal(); }
+        function printCtoReport() { showPremiumFeatureModal(); }
+        function downloadFieldReport() { showPremiumFeatureModal(); }
+        function shareProject() { showPremiumFeatureModal(); }
 
-            window.print();
-            
-            document.body.classList.remove('cto-print-mode');
-             if(activePanel) activePanel.classList.remove('active-for-print');
-        }
-
-        function downloadFieldReport() {
-             const date = new Date().toLocaleDateString('pt-BR');
-            let ctoCardsHtml = '';
-            let networkTitle = '';
-
-            if (activeTab === 'desbalanceada') {
-                networkTitle = 'Parâmetros da Rede Desbalanceada';
-                networkSegments.forEach((cto, index) => {
-                    const title = `CTO-${String(index + 1).padStart(2, '0')}`;
-                    const selectedColor = FIBER_COLORS[cto.colorGroup || 0];
-                    const geoText = cto.geo ? `${cto.geo.lat.toFixed(5)}, ${cto.geo.lon.toFixed(5)}` : 'N/A';
-                    const googleMapsLink = cto.geo ? `<a href="https://www.google.com/maps?q=${cto.geo.lat},${cto.geo.lon}" target="_blank" style="color: #3b82f6; text-decoration: underline;">Ver no Mapa</a>` : 'N/A';
-                    
-                    ctoCardsHtml += `
-    <div style="border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-        <h3 style="font-size: 1.125rem; font-weight: bold; margin-bottom: 0.5rem;">${title} (${selectedColor.name})</h3>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-            <div><strong>Distância:</strong> ${cto.distance || 0} m</div>
-            <div><strong>Nº de Fusões:</strong> ${cto.spliceCount || 0}</div>
-            <div><strong>Splitter Desb.:</strong> ${cto.splitterHub || 'N/A'}</div>
-            <div><strong>Splitter CTO:</strong> ${cto.splitterCto || 'N/A'}</div>
-            <div><strong>Sinal Final Estimado:</strong> <span style="font-weight: bold;">${cto.sinalFinalCto || '---'} dBm</span></div>
-            <div><strong>Sinal Medido:</strong> _________________ dBm</div>
-            <div><strong>Geolocalização:</strong> ${geoText} ${googleMapsLink}</div>
-        </div>
-        <div style="margin-top: 1rem;">
-            <strong>Notas de Campo:</strong>
-            <p style="margin-top: 0.25rem; border-bottom: 1px solid #d1d5db; padding-bottom: 0.25rem;">${cto.description || '________________________________________________'}</p>
-        </div>
-    </div>`;
-                });
-            } else { // Rede Balanceada
-                networkTitle = 'Parâmetros da Rede Balanceada';
-                 balancedNetworkCtos.forEach((cto, index) => {
-                    const title = `CTO Bal.-${String(index + 1).padStart(2, '0')}`;
-                    const selectedColor = FIBER_COLORS[cto.colorGroup || 0];
-                    const geoText = cto.geo ? `${cto.geo.lat.toFixed(5)}, ${cto.geo.lon.toFixed(5)}` : 'N/A';
-                    const googleMapsLink = cto.geo ? `<a href="https://www.google.com/maps?q=${cto.geo.lat},${cto.geo.lon}" target="_blank" style="color: #3b82f6; text-decoration: underline;">Ver no Mapa</a>` : 'N/A';
-                    
-                    ctoCardsHtml += `
-    <div style="border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-        <h3 style="font-size: 1.125rem; font-weight: bold; margin-bottom: 0.5rem;">${title} (${selectedColor.name})</h3>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-            <div><strong>Distância:</strong> ${cto.distance || 0} m</div>
-            <div><strong>Nº de Fusões:</strong> ${cto.spliceCount || 0}</div>
-            <div><strong>Splitter Primário:</strong> ${balancedConfig.primarySplitter || 'N/A'}</div>
-            <div><strong>Splitter CTO:</strong> ${cto.splitterCto || 'N/A'}</div>
-            <div><strong>Sinal Final Estimado:</strong> <span style="font-weight: bold;">${cto.sinalFinal || '---'} dBm</span></div>
-            <div><strong>Sinal Medido:</strong> _________________ dBm</div>
-            <div><strong>Geolocalização:</strong> ${geoText} ${googleMapsLink}</div>
-        </div>
-        <div style="margin-top: 1rem;">
-            <strong>Notas de Campo:</strong>
-            <p style="margin-top: 0.25rem; border-bottom: 1px solid #d1d5db; padding-bottom: 0.25rem;">${cto.description || '________________________________________________'}</p>
-        </div>
-    </div>`;
-                });
-            }
-
-
-            const reportContent = `
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relatório de Campo</title>
-    <style>
-        body { font-family: sans-serif; background-color: #f4f4f9; color: #1f2937; padding: 2rem; }
-        .container { max-width: 800px; margin: 0 auto; background-color: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h1, h2 { border-bottom: 1px solid #ddd; padding-bottom: 8px; margin-bottom: 16px; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Relatório de Campo</h1>
-        <p>Gerado em: ${date}</p>
-        <h2>Configurações Gerais</h2>
-        <p><strong>Potência OLT:</strong> ${oltPower.toFixed(2)} dBm</p>
-        <p><strong>Mapa do Projeto:</strong> ${googleMapsUrl ? `<a href="${googleMapsUrl}" target="_blank">${googleMapsUrl}</a>` : 'N/A'}</p>
-        
-        <h2>${networkTitle}</h2>
-        ${ctoCardsHtml}
-    </div>
-</body>
-</html>`;
-
-            const blob = new Blob([reportContent], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `relatorio_de_campo_${activeTab}.html`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
 
         window.onload = function() {
             updateUIWithLoadedData();
         };
 
-        // --- Dropdown Menu Logic ---
         const menuButton = document.getElementById('project-menu-button');
         const menu = document.getElementById('project-menu');
 
@@ -999,7 +981,6 @@
             menu.classList.toggle('hidden');
         });
 
-        // Close dropdown if clicking outside
         window.addEventListener('click', function(e) {
             if (!menuButton.contains(e.target) && !menu.contains(e.target)) {
                 menu.classList.add('hidden');
