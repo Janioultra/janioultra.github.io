@@ -1,991 +1,901 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciador de CTOs (Versão Demo)</title>
-    
+    <title>Cadastro de Clientes Telecom</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            padding: 1rem;
         }
-        .container {
-            max-width: 1280px;
-            margin: auto;
-            background-color: #fff;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        .form-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af; /* gray-400 */
         }
-        .section-card {
-            background-color: #fff;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-top: 1.5rem;
-            border: 1px solid #e5e7eb;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        .form-input {
+            padding-left: 2.5rem;
         }
-        .input-field {
-            @apply w-24 text-xs p-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out flex-shrink-0;
-            text-align: center;
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-        .result-field {
-            @apply w-24 text-center text-xs p-1 border border-gray-200 rounded-md bg-gray-100 font-semibold text-gray-700 flex-shrink-0;
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; /* slate-100 */
         }
-        .signal-good { @apply bg-green-100 border-green-300 text-green-800; }
-        .signal-warn { @apply bg-yellow-100 border-yellow-300 text-yellow-800; }
-        .signal-bad { @apply bg-red-100 border-red-300 text-red-800; }
-        .tab-button {
-            @apply whitespace-nowrap py-3 px-4 font-medium text-lg transition-colors duration-200 border-b-2;
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8; /* slate-400 */
+            border-radius: 10px;
         }
-        .tab-button:not(.tab-active) {
-            @apply text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b; /* slate-500 */
         }
-        .tab-active {
-            @apply text-white rounded-t-lg shadow-md border-transparent;
-        }
-        #tab-desbalanceada.tab-active {
-            background: linear-gradient(to right, #F97316, #EF4444); /* orange-500 to red-600 */
-        }
-        #tab-balanceada.tab-active {
-            background: linear-gradient(to right, #2563EB, #7C3AED); /* blue-600 to violet-600 */
-        }
-        input[type="number"]::-webkit-inner-spin-button,
-        input[type="number"]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        input[type="number"] {
-            -moz-appearance: textfield;
-        }
-        .loss-detail {
-            @apply w-24 text-xs text-center text-red-600 font-medium p-1 flex-shrink-0;
-        }
-        .geo-button {
-            @apply mt-2 px-2 py-1 text-xs font-bold rounded-lg shadow-sm transition-colors duration-150;
-        }
-        .manual-signal-field {
-          @apply mt-2 w-full text-center text-xs text-gray-500 italic;
-        }
-        .printable-only-description {
-            display: none;
-        }
-       
-       @media print {
-            body > .container > header,
-            body .border-b.no-print,
-            body .tab-panel:not(.active-for-print),
-            body footer {
-                display: none;
-            }
-
-            body .no-print {
+        
+        @media print {
+            body.printing-customer-sheet > *:not(#print-area) {
                 display: none !important;
             }
-            
-            body .tab-panel.active-for-print {
+            #print-area {
                 display: block !important;
             }
-
-            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 9pt; }
-            .printable-area { box-shadow: none !important; border: none !important; }
-            h2 { font-size: 1.25rem; }
-            #network-layout-container, #balanced-network-container { gap: 0.5rem; }
-            .cto-card-print { width: 240px !important; page-break-inside: avoid; }
-            .printable-only-description { display: block; margin-top: 0.5rem; text-align: left; }
+            .printable-sheet {
+                page-break-after: always;
+            }
+            .printable-sheet:last-child {
+                page-break-after: auto;
+            }
         }
     </style>
 </head>
-<body>
+<body class="bg-slate-100 text-slate-800">
 
-    <div class="container">
-        <header class="text-center mb-8 no-print flex justify-between items-start">
-            <div>
-                <h1 id="main-title" class="text-3xl md:text-4xl font-extrabold text-gray-800 text-left">Gerenciador de CTOs</h1>
-                <p class="text-lg text-gray-500 mt-2 text-left">Planeje e calcule a potência para redes ópticas balanceadas e desbalanceadas.</p>
-            </div>
-             <div class="flex items-center gap-4">
-                <div class="relative">
-                    <button id="project-menu-button" class="bg-white text-gray-700 font-bold py-2 px-4 rounded-lg shadow-md hover:bg-gray-100 transition flex items-center border border-gray-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 16a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" />
-                        </svg>
-                        <span>Projeto</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                        </svg>
-                    </button>
-                    <div id="project-menu" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg z-20 border">
-                        <div class="py-1">
-                            <a href="#" onclick="showPremiumFeatureModal()" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" /></svg>
-                                Abrir Projeto
-                            </a>
-                            <a href="#" onclick="showPremiumFeatureModal()" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v10a2 2 0 01-2 2H7a2 2 0 01-2-2V4zm3 1a1 1 0 00-1 1v6a1 1 0 102 0V6a1 1 0 00-1-1z" /></svg>
-                                Salvar Projeto
-                            </a>
-                        </div>
-                        <div class="border-t border-gray-100"></div>
-                        <div class="py-1">
-                            <a href="#" onclick="showPremiumFeatureModal()" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v6a2 2 0 002 2h12a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7V9h6v3z" clip-rule="evenodd" /></svg>
-                                Imprimir CTOs
-                            </a>
-                            <a href="#" onclick="showPremiumFeatureModal()" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                                Relatório de Campo
-                            </a>
-                            <a href="#" onclick="showPremiumFeatureModal()" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12s-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367 2.684z" /></svg>
-                                Compartilhar
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-8">
+            <h1 id="app-title" contenteditable="true" class="text-4xl md:text-5xl font-bold text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 rounded-md">Gestão de Clientes Telecom</h1>
+            <p id="app-slogan" contenteditable="true" class="text-lg text-slate-600 mt-2 outline-none focus:ring-2 focus:ring-blue-500 rounded-md">Cadastre, visualize e gerencie seus clientes com facilidade.</p>
         </header>
-        
-        <div class="section-card mb-8">
-            <label for="project-name-input" class="font-bold text-lg text-gray-600 text-center block mb-2">Nome do Projeto</label>
-            <input id="project-name-input" oninput="projectName = this.value" type="text" placeholder="Ex: Expansão Bairro Centro" class="w-full max-w-md mx-auto p-2 text-center rounded-md font-bold border-2 border-gray-300 focus:border-indigo-500 block">
-        </div>
 
-        <div class="border-b border-gray-200 no-print">
-            <nav class="-mb-px flex justify-center space-x-4" aria-label="Tabs">
-                <button id="tab-desbalanceada" onclick="switchTab('desbalanceada')" class="tab-button tab-active">Rede Desbalanceada</button>
-                <button id="tab-balanceada" onclick="switchTab('balanceada')" class="tab-button">Rede Balanceada</button>
-            </nav>
-        </div>
+        <main class="space-y-8">
+            <!-- Coluna do Formulário -->
+            <div>
+                <form id="customer-form" class="bg-white p-6 rounded-lg shadow-lg space-y-4 max-w-2xl mx-auto">
+                    <h2 id="form-title" class="text-2xl font-semibold border-b pb-3 mb-4">Cadastrar Novo Cliente</h2>
+                    
+                    <input type="hidden" id="customer-id">
+                    <input type="hidden" id="photo-data">
 
-        <!-- Painel Rede Desbalanceada -->
-        <div id="tab-panel-desbalanceada" class="tab-panel printable-area">
-            <div class="section-card">
-                <h2 class="text-2xl font-bold text-center text-gray-700 mb-4">Parâmetros da Rede Desbalanceada</h2>
-                 <div class="max-w-md mx-auto mb-6">
-                     <label for="map-link-input-unbalanced" class="font-bold text-lg text-gray-600 text-center block mb-2">Link do Mapa (Google My Maps)</label>
-                     <div class="flex items-center">
-                         <input id="map-link-input-unbalanced" oninput="googleMapsUrl = this.value" type="url" placeholder="Cole o link compartilhável do seu mapa aqui" class="w-full p-2 rounded-l-md font-bold border-2 border-gray-300 focus:border-indigo-500">
-                         <button onclick="viewProjectMap()" title="Visualizar Mapa" class="bg-blue-600 text-white p-3 rounded-r-md hover:bg-blue-700 transition no-print">
-                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.527-1.912 6.01 6.01 0 012.142 4.072 6.01 6.01 0 01-3.668 5.473 1.503 1.503 0 01-1.499.044 2 2 0 00-2.427 0 2 2 0 01-1.527 1.912 6.01 6.01 0 01-3.8-5.57z" clip-rule="evenodd" /></svg>
-                         </button>
-                     </div>
-                </div>
-                 <div class="max-w-xs mx-auto mb-6">
-                    <label for="olt-power-input-unbalanced" class="font-bold text-lg text-gray-600 text-center block mb-2">Potência OLT</label>
-                    <div class="flex items-center">
-                        <input type="text" id="olt-power-input-unbalanced" oninput="handleOltPowerChange(this)" value="7.00" class="w-full p-2 text-center rounded-md font-bold border-2 border-gray-300 focus:border-indigo-500"/>
-                        <span class="font-semibold text-gray-700 ml-2">dBm</span>
+                    <div class="relative">
+                        <label for="fullName" class="block text-sm font-medium text-slate-700 mb-1">🆔 Nome completo</label>
+                        <input type="text" id="fullName" required class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="Ex: João da Silva">
+                    </div>
+                    
+                    <div class="relative">
+                        <label for="nickname" class="block text-sm font-medium text-slate-700 mb-1">🏷 Apelido</label>
+                        <input type="text" id="nickname" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="Ex: João">
+                    </div>
+
+                    <div class="relative">
+                        <label for="cpf" class="block text-sm font-medium text-slate-700 mb-1">🪪 CPF</label>
+                        <input type="text" id="cpf" required class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="000.000.000-00">
+                    </div>
+
+                    <div class="relative">
+                        <label for="birthDate" class="block text-sm font-medium text-slate-700 mb-1">🎂 Data de nascimento</label>
+                        <input type="date" id="birthDate" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="relative">
+                            <label for="phone" class="block text-sm font-medium text-slate-700 mb-1">📞 Telefone</label>
+                            <input type="tel" id="phone" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="(00) 0000-0000">
+                        </div>
+                        <div class="relative">
+                            <label for="whatsapp" class="block text-sm font-medium text-slate-700 mb-1">💬 WhatsApp</label>
+                            <input type="tel" id="whatsapp" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="(00) 00000-0000">
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <label for="email" class="block text-sm font-medium text-slate-700 mb-1">✉ E-mail</label>
+                        <input type="email" id="email" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="exemplo@email.com">
+                    </div>
+
+                    <div class="relative">
+                        <label for="address" class="block text-sm font-medium text-slate-700 mb-1">🏡 Endereço</label>
+                        <input type="text" id="address" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="Rua, Número, Bairro, Cidade">
+                    </div>
+                    
+                    <div class="relative">
+                        <label for="geolocation" class="flex items-center justify-between text-sm font-medium text-slate-700 mb-1">
+                            <span>📍 Geolocalização</span>
+                            <button type="button" id="get-location-btn" class="text-xs bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-1 px-2 rounded-md">Obter Localização</button>
+                        </label>
+                        <input type="text" id="geolocation" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500 bg-slate-50" placeholder="Clique em 'Obter Localização'">
+                    </div>
+
+                    <div class="relative">
+                        <label for="reference" class="block text-sm font-medium text-slate-700 mb-1">📌 Ponto de referência</label>
+                        <input type="text" id="reference" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="Próximo ao mercado X">
+                    </div>
+
+                    <div class="relative">
+                        <label for="plan" class="block text-sm font-medium text-slate-700 mb-1">📃 Plano escolhido</label>
+                        <select id="plan" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                            <!-- Planos carregados via JS -->
+                        </select>
+                        <input type="text" id="customPlan" class="hidden w-full p-2 border border-slate-300 rounded-md mt-2" placeholder="Digite o nome do plano">
+                        <span id="plan-value" class="text-sm text-slate-500 mt-1 block"></span>
+                    </div>
+                    
+                    <div class="relative">
+                        <label for="devices" class="block text-sm font-medium text-slate-700 mb-1">📱 Quantos aparelhos conectados?</label>
+                        <input type="number" id="devices" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="Ex: 5">
+                    </div>
+                    
+                    <div class="relative">
+                        <label for="freeTrial" class="block text-sm font-medium text-slate-700 mb-1">🎁 Teste grátis</label>
+                        <select id="freeTrial" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                            <option value="nao">Não</option>
+                            <option value="15_dias">15 dias</option>
+                            <option value="1_mes">1 mês</option>
+                            <option value="2_meses">2 meses</option>
+                            <option value="3_meses">3 meses</option>
+                        </select>
+                    </div>
+                    
+                    <div class="relative">
+                        <label for="dueDate" class="block text-sm font-medium text-slate-700 mb-1">🗓️ Data de Vencimento</label>
+                        <select id="dueDate" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                            <option value="">Selecione o dia</option>
+                            <option value="01">Dia 01</option>
+                            <option value="10">Dia 10</option>
+                            <option value="15">Dia 15</option>
+                            <option value="20">Dia 20</option>
+                        </select>
+                    </div>
+
+                    <div class="relative">
+                        <label for="observations" class="block text-sm font-medium text-slate-700 mb-1">📝 OBS.:</label>
+                        <textarea id="observations" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" rows="3" placeholder="Observações adicionais sobre o cliente ou instalação..."></textarea>
+                    </div>
+
+                    <div class="relative">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">📸 Foto (Documento/Fachada)</label>
+                        <div class="flex items-center gap-4">
+                            <input type="file" id="photo-input" class="hidden" accept="image/*" capture="environment">
+                            <button type="button" id="take-photo-btn" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-2 px-4 rounded-md">Tirar Foto</button>
+                            <img id="photo-preview" src="" class="w-24 h-24 rounded-md object-cover hidden">
+                            <button type="button" id="remove-photo-btn" class="hidden text-red-500 hover:text-red-700 text-2xl font-bold">&times;</button>
+                        </div>
+                    </div>
+
+
+                    <div class="flex items-center gap-4 pt-4 border-t">
+                        <button type="submit" id="save-btn" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">Salvar Cliente</button>
+                        <button type="button" id="clear-btn" class="w-full bg-slate-200 text-slate-800 font-bold py-2 px-4 rounded-md hover:bg-slate-300 transition-colors">Limpar</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Coluna da Lista de Clientes -->
+            <div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
+                        <h2 class="text-2xl font-semibold">Clientes Cadastrados</h2>
+                    </div>
+                    <div class="relative mb-4">
+                         <span class="form-icon">🔍</span>
+                        <input type="text" id="search" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="Buscar por nome, apelido ou CPF...">
+                    </div>
+                    <div id="customer-list" class="space-y-3 max-h-[70vh] overflow-y-auto pr-2">
+                        <!-- Clientes serão inseridos aqui -->
+                    </div>
+                    <div class="flex flex-col sm:flex-row items-center gap-2 border-t pt-4 mt-4">
+                        <button id="manage-plans-btn" class="w-full sm:w-auto bg-purple-600 text-white font-bold py-2 px-4 rounded-md hover:bg-purple-700 transition-colors text-sm">Gerenciar Planos</button>
+                        <button id="backup-btn" class="w-full sm:w-auto bg-blue-800 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-900 transition-colors text-sm">Backup</button>
+                        <button id="restore-btn" class="w-full sm:w-auto bg-slate-600 text-white font-bold py-2 px-4 rounded-md hover:bg-slate-700 transition-colors text-sm">Restaurar</button>
+                        <button id="print-all-btn" class="w-full sm:w-auto bg-gray-700 text-white font-bold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors text-sm">Imprimir Tudo</button>
+                        <button id="share-all-btn" class="w-full sm:w-auto bg-green-600 text-white font-bold py-2 px-4 rounded-md hover:bg-green-700 transition-colors text-sm">Compartilhar Relatório</button>
                     </div>
                 </div>
-                <div id="network-layout-container" class="flex flex-wrap justify-center gap-4">
-                    <!-- Cards will be inserted here -->
-                </div>
-                <div class="flex flex-wrap justify-center mt-6 gap-4">
-                    <button onclick="addSpliceBox('unbalanced')" class="bg-gradient-to-r from-teal-500 to-cyan-600 text-white font-bold py-3 px-5 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M9 10h.01M15 10h.01M9 14h.01M15 14h.01M12 6v12" /></svg>
-                        + CEO/CDR
-                    </button>
-                    <button onclick="addCto()" class="bg-gradient-to-r from-orange-500 to-red-600 text-white font-bold py-3 px-5 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                        </svg>
-                        + CTO
-                    </button>
-                </div>
             </div>
-        </div>
-        
-        <!-- Painel Rede Balanceada -->
-        <div id="tab-panel-balanceada" class="hidden tab-panel printable-area">
-             <div class="section-card">
-                <h2 class="text-2xl font-bold text-center text-gray-700 mb-6">Parâmetros da Rede Balanceada</h2>
-                <div class="max-w-md mx-auto mb-6">
-                     <label for="map-link-input-balanced" class="font-bold text-lg text-gray-600 text-center block mb-2">Link do Mapa (Google My Maps)</label>
-                     <div class="flex items-center">
-                         <input id="map-link-input-balanced" oninput="googleMapsUrl = this.value" type="url" placeholder="Cole o link compartilhável do seu mapa aqui" class="w-full p-2 rounded-l-md font-bold border-2 border-gray-300 focus:border-indigo-500">
-                         <button onclick="viewProjectMap()" title="Visualizar Mapa" class="bg-blue-600 text-white p-3 rounded-r-md hover:bg-blue-700 transition no-print">
-                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.527-1.912 6.01 6.01 0 012.142 4.072 6.01 6.01 0 01-3.668 5.473 1.503 1.503 0 01-1.499.044 2 2 0 00-2.427 0 2 2 0 01-1.527 1.912 6.01 6.01 0 01-3.8-5.57z" clip-rule="evenodd" /></svg>
-                         </button>
-                     </div>
-                </div>
-                 <div class="max-w-xs mx-auto mb-6">
-                    <label for="olt-power-input-balanced" class="font-bold text-lg text-gray-600 text-center block mb-2">Potência OLT</label>
-                    <div class="flex items-center">
-                        <input type="text" id="olt-power-input-balanced" oninput="handleOltPowerChange(this)" value="7.00" class="w-full p-2 text-center rounded-md font-bold border-2 border-gray-300 focus:border-indigo-500"/>
-                        <span class="font-semibold text-gray-700 ml-2">dBm</span>
-                    </div>
-                </div>
-                <div class="max-w-4xl mx-auto grid grid-cols-1 gap-6 bg-gray-50 p-4 rounded-lg border mb-6">
-                    <div class="flex flex-col items-center">
-                        <label for="balanced-primary-splitter" class="font-bold text-lg text-gray-600">Splitter Primário (CEOA)</label>
-                        <select id="balanced-primary-splitter" onchange="handleBalancedConfigChange('primarySplitter', this.value)" class="mt-1 w-full max-w-xs text-center p-2 rounded-md font-bold border-2 border-gray-300 focus:border-indigo-500"></select>
-                    </div>
-                </div>
-                 <div id="balanced-network-container" class="flex flex-wrap justify-center gap-4">
-                     <!-- Cards will be inserted here -->
-                 </div>
-                 <div class="flex flex-wrap justify-center mt-6 gap-4">
-                     <button onclick="addSpliceBox('balanced')" class="bg-gradient-to-r from-teal-500 to-cyan-600 text-white font-bold py-3 px-5 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M9 10h.01M15 10h.01M9 14h.01M15 14h.01M12 6v12" /></svg>
-                        + CEO/CDR
-                    </button>
-                     <button onclick="addBalancedCto()" class="bg-gradient-to-r from-orange-500 to-red-600 text-white font-bold py-3 px-5 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out flex items-center justify-center">
-                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                        </svg>
-                         + CTO
-                     </button>
-                 </div>
-             </div>
-        </div>
-    </div>
-    
-    <!-- Modal para Descrição -->
-    <div id="description-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
-            <div class="p-6 text-left">
-                <h3 class="text-xl font-bold text-gray-800">Descrição do Sinal</h3>
-                <div class="mt-4">
-                    <label for="signal-description-input" class="block text-sm font-medium text-gray-700">Adicione uma nota sobre o sinal medido:</label>
-                    <textarea id="signal-description-input" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
-                </div>
-            </div>
-            <div class="bg-gray-100 px-6 py-4 flex justify-end gap-3 rounded-b-lg">
-                <button onclick="closeDescriptionModal()" class="px-4 py-2 bg-gray-200 text-gray-800 text-base font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400">Cancelar</button>
-                <button onclick="saveDescription()" class="px-4 py-2 bg-indigo-600 text-white text-base font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Salvar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para Alertas -->
-    <div id="custom-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
-            <div class="p-6">
-                <h3 class="text-xl font-bold text-gray-800 text-left" id="modal-title"></h3>
-                <div class="mt-4">
-                    <p class="text-md text-gray-600 text-left whitespace-pre-line" id="modal-content"></p>
-                </div>
-            </div>
-            <div class="bg-gray-100 px-6 py-4 flex justify-end gap-3 rounded-b-lg">
-                <button id="ok-btn" class="px-4 py-2 bg-blue-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">OK</button>
-            </div>
-        </div>
-    </div>
-
-    <footer class="mt-8 pt-8 border-t border-gray-200 text-center text-gray-600 no-print">
-        <div class="max-w-2xl mx-auto">
-            <h3 class="text-xl font-bold text-gray-800">Suporte e Contato</h3>
-            <p class="mt-4 font-semibold">Para dúvidas ou sugestões, entre em contato:</p>
-            <a href="https://wa.me/5575998312170" target="_blank" class="mt-2 inline-flex items-center bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600 transition-colors shadow-md">
-                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.152,4.26C8.24,4.26,6.65,5.85,6.65,7.761c0,0.619,0.161,1.196,0.446,1.714L6.92,9.88l-0.565,1.977l2.03-0.555	C8.75,11.536,9.423,11.69,10.152,11.69c1.91,0,3.5-1.59,3.5-3.5S12.062,4.26,10.152,4.26z M15.654,14.188	c-0.326-0.164-1.932-0.951-2.232-1.062s-0.519-0.164-0.739,0.164s-0.843,1.062-1.033,1.282s-0.38,0.246-0.705,0.082	s-1.378-0.506-2.624-1.619s-1.958-2.26-2.193-2.646s-0.246-0.58,0.156-0.744c0.094-0.037,0.203-0.09,0.301-0.136	c0.237-0.113,0.312-0.188,0.402-0.313c0.113-0.15,0.168-0.281,0.249-0.459c0.082-0.178,0.041-0.329-0.021-0.492	c-0.062-0.164-0.657-1.583-0.9-2.166c-0.237-0.564-0.485-0.485-0.657-0.492c-0.164-0.01-0.348-0.01-0.533-0.01	c-0.185,0-0.485,0.082-0.739,0.41s-0.9,0.884-0.9,2.144s0.923,2.481,1.053,2.646s1.82,2.777,4.416,3.91	c2.596,1.133,2.596,0.754,3.056,0.732c0.46-0.021,1.523-0.621,1.739-1.22c0.216-0.598,0.216-1.107,0.156-1.22	C16.151,14.398,15.98,14.352,15.654,14.188z M10.001,0C4.486,0,0,4.486,0,10.001c0,5.514,4.486,10,10.001,10	c5.514,0,10-4.486,10-10.001C20.001,4.486,15.515,0,10.001,0z M10.001,18.13c-4.48,0-8.128-3.649-8.128-8.129	c0-4.48,3.649-8.128,8.128-8.128c4.48,0,8.129,3.649,8.129,8.128C18.13,14.481,14.481,18.13,10.001,18.13z"/></svg>
-                Chamar no WhatsApp: +55 75 99831-2170
+        </main>
+        <footer class="text-center mt-12 py-4 border-t border-slate-200">
+            <h3 class="font-semibold text-slate-800">Suporte e Contato</h3>
+            <p class="text-slate-600 text-sm mt-2">Para dúvidas ou sugestões, entre em contato:</p>
+            <a href="https://wa.me/5575998312170" target="_blank" class="text-blue-600 hover:text-blue-800 inline-flex items-center justify-center mt-2 font-bold">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.654 4.502 1.905 6.344l-1.225 4.485 4.653-1.222zM8.053 7.331c-.162-.375-.527-.456-.74-.465-.213-.01-.444-.01-.675-.01-.272 0-.686.095-.994.465-.309.369-1.206 1.176-1.206 2.867 0 1.691 1.237 3.328 1.405 3.554.169.227 2.373 3.659 5.728 5.053 2.879 1.144 3.353 1.054 3.935.955.582-.099 1.834-.75 2.096-1.469.262-.719.262-1.335.183-1.469-.079-.134-.309-.214-.618-.369-.309-.155-1.834-.906-2.115-1.012-.282-.106-.487-.155-.693.155-.205.309-.798.906-.979 1.096-.181.19-.362.219-.618.064-.256-.155-1.076-.395-2.048-1.272-1.524-1.378-1.834-1.666-1.834-1.892.079-.227.182-.369.272-.464.09-.095.205-.24.309-.369.104-.13.155-.213.234-.368.079-.155.039-.282-.019-.418-.058-.134-.693-1.666-.924-2.279z"/></svg>
+                +55 75 99831-2170
             </a>
-            <p class="mt-6 text-sm text-gray-500">Desenvolvido por Jânio Carlos 10/08/2025</p>
+            <p class="text-xs text-slate-500 mt-4">Desenvolvido por Jânio Carlos &copy; 2025</p>
+        </footer>
+    </div>
+
+    <!-- Modal de Confirmação de Exclusão -->
+    <div id="delete-modal" class="hidden fixed inset-0 bg-black/50 z-50 items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-xl text-center max-w-sm mx-4">
+            <h3 class="text-xl font-bold mb-4">Confirmar Exclusão</h3>
+            <p class="text-slate-600 mb-6">Você tem certeza que deseja excluir este cliente? Esta ação não pode ser desfeita.</p>
+            <div class="flex gap-4">
+                <button id="confirm-delete-btn" class="w-full bg-red-600 text-white font-bold py-2 px-4 rounded-md hover:bg-red-700 transition-colors">Excluir</button>
+                <button id="cancel-delete-btn" class="w-full bg-slate-200 text-slate-800 font-bold py-2 px-4 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
+            </div>
         </div>
-    </footer>
-
-
+    </div>
+    
+    <!-- Modal de Gerenciamento de Planos -->
+    <div id="plans-modal" class="hidden fixed inset-0 bg-black/50 z-50 items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Gerenciar Planos e Valores</h3>
+                <button id="close-plans-modal-btn" class="text-2xl font-bold">&times;</button>
+            </div>
+            <div id="plans-list" class="space-y-2 max-h-64 overflow-y-auto mb-4 pr-2">
+                <!-- Lista de planos será inserida aqui -->
+            </div>
+            <div class="flex justify-between items-center border-t pt-4">
+                 <button id="add-plan-btn" class="bg-green-600 text-white font-bold py-2 px-4 rounded-md hover:bg-green-700 transition-colors">Adicionar Plano</button>
+                 <button id="save-plans-btn" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Área de Impressão (invisível) -->
+    <div id="print-area" class="hidden"></div>
+    
     <script>
-        // --- Variáveis de Estado Globais ---
-        let oltPower = 7.00;
-        let projectName = '';
-        let googleMapsUrl = '';
-        let activeTab = 'desbalanceada';
-        let networkSegments = [];
-        let balancedConfig = { primarySplitter: '1:8' };
-        let balancedNetworkCtos = [];
-        const FIBER_LOSS_PER_KM = 0.10;
-        const FUSION_SPLICE_LOSS = 0.10;
-        let debounceTimer = null;
-        let currentCtoInfo = null;
-
-        const FIBER_COLORS = [
-            { name: 'Verde', hex: '#28a745', text: 'white' }, { name: 'Amarelo', hex: '#ffc107', text: 'black' },
-            { name: 'Branco', hex: '#ffffff', text: 'black' }, { name: 'Azul', hex: '#007bff', text: 'white' },
-            { name: 'Vermelho', hex: '#dc3545', text: 'white' }, { name: 'Violeta', hex: '#6f42c1', text: 'white' },
-            { name: 'Marrom', hex: '#a52a2a', text: 'white' }, { name: 'Rosa', hex: '#e83e8c', text: 'white' },
-            { name: 'Preto', hex: '#000000', text: 'white' }, { name: 'Cinza', hex: '#6c757d', text: 'white' },
-            { name: 'Laranja', hex: '#fd7e14', text: 'white' }, { name: 'Aqua', hex: '#00ffff', text: 'black' }
-        ];
-    
-        const UNBALANCED_CTO_ROWS = [
-          { label: 'Sinal Entrada', key: 'sinalEntradaHub', type: 'result' },
-          { label: 'Splitter Desb.', key: 'splitterHub', type: 'select_hub' },
-          { label: 'Perda Passagem', key: 'perdaPassagemHub', type: 'result_detail' },
-          { label: 'Sinal Saída', key: 'sinalSaidaHub', type: 'result' },
-          { label: 'Perda Trecho', key: 'perdaTotalTrecho', type: 'result_detail' },
-          { label: 'Splitter CTO', key: 'splitterCto', type: 'select_cto' },
-          { label: 'Sinal Final CTO', key: 'sinalFinalCto', type: 'result_final' },
-        ];
-
-        const UNBALANCED_SPLICE_BOX_ROWS = [];
+    document.addEventListener('DOMContentLoaded', () => {
+        const customerForm = document.getElementById('customer-form');
+        const formTitle = document.getElementById('form-title');
+        const customerList = document.getElementById('customer-list');
+        const searchInput = document.getElementById('search');
+        const saveBtn = document.getElementById('save-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const customerIdInput = document.getElementById('customer-id');
         
-        const splitterLosses = { 
-          'Ausente': { drop: 0, pass: 0 }, '1:2': { drop: 3.7 }, '1:4': { drop: 7.1 }, '1:8': { drop: 10.5 }, '1:16': { drop: 13.7 }, '1:32': { drop: 17.1 }, '1:64': { drop: 20.4 }, '1:128': { drop: 23.9 }, 
-          '1:99': { drop: 21.6, pass: 0.3 }, '2:98': { drop: 18.7, pass: 0.4 }, '3:97': { drop: 16.8, pass: 0.4 }, '4:96': { drop: 14.9, pass: 0.4 }, '5:95': { drop: 14.6, pass: 0.5 }, '7:93': { drop: 13.0, pass: 0.6 }, '9:91': { drop: 11.7, pass: 0.65 }, '10:90': { drop: 11.0, pass: 0.7 }, '15:85': { drop: 9.6,  pass: 1.0 }, '20:80': { drop: 7.9,  pass: 1.4 }, '25:75': { drop: 6.95, pass: 1.7 }, '30:70': { drop: 6.0,  pass: 1.9 }, '35:65': { drop: 5.35, pass: 2.3 }, '40:60': { drop: 4.7,  pass: 2.7 }, '45:55': { drop: 4.15, pass: 3.15 }, '50:50': { drop: 3.7,  pass: 2.5 },
+        const deleteModal = document.getElementById('delete-modal');
+        const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+        const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
+        
+        const backupBtn = document.getElementById('backup-btn');
+        const restoreBtn = document.getElementById('restore-btn');
+        const printArea = document.getElementById('print-area');
+        
+        const plansModal = document.getElementById('plans-modal');
+        const managePlansBtn = document.getElementById('manage-plans-btn');
+        const closePlansModalBtn = document.getElementById('close-plans-modal-btn');
+        const plansList = document.getElementById('plans-list');
+        const addPlanBtn = document.getElementById('add-plan-btn');
+        const savePlansBtn = document.getElementById('save-plans-btn');
+        const printAllBtn = document.getElementById('print-all-btn');
+        const shareAllBtn = document.getElementById('share-all-btn');
+
+        let customerToDeleteId = null;
+
+        const cpfInput = document.getElementById('cpf');
+        const phoneInput = document.getElementById('phone');
+        const whatsappInput = document.getElementById('whatsapp');
+        const planSelect = document.getElementById('plan');
+        const customPlanInput = document.getElementById('customPlan');
+        const planValueSpan = document.getElementById('plan-value');
+        const getLocationBtn = document.getElementById('get-location-btn');
+        const geolocationInput = document.getElementById('geolocation');
+        const takePhotoBtn = document.getElementById('take-photo-btn');
+        const photoInput = document.getElementById('photo-input');
+        const photoPreview = document.getElementById('photo-preview');
+        const removePhotoBtn = document.getElementById('remove-photo-btn');
+        const photoDataInput = document.getElementById('photo-data');
+        const dueDateSelect = document.getElementById('dueDate');
+
+
+        // --- Máscaras de Input ---
+        const maskCpf = (value) => {
+            return value
+                .replace(/\D/g, '')
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+                .substring(0, 14);
         };
         
-        function getSignalColorClass(signal) { if (isNaN(signal) || signal === null) return 'bg-gray-100 border-gray-300 text-gray-500'; if (signal < -22) return 'signal-bad'; if (signal < -19) return 'signal-warn'; return 'signal-good'; }
+        const maskPhone = (value) => {
+            return value
+                .replace(/\D/g, '')
+                .replace(/(\d{2})(\d)/, '($1) $2')
+                .replace(/(\d{4})(\d)/, '$1-$2')
+                .substring(0, 14);
+        };
         
-        function getSplitterOptions(type, selectedValue) { 
-            let list;
-            if (type === 'hub') {
-                list = Object.keys(splitterLosses).filter(k => splitterLosses[k].pass !== undefined);
-            } else if (type === 'balanced') {
-                list = Object.keys(splitterLosses).filter(k => splitterLosses[k].pass === undefined && k !== 'Ausente');
-            } else { // cto
-                list = Object.keys(splitterLosses).filter(k => splitterLosses[k].pass === undefined || k === 'Ausente');
-            }
-            return list.map(key => `<option value="${key}" ${key === selectedValue ? 'selected' : ''}>${key}</option>`).join('');
-        }
-
-        function switchTab(tabName) {
-            activeTab = tabName;
-            const tabs = ['desbalanceada', 'balanceada'];
-            tabs.forEach(tab => {
-                document.getElementById(`tab-panel-${tab}`).classList.add('hidden');
-                document.getElementById(`tab-${tab}`).classList.remove('tab-active');
-            });
-            document.getElementById(`tab-panel-${tabName}`).classList.remove('hidden');
-            document.getElementById(`tab-${tabName}`).classList.add('tab-active');
-        }
-
-        function showModal(title, content) {
-            const modal = document.getElementById('custom-modal');
-            const modalTitle = document.getElementById('modal-title');
-            const modalContent = document.getElementById('modal-content');
-            
-            if(modal) {
-                modalTitle.innerText = title;
-                modalContent.innerHTML = content; // Use innerHTML to render the link
-                modal.classList.remove('hidden');
-
-                const okBtn = document.getElementById('ok-btn');
-                okBtn.onclick = () => modal.classList.add('hidden');
-            }
-        }
+        const maskWhatsapp = (value) => {
+             return value
+                .replace(/\D/g, '')
+                .replace(/(\d{2})(\d)/, '($1) $2')
+                .replace(/(\d{5})(\d)/, '$1-$2')
+                .substring(0, 15);
+        };
         
-        function showPremiumFeatureModal() {
-            const contactLink = `<a href="https://wa.me/5575998312170" target="_blank" class="text-blue-600 hover:underline font-bold">clicando aqui</a>`;
-            showModal(
-                "Funcionalidade Premium",
-                `Esta funcionalidade está disponível na versão completa.\n\nPara adquirir ou saber mais, entre em contato pelo WhatsApp ${contactLink}.`
+        cpfInput.addEventListener('input', (e) => { e.target.value = maskCpf(e.target.value); });
+        phoneInput.addEventListener('input', (e) => { e.target.value = maskPhone(e.target.value); });
+        whatsappInput.addEventListener('input', (e) => { e.target.value = maskWhatsapp(e.target.value); });
+
+        // --- Funções de Dados ---
+        const getCustomers = () => JSON.parse(localStorage.getItem('telecom_customers')) || [];
+        const setCustomers = (customers) => localStorage.setItem('telecom_customers', JSON.stringify(customers));
+        const getPlans = () => {
+            const plans = localStorage.getItem('telecom_plans');
+            if (plans) {
+                return JSON.parse(plans);
+            }
+            // Default plans
+            return [
+                { id: '85_mega', name: 'Fibra 85 Mega', value: 64.99 },
+                { id: '175_mega', name: 'Fibra 175 Mega', value: 74.99 },
+                { id: '375_mega', name: 'Fibra 375 Mega', value: 84.99 },
+                { id: '525_mega', name: 'Fibra 525 Mega', value: 99.99 },
+                { id: '1_giga', name: 'Fibra 1 Giga', value: 189.99 }
+            ];
+        };
+        const setPlans = (plans) => localStorage.setItem('telecom_plans', JSON.stringify(plans));
+
+        const getAppSettings = () => JSON.parse(localStorage.getItem('telecom_settings')) || {
+            title: 'Gestão de Clientes Telecom',
+            slogan: 'Cadastre, visualize e gerencie seus clientes com facilidade.'
+        };
+        const setAppSettings = (settings) => localStorage.setItem('telecom_settings', JSON.stringify(settings));
+
+        const renderCustomers = (filter = '') => {
+            customerList.innerHTML = '';
+            const customers = getCustomers();
+            const filteredCustomers = customers.filter(c =>
+                c.fullName.toLowerCase().includes(filter.toLowerCase()) ||
+                (c.nickname && c.nickname.toLowerCase().includes(filter.toLowerCase())) ||
+                c.cpf.includes(filter)
             );
-        }
 
-        function showDescriptionModal(index, networkType) {
-            currentCtoInfo = { index, networkType };
-            const modal = document.getElementById('description-modal');
-            const descriptionInput = document.getElementById('signal-description-input');
-            const network = networkType === 'unbalanced' ? networkSegments : balancedNetworkCtos;
-            descriptionInput.value = network[index].description || '';
-            modal.classList.remove('hidden');
-        }
-
-        function saveDescription() {
-            if (currentCtoInfo !== null) {
-                const { index, networkType } = currentCtoInfo;
-                const network = networkType === 'unbalanced' ? networkSegments : balancedNetworkCtos;
-                network[index].description = document.getElementById('signal-description-input').value;
-                if (networkType === 'unbalanced') renderUnbalancedNetwork();
-                else renderBalancedNetwork();
-            }
-            closeDescriptionModal();
-        }
-        
-        function closeDescriptionModal() {
-            document.getElementById('description-modal').classList.add('hidden');
-        }
-
-        function renderUnbalancedNetwork() {
-            const container = document.getElementById('network-layout-container');
-            container.innerHTML = ''; 
-            let ctoCounter = 0;
-            let spliceBoxCounter = 0;
-            networkSegments.forEach((segment, index) => {
-                let displayIndex;
-                if(segment.type === 'splice_box'){
-                    spliceBoxCounter++;
-                    displayIndex = spliceBoxCounter;
-                } else {
-                    ctoCounter++;
-                    displayIndex = ctoCounter;
-                }
-                const networkCard = createNetworkCard(segment, index, 'unbalanced', displayIndex);
-                container.appendChild(networkCard);
-            });
-        }
-        
-        function renderBalancedNetwork() {
-            const container = document.getElementById('balanced-network-container');
-            container.innerHTML = '';
-            document.getElementById('balanced-primary-splitter').innerHTML = getSplitterOptions('balanced', balancedConfig.primarySplitter);
-            
-            let ctoCounter = 0;
-            let spliceBoxCounter = 0;
-
-            balancedNetworkCtos.forEach((item, index) => {
-                let displayIndex;
-                if (item.type === 'splice_box') {
-                    spliceBoxCounter++;
-                    displayIndex = spliceBoxCounter;
-                } else {
-                    ctoCounter++;
-                    displayIndex = ctoCounter;
-                }
-                const card = createNetworkCard(item, index, 'balanced', displayIndex);
-                container.appendChild(card);
-            });
-        }
-
-        function createNetworkCard(data, index, networkType, displayIndex) {
-            const isUnbalanced = networkType === 'unbalanced';
-            const isSpliceBox = data.type === 'splice_box';
-            const geoText = data.geo ? `${data.geo.lat.toFixed(5)}, ${data.geo.lon.toFixed(5)}` : 'N/A';
-            const cardIdPrefix = isUnbalanced ? 'U' : 'B';
-            
-            let title = '';
-            const finalIndex = displayIndex || index + 1;
-
-            if (isSpliceBox) {
-                title = `CEO/CDR-${String(finalIndex).padStart(2, '0')}`;
-            } else if (isUnbalanced) {
-                title = `CTO-${String(finalIndex).padStart(2, '0')}`;
-            } else { 
-                title = `CTO Bal.-${String(finalIndex).padStart(2, '0')}`;
+            if (filteredCustomers.length === 0) {
+                customerList.innerHTML = `<p class="text-slate-500 text-center py-4">Nenhum cliente encontrado.</p>`;
+                return;
             }
 
-            const selectedColor = FIBER_COLORS[data.colorGroup || 0];
-            
-            const card = document.createElement('div');
-            card.className = "cto-card-print flex flex-col items-center bg-gray-50 rounded-lg shadow-md border p-3";
-            card.style.width = "280px";
-            
-            const removeAction = isUnbalanced ? `removeNetworkSegment(${index})` : `removeBalancedItem(${index})`;
-
-            let cardHtml = `
-            <h3 class="relative text-lg font-bold mb-3 px-4 py-1 rounded-full border border-gray-300" 
-                 style="background-color:${selectedColor.hex}; color:${selectedColor.text};">
-                ${title}
-                <button onclick="${removeAction}" title="Remover" class="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors no-print"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
-            </h3>
-            <div class="flex flex-col items-center mb-2 w-full">
-                <span class="text-xs font-semibold text-gray-600">Geolocalização:</span>
-                <span class="text-xs text-gray-500 mt-1 printable-geo">${geoText}</span>
-                <div class="flex gap-1 mt-1">
-                    <button onclick="getGeoLocation(${index}, '${networkType}')" class="geo-button bg-blue-500 text-white hover:bg-blue-600 no-print flex-1 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg> GPS</button>
-                    <button onclick="copyGeoLocation(${index}, '${networkType}')" class="geo-button bg-gray-500 text-white hover:bg-gray-600 no-print flex-1 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" /><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" /></svg> Copiar</button>
-                    <button onclick="openInGoogleMaps(${index}, '${networkType}')" class="geo-button bg-green-500 text-white hover:bg-green-600 no-print flex-1 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.022 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" /></svg> Mapa</button>
-                </div>
-                <div class="flex items-center mt-2 w-full">
-                    <input id="manual-geo-input-${cardIdPrefix}-${index}" type="text" placeholder="Inserir Coords." class="w-full text-center text-xs p-1 rounded-l-md border-2 border-gray-300 focus:border-indigo-500">
-                    <button onclick="saveManualGeo(${index}, '${networkType}')" class="bg-indigo-500 text-white text-xs font-bold p-1.5 rounded-r-md hover:bg-indigo-600 transition">Salvar</button>
-                </div>
-            </div>
-             <div class="flex items-center justify-start w-full mb-1.5 px-2 gap-4">
-                <div class="flex items-center">
-                    <label class="text-xs font-semibold text-gray-600 mr-1">Dist(m):</label>
-                    <input id="cto-${cardIdPrefix}-${index}-distance" type="number" value="${data.distance || 0}" oninput="handleCtoDataChange(event, ${index}, '${networkType}', 'distance')" class="input-field !w-16" />
-                </div>
-                <div class="flex items-center">
-                    <label class="text-xs font-semibold text-gray-600 mr-1">Fusões:</label>
-                    <input id="cto-${cardIdPrefix}-${index}-spliceCount" type="number" value="${data.spliceCount || 0}" oninput="handleCtoDataChange(event, ${index}, '${networkType}', 'spliceCount')" class="input-field !w-12" />
-                </div>
-            </div>
-            `;
-            
-            if (isSpliceBox) {
-                 cardHtml += `<div id="splice-details-${index}" class="w-full mt-2 pt-2 border-t border-gray-300">
-                    <div class="text-xs font-semibold text-gray-600 text-center mb-1">Detalhes da Fusão (Cor a Cor)</div>`;
-                (data.spliceDetails || []).forEach((detail, detailIndex) => {
-                    const color1 = FIBER_COLORS[detail.color1 || 0];
-                    const color2 = FIBER_COLORS[detail.color2 || 0];
-                    cardHtml += `
-                    <div class="flex items-center justify-between w-full mb-1 px-2 gap-1">
-                        <select oninput="handleSpliceDetailChange(event, ${index}, ${detailIndex}, 'color1', '${networkType}')" class="input-field flex-1 font-semibold" style="background-color:${color1.hex}; color:${color1.text}; border-color: #999;">
-                            ${FIBER_COLORS.map((c, i) => `<option value="${i}" ${i === (detail.color1 || 0) ? 'selected' : ''} style="background-color:${c.hex}; color:${c.text};">${c.name}</option>`).join('')}
-                        </select>
-                        <span class="text-xs font-bold">X</span>
-                        <select oninput="handleSpliceDetailChange(event, ${index}, ${detailIndex}, 'color2', '${networkType}')" class="input-field flex-1 font-semibold" style="background-color:${color2.hex}; color:${color2.text}; border-color: #999;">
-                             ${FIBER_COLORS.map((c, i) => `<option value="${i}" ${i === (detail.color2 || 0) ? 'selected' : ''} style="background-color:${c.hex}; color:${c.text};">${c.name}</option>`).join('')}
-                        </select>
-                        <button onclick="removeSpliceDetail(${index}, ${detailIndex}, '${networkType}')" class="p-1 bg-red-100 text-red-600 rounded-md hover:bg-red-200 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg>
-                        </button>
+            filteredCustomers.forEach(customer => {
+                const customerDiv = document.createElement('div');
+                customerDiv.className = 'bg-slate-50 p-4 rounded-lg border border-slate-200 flex flex-col';
+                customerDiv.innerHTML = `
+                    <div class="flex-grow">
+                        <h3 class="font-bold text-lg text-blue-600">${customer.fullName} ${customer.nickname ? `(${customer.nickname})` : ''}</h3>
+                        <p class="text-sm text-slate-600">🪪 ${customer.cpf}</p>
+                        <p class="text-sm text-slate-600">📞 ${customer.phone || 'Não informado'}</p>
                     </div>
-                    `;
-                });
-                cardHtml += `<button onclick="addSpliceDetail(${index}, '${networkType}')" class="mt-1 w-full text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-1 px-2 rounded-md transition">+ Adicionar Fusão</button></div>`;
-            } else {
-                cardHtml += `
-                <div class="flex items-center w-full mb-1.5 px-2">
-                    <label class="flex-1 text-xs font-semibold text-gray-600">Cor da Fibra:</label>
-                    <select id="cto-${cardIdPrefix}-${index}-colorGroup" oninput="handleCtoDataChange(event, ${index}, '${networkType}', 'colorGroup')" class="input-field font-semibold" style="background-color:${selectedColor.hex}; color:${selectedColor.text}; border-color: #999;">
-                        ${FIBER_COLORS.map((color, colorIndex) => `<option value="${colorIndex}" ${colorIndex === (data.colorGroup || 0) ? 'selected' : ''} style="background-color:${color.hex}; color:${color.text};">${colorIndex + 1} - ${color.name}</option>`).join('')}
-                    </select>
-                </div>`;
-            }
-
-            cardHtml += `<div class="w-full">`;
-            
-            let parameterRows = [];
-            if (isUnbalanced) {
-                parameterRows = isSpliceBox ? UNBALANCED_SPLICE_BOX_ROWS : UNBALANCED_CTO_ROWS;
-            } else { 
-                if (!isSpliceBox) {
-                    parameterRows = [
-                        { label: 'Splitter CTO', key: 'splitterCto', type: 'select_cto' },
-                        { label: 'Sinal Final CTO', key: 'sinalFinal', type: 'result_final' }
-                    ];
-                }
-            }
-            
-            parameterRows.forEach(row => {
-                const value = data[row.key];
-                if (row.type === 'result_final') {
-                    const finalSignal = parseFloat(value);
-                    const colorClass = getSignalColorClass(finalSignal);
-                    cardHtml += `<div class="flex justify-between items-center w-full mb-1.5 px-2"><label class="text-xs font-semibold text-gray-600">${row.label}:</label><div class="px-3 py-1 text-sm font-bold rounded-full ${colorClass}">${value || '---'} dBm</div></div>`;
-                } else {
-                    cardHtml += `<div class="flex items-center w-full mb-1.5 px-2"><label class="flex-1 text-xs font-semibold text-gray-600">${row.label}:</label>`;
-                    switch(row.type) {
-                        case 'select_hub': cardHtml += `<select oninput="handleCtoDataChange(event, ${index}, '${networkType}', 'splitterHub')" class="input-field">${getSplitterOptions('hub', data.splitterHub)}</select>`; break;
-                        case 'select_cto':
-                             const optionsType = isUnbalanced ? 'cto' : 'balanced';
-                             cardHtml += `<select oninput="handleCtoDataChange(event, ${index}, '${networkType}', 'splitterCto')" class="input-field">${getSplitterOptions(optionsType, data.splitterCto)}</select>`;
-                             break;
-                        case 'result': cardHtml += `<input type="text" value="${value || '---'}" readonly class="result-field" />`; break;
-                        case 'result_detail': cardHtml += `<div class="loss-detail">${value || '---'}</div>`; break;
-                    }
-                    cardHtml += `</div>`;
-                }
+                    <div class="flex gap-2 justify-end mt-4 pt-4 border-t border-slate-200">
+                         <button class="share-btn text-green-500 hover:text-green-700" data-id="${customer.id}" title="Compartilhar no WhatsApp">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.654 4.502 1.905 6.344l-1.225 4.485 4.653-1.222zM8.053 7.331c-.162-.375-.527-.456-.74-.465-.213-.01-.444-.01-.675-.01-.272 0-.686.095-.994.465-.309.369-1.206 1.176-1.206 2.867 0 1.691 1.237 3.328 1.405 3.554.169.227 2.373 3.659 5.728 5.053 2.879 1.144 3.353 1.054 3.935.955.582-.099 1.834-.75 2.096-1.469.262-.719.262-1.335.183-1.469-.079-.134-.309-.214-.618-.369-.309-.155-1.834-.906-2.115-1.012-.282-.106-.487-.155-.693.155-.205.309-.798.906-.979 1.096-.181.19-.362.219-.618.064-.256-.155-1.076-.395-2.048-1.272-1.524-1.378-1.834-1.666-1.834-1.892.079-.227.182-.369.272-.464.09-.095.205-.24.309-.369.104-.13.155-.213.234-.368.079-.155.039-.282-.019-.418-.058-.134-.693-1.666-.924-2.279z"/></svg>
+                            </button>
+                             <button class="print-btn text-gray-500 hover:text-gray-700" data-id="${customer.id}" title="Imprimir / Salvar PDF">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v6a2 2 0 002 2h12a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zM4 9h12v6H4V9z" clip-rule="evenodd" /></svg>
+                            </button>
+                            <button class="edit-btn text-blue-500 hover:text-blue-700" data-id="${customer.id}" title="Editar">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
+                            </button>
+                            <button class="delete-btn text-red-500 hover:text-red-700" data-id="${customer.id}" title="Excluir">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                customerList.appendChild(customerDiv);
             });
-            
-            cardHtml += `<div class="mt-2 w-full text-center text-xs text-gray-500 font-bold no-print flex items-center justify-between"><span>Sinal Medido em Campo</span><button onclick="showDescriptionModal(${index}, '${networkType}')" class="p-1 rounded-full text-white bg-gray-500 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400" title="Adicionar/Editar Descrição"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button></div><div class="manual-signal-field no-print"><span class="text-xs text-gray-500 italic">${data.description || 'Nenhuma descrição salva.'}</span></div><div class="printable-only-description"><span class="text-xs font-bold text-gray-700">Descrição: </span><span>${data.description || 'N/A'}</span></div></div>`;
-            card.innerHTML = cardHtml;
-            return card;
-        }
-    
-        function recalculateUnbalanced() {
-            let powerForNextSegment = oltPower;
-            
-            networkSegments.forEach((segment) => {
-                const distanceInKm = (segment.distance || 0) / 1000;
-                let fusionLoss;
-
-                if (segment.type === 'splice_box') {
-                    fusionLoss = (segment.spliceDetails?.length || 0) * FUSION_SPLICE_LOSS;
-                } else {
-                     fusionLoss = (segment.spliceCount || 0) * FUSION_SPLICE_LOSS;
-                }
-                
-                const totalSegmentLoss = (distanceInKm * FIBER_LOSS_PER_KM) + fusionLoss;
-                segment.perdaTotalTrecho = totalSegmentLoss.toFixed(2) + ' dB';
-
-                const sinalEntradaHub = powerForNextSegment - totalSegmentLoss;
-                segment.sinalEntradaHub = sinalEntradaHub.toFixed(2);
-                
-                const hubSplitter = splitterLosses[segment.splitterHub] || { drop: 0, pass: 0 };
-                const ctoSplitter = splitterLosses[segment.splitterCto] || { drop: 0 };
-                
-                segment.perdaPassagemHub = (hubSplitter.pass || 0).toFixed(2) + ' dB';
-                
-                const sinalFinalCto = sinalEntradaHub - hubSplitter.drop - ctoSplitter.drop;
-
-                if (segment.type !== 'splice_box') {
-                    segment.sinalFinalCto = (segment.splitterCto === 'Ausente') ? null : sinalFinalCto.toFixed(2);
-                } else {
-                    segment.sinalFinalCto = null;
-                }
-                
-                const sinalSaidaHub = sinalEntradaHub - hubSplitter.pass;
-                segment.sinalSaidaHub = sinalSaidaHub.toFixed(2);
-                
-                powerForNextSegment = sinalSaidaHub;
-            });
-            renderUnbalancedNetwork();
-        }
-
-        function recalculateBalanced() {
-            let powerForChain = oltPower - (splitterLosses[balancedConfig.primarySplitter]?.drop || 0);
-
-            balancedNetworkCtos.forEach(segment => {
-                const inputPower = powerForChain;
-                const distanceLoss = ((segment.distance || 0) / 1000) * FIBER_LOSS_PER_KM;
-
-                if (segment.type === 'splice_box') {
-                    const fusionLoss = (segment.spliceDetails?.length || 0) * FUSION_SPLICE_LOSS;
-                    segment.sinalFinal = null; 
-                    powerForChain = inputPower - distanceLoss - fusionLoss;
-                } else { 
-                    const spliceLoss = (segment.spliceCount || 0) * FUSION_SPLICE_LOSS;
-                    const secondarySplitterLoss = splitterLosses[segment.splitterCto]?.drop || 0;
-                    const finalSignal = inputPower - distanceLoss - spliceLoss - secondarySplitterLoss;
-                    segment.sinalFinal = finalSignal.toFixed(2);
-                    powerForChain = -Infinity;
-                }
-            });
-
-            renderBalancedNetwork();
-        }
-    
-       function handleProjectNameChange(name) {
-            projectName = name.trim();
-            document.title = projectName || 'Gerenciador de CTOs';
-            document.getElementById('main-title').innerText = projectName ? `Projeto: ${projectName}` : 'Gerenciador de CTOs';
-        }
-    
-        function updateUIWithLoadedData() {
-            document.getElementById('project-name-input').value = projectName;
-            document.getElementById('main-title').innerText = projectName ? `Projeto: ${projectName}` : 'Gerenciador de CTOs';
-            document.title = projectName || 'Gerenciador de CTOs';
-
-            document.getElementById('olt-power-input-unbalanced').value = oltPower.toFixed(2);
-            document.getElementById('olt-power-input-balanced').value = oltPower.toFixed(2);
-
-            document.getElementById('map-link-input-unbalanced').value = googleMapsUrl;
-            document.getElementById('map-link-input-balanced').value = googleMapsUrl;
-            
-            recalculateUnbalanced();
-            recalculateBalanced();
-        }
-    
-        function handleOltPowerChange(inputElement) {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => {
-                const newValue = parseFloat(inputElement.value.replace(',', '.'));
-                if (!isNaN(newValue)) {
-                    oltPower = newValue;
-                    
-                    const unbalancedInput = document.getElementById('olt-power-input-unbalanced');
-                    const balancedInput = document.getElementById('olt-power-input-balanced');
-                    
-                    if (inputElement.id === 'olt-power-input-unbalanced') {
-                        balancedInput.value = inputElement.value;
-                    } else {
-                        unbalancedInput.value = inputElement.value;
-                    }
-
-                    recalculateUnbalanced();
-                    recalculateBalanced();
-                }
-            }, 500);
-        }
-    
-        function handleCtoDataChange(event, index, networkType, field) {
-             const focusedElementId = event.target.id;
-             const selectionStart = event.target.selectionStart;
-             clearTimeout(debounceTimer);
-             debounceTimer = setTimeout(() => {
-                const network = networkType === 'unbalanced' ? networkSegments : balancedNetworkCtos;
-                let value = event.target.value;
-
-                if (field === 'distance' || field === 'spliceCount' || field === 'colorGroup') {
-                    value = parseFloat(value) || 0;
-                }
-                 
-                if (network[index]) { 
-                    network[index][field] = value; 
-                }
-                
-                if (networkType === 'unbalanced' && field === 'splitterCto') {
-                    networkSegments[index][field] = value;
-                }
-
-                if (networkType === 'unbalanced') recalculateUnbalanced();
-                else recalculateBalanced();
-                
-                const focusedElement = document.getElementById(focusedElementId);
-                if (focusedElement) {
-                    focusedElement.focus({ preventScroll: true });
-                    if (focusedElement.setSelectionRange) {
-                        focusedElement.setSelectionRange(selectionStart, selectionStart);
-                    }
-                }
-             }, 500);
-        }
-
-        function handleBalancedConfigChange(field, value) {
-            balancedConfig[field] = value;
-            recalculateBalanced();
-        }
-
-        function handleMapLinkChange(inputElement) {
-            const url = inputElement.value.trim();
-            googleMapsUrl = url;
-
-            const unbalancedInput = document.getElementById('map-link-input-unbalanced');
-            const balancedInput = document.getElementById('map-link-input-balanced');
-            
-            if (inputElement.id === 'map-link-input-unbalanced') {
-                balancedInput.value = url;
-            } else if (inputElement.id === 'map-link-input-balanced') {
-                unbalancedInput.value = url;
-            }
-        }
-
-        function viewProjectMap() {
-            if (googleMapsUrl && googleMapsUrl.trim() !== '') {
-                try {
-                    new URL(googleMapsUrl);
-                    window.open(googleMapsUrl, '_blank');
-                } catch (e) {
-                    showModal("URL Inválida", "Por favor, insira um link válido começando com http:// ou https://");
-                }
-            } else {
-                showModal("Nenhum Mapa Definido", "Por favor, insira um link do Google My Maps no campo correspondente.");
-            }
-        }
-
-        function copyGeoLocation(index, networkType) {
-            const network = networkType === 'unbalanced' ? networkSegments : balancedNetworkCtos;
-            const segment = network[index];
-            if (segment && segment.geo) {
-                const geoString = `${segment.geo.lat}, ${segment.geo.lon}`;
-                const textArea = document.createElement("textarea");
-                textArea.value = geoString;
-                textArea.style.position = "fixed"; 
-                textArea.style.top = "-9999px";
-                textArea.style.left = "-9999px";
-                document.body.appendChild(textArea);
-                textArea.focus();
-                textArea.select();
-                try {
-                    document.execCommand('copy');
-                    showModal("Coordenadas Copiadas", `O texto "${geoString}" foi copiado para a área de transferência.`);
-                } catch (err) {
-                    showModal("Erro ao Copiar", "Não foi possível copiar as coordenadas.");
-                }
-                document.body.removeChild(textArea);
-            } else {
-                showModal("Geolocalização Ausente", "Primeiro, clique em 'GPS' para capturar as coordenadas.");
-            }
-        }
-
-       function openInGoogleMaps(index, networkType) {
-            const network = networkType === 'unbalanced' ? networkSegments : balancedNetworkCtos;
-            const cto = network[index];
-            
-            if (!cto.geo) {
-                showModal("Geolocalização Ausente", "Por favor, capture as coordenadas GPS ou insira-as manualmente primeiro.");
-                return;
-            }
-            
-            if (googleMapsUrl && googleMapsUrl.trim() !== '') {
-                 const geoString = `${cto.geo.lat.toFixed(5)}, ${cto.geo.lon.toFixed(5)}`;
-                 navigator.clipboard.writeText(geoString).then(() => {
-                     window.open(googleMapsUrl, '_blank');
-                     showModal("Coordenadas Copiadas", `As coordenadas "${geoString}" foram copiadas. Agora, cole-as no seu mapa para adicionar o ponto.`);
-                 }, () => {
-                     showModal("Erro ao Copiar", "Não foi possível copiar as coordenadas para a área de transferência.");
-                 });
-            } else {
-                 const lat = cto.geo.lat;
-                 const lon = cto.geo.lon;
-                 const url = `https://www.google.com/maps?q=${lat},${lon}`;
-                 window.open(url, '_blank');
-            }
-        }
-    
-        function getGeoLocation(index, networkType) {
-            if (!navigator.geolocation) {
-                showModal("Geolocalização Não Suportada", "O seu navegador não suporta a API de Geolocalização.");
-                return;
-            }
-            
-            if (window.isSecureContext === false) {
-                 showModal("Conexão Insegura", "O GPS não pode ser ativado em conexões não seguras (HTTP ou local). Por favor, hospede o ficheiro num servidor com HTTPS para usar esta funcionalidade.");
-                 return;
-            }
-
-            showModal("A obter localização...", "Por favor, aguarde enquanto o GPS está a ser capturado.\n\nPode ser necessário autorizar o acesso à sua localização no navegador.");
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const network = networkType === 'unbalanced' ? networkSegments : balancedNetworkCtos;
-                    const lat = position.coords.latitude;
-                    const lon = position.coords.longitude;
-                    network[index].geo = { lat: lat, lon: lon };
-                    showModal("Localização Capturada!", `As coordenadas ${lat.toFixed(5)}, ${lon.toFixed(5)} foram guardadas.`);
-                    if (networkType === 'unbalanced') renderUnbalancedNetwork();
-                    else renderBalancedNetwork();
-                },
-                (error) => {
-                    let message = "Ocorreu um erro desconhecido.";
-                    if (error.code === 1) { // PERMISSION_DENIED
-                         message = "A permissão de acesso ao GPS foi negada.\n\nVerifique as permissões do seu navegador para este site. Lembre-se que o GPS só funciona em conexões seguras (HTTPS).";
-                    } else if (error.code === 2) { // POSITION_UNAVAILABLE
-                         message = "Localização indisponível. Não foi possível obter a sua posição atual.";
-                    } else if (error.code === 3) { // TIMEOUT
-                         message = "Tempo esgotado ao tentar obter a localização.";
-                    }
-                    showModal("Erro de Geolocalização", message);
-                },
-                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-            );
-        }
-        
-        function saveManualGeo(index, networkType) {
-            const cardIdPrefix = networkType === 'unbalanced' ? 'U' : 'B';
-            const input = document.getElementById(`manual-geo-input-${cardIdPrefix}-${index}`);
-            const coordsString = input.value.trim();
-            if (coordsString) {
-                const parts = coordsString.replace(/ /g, '').split(',');
-                if (parts.length === 2) {
-                    const lat = parseFloat(parts[0]);
-                    const lon = parseFloat(parts[1]);
-                    if (!isNaN(lat) && !isNaN(lon)) {
-                        const network = networkType === 'unbalanced' ? networkSegments : balancedNetworkCtos;
-                        network[index].geo = { lat, lon };
-                        if (networkType === 'unbalanced') renderUnbalancedNetwork();
-                        else renderBalancedNetwork();
-                        showModal("Coordenadas Guardadas", `As coordenadas ${lat}, ${lon} foram guardadas com sucesso.`);
-                        input.value = '';
-                        return;
-                    }
-                }
-            }
-            showModal("Formato Inválido", "Por favor, insira as coordenadas no formato 'latitude, longitude'. Ex: -12.345, -39.876");
-        }
-        
-        function addSpliceDetail(segmentIndex, networkType) {
-            const network = networkType === 'unbalanced' ? networkSegments : balancedNetworkCtos;
-            if (network[segmentIndex] && network[segmentIndex].type === 'splice_box') {
-                if (!network[segmentIndex].spliceDetails) {
-                    network[segmentIndex].spliceDetails = [];
-                }
-                network[segmentIndex].spliceDetails.push({ color1: 0, color2: 0 });
-                if (networkType === 'unbalanced') renderUnbalancedNetwork();
-                else renderBalancedNetwork();
-            }
-        }
-
-        function removeSpliceDetail(segmentIndex, detailIndex, networkType) {
-            const network = networkType === 'unbalanced' ? networkSegments : balancedNetworkCtos;
-            if (network[segmentIndex] && network[segmentIndex].spliceDetails) {
-                network[segmentIndex].spliceDetails.splice(detailIndex, 1);
-                if (networkType === 'unbalanced') renderUnbalancedNetwork();
-                else renderBalancedNetwork();
-            }
-        }
-
-        function handleSpliceDetailChange(event, segmentIndex, detailIndex, colorKey, networkType) {
-            const network = networkType === 'unbalanced' ? networkSegments : balancedNetworkCtos;
-            if (network[segmentIndex] && network[segmentIndex].spliceDetails[detailIndex]) {
-                network[segmentIndex].spliceDetails[detailIndex][colorKey] = parseInt(event.target.value, 10);
-                if (networkType === 'unbalanced') renderUnbalancedNetwork();
-                else renderBalancedNetwork();
-            }
-        }
-
-        function addCto() {
-            if (networkSegments.length >= 3) {
-                showPremiumFeatureModal();
-                return;
-            }
-            const lastSegment = networkSegments.length > 0 ? networkSegments[networkSegments.length - 1] : { colorGroup: -1 };
-            networkSegments.push({
-                type: 'cto',
-                splitterHub: 'Ausente',
-                splitterCto: 'Ausente', 
-                distance: 0,
-                spliceCount: 0,
-                geo: null,
-                description: '',
-                colorGroup: (lastSegment.colorGroup + 1) % 12
-            });
-            recalculateUnbalanced();
-        }
-
-        function removeNetworkSegment(index) {
-            if (networkSegments.length > 0) {
-                networkSegments.splice(index, 1);
-                recalculateUnbalanced();
-            }
-        }
-        
-        function addSpliceBox(networkType) {
-             const network = networkType === 'unbalanced' ? networkSegments : balancedNetworkCtos;
-            if (network.length >= 3) {
-                showPremiumFeatureModal();
-                return;
-            }
-            const lastSegment = network.length > 0 ? network[network.length - 1] : { colorGroup: -1, outgoingColorGroup: 0 };
-            const incomingColor = lastSegment.outgoingColorGroup !== undefined ? lastSegment.outgoingColorGroup : (lastSegment.colorGroup + 1) % 12;
-
-            network.push({
-                type: 'splice_box',
-                distance: 0,
-                spliceCount: 0,
-                geo: null,
-                description: '',
-                colorGroup: incomingColor,
-                outgoingColorGroup: (incomingColor + 1) % 12,
-                spliceDetails: []
-            });
-            
-            if(networkType === 'unbalanced') recalculateUnbalanced();
-            else recalculateBalanced();
-        }
-
-        function addBalancedCto() {
-            if (balancedNetworkCtos.length >= 3) {
-                showPremiumFeatureModal();
-                return;
-            }
-            const lastCto = balancedNetworkCtos.length > 0 ? balancedNetworkCtos[balancedNetworkCtos.length - 1] : { colorGroup: -1 };
-            const newColorGroup = lastCto ? (lastCto.colorGroup + 1) % 12 : 0;
-            balancedNetworkCtos.push({ 
-                type: 'cto',
-                distance: 0, 
-                spliceCount: 0, 
-                geo: null, 
-                description: '', 
-                colorGroup: newColorGroup,
-                splitterCto: '1:8'
-            });
-            recalculateBalanced();
-        }
-
-        function removeBalancedItem(index) {
-            if (balancedNetworkCtos.length > 0) {
-                balancedNetworkCtos.splice(index, 1);
-                recalculateBalanced();
-            }
-        }
-        
-        // --- Funções Desativadas (Premium) ---
-        function saveProject() { showPremiumFeatureModal(); }
-        function loadProject() { showPremiumFeatureModal(); }
-        function printCtoReport() { showPremiumFeatureModal(); }
-        function downloadFieldReport() { showPremiumFeatureModal(); }
-        function shareProject() { showPremiumFeatureModal(); }
-
-
-        window.onload = function() {
-            updateUIWithLoadedData();
         };
 
-        const menuButton = document.getElementById('project-menu-button');
-        const menu = document.getElementById('project-menu');
+        const clearForm = () => {
+            customerForm.reset();
+            customerIdInput.value = '';
+            formTitle.textContent = 'Cadastrar Novo Cliente';
+            saveBtn.textContent = 'Salvar Cliente';
+            saveBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+            saveBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+            customPlanInput.classList.add('hidden');
+            customPlanInput.value = '';
+            planValueSpan.textContent = '';
+            geolocationInput.value = '';
+            document.getElementById('devices').value = '';
+            document.getElementById('freeTrial').value = 'nao';
+            document.getElementById('observations').value = '';
+            document.getElementById('dueDate').value = '';
+            photoDataInput.value = '';
+            photoPreview.src = '';
+            photoPreview.classList.add('hidden');
+            removePhotoBtn.classList.add('hidden');
+        };
+        
+        const showDeleteModal = (id) => {
+            customerToDeleteId = id;
+            deleteModal.style.display = 'flex';
+        };
+        
+        const hideDeleteModal = () => {
+            customerToDeleteId = null;
+            deleteModal.style.display = 'none';
+        };
+        
+        // --- Funções de Planos ---
+        const populatePlansDropdown = () => {
+            const plans = getPlans();
+            planSelect.innerHTML = `<option value="">Selecione um plano</option>`;
+            plans.forEach(plan => {
+                const option = document.createElement('option');
+                option.value = plan.id;
+                option.textContent = `${plan.name} - R$ ${plan.value.toFixed(2)}`;
+                planSelect.appendChild(option);
+            });
+            planSelect.innerHTML += `<option value="outro">Outro (especificar)</option>`;
+        };
 
-        menuButton.addEventListener('click', () => {
-            menu.classList.toggle('hidden');
-        });
+        const renderPlansModal = () => {
+            plansList.innerHTML = '';
+            const plans = getPlans();
+            plans.forEach(plan => {
+                const planDiv = document.createElement('div');
+                planDiv.className = 'flex items-center gap-2';
+                planDiv.dataset.id = plan.id;
+                planDiv.innerHTML = `
+                    <input type="text" value="${plan.name}" class="plan-name-input flex-grow p-1 border rounded-md" placeholder="Nome do Plano">
+                    <input type="number" step="0.01" value="${plan.value.toFixed(2)}" class="plan-value-input w-24 p-1 border rounded-md" placeholder="Valor">
+                    <button class="delete-plan-btn text-red-500 hover:text-red-700 font-bold text-xl">&times;</button>
+                `;
+                plansList.appendChild(planDiv);
+            });
+        };
 
-        window.addEventListener('click', function(e) {
-            if (!menuButton.contains(e.target) && !menu.contains(e.target)) {
-                menu.classList.add('hidden');
+        // --- Event Listeners ---
+        planSelect.addEventListener('change', () => {
+            if (planSelect.value === 'outro') {
+                customPlanInput.classList.remove('hidden');
+                planValueSpan.textContent = '';
+            } else {
+                customPlanInput.classList.add('hidden');
+                const selectedPlan = getPlans().find(p => p.id === planSelect.value);
+                if (selectedPlan) {
+                    planValueSpan.textContent = `Valor: R$ ${selectedPlan.value.toFixed(2)}`;
+                } else {
+                    planValueSpan.textContent = '';
+                }
             }
         });
+
+        customerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = customerIdInput.value;
+            const customers = getCustomers();
+            
+            const selectedPlan = getPlans().find(p => p.id === planSelect.value);
+            let planText = '';
+            let planValue = 0;
+
+            if (planSelect.value === 'outro') {
+                planText = customPlanInput.value;
+            } else if (selectedPlan) {
+                planText = selectedPlan.name;
+                planValue = selectedPlan.value;
+            }
+
+            const newCustomer = {
+                id: id ? id : Date.now().toString(),
+                fullName: document.getElementById('fullName').value,
+                nickname: document.getElementById('nickname').value,
+                cpf: document.getElementById('cpf').value,
+                birthDate: document.getElementById('birthDate').value,
+                phone: document.getElementById('phone').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                email: document.getElementById('email').value,
+                address: document.getElementById('address').value,
+                geolocation: document.getElementById('geolocation').value,
+                reference: document.getElementById('reference').value,
+                plan: planSelect.value,
+                planText: planText,
+                planValue: planValue,
+                devices: document.getElementById('devices').value,
+                freeTrial: document.getElementById('freeTrial').value,
+                dueDate: document.getElementById('dueDate').value,
+                observations: document.getElementById('observations').value,
+                photo: photoDataInput.value
+            };
+
+            if (id) {
+                const index = customers.findIndex(c => c.id === id);
+                customers[index] = newCustomer;
+            } else {
+                customers.push(newCustomer);
+            }
+            setCustomers(customers);
+            renderCustomers(searchInput.value);
+            clearForm();
+        });
+
+        clearBtn.addEventListener('click', clearForm);
+
+        searchInput.addEventListener('input', (e) => renderCustomers(e.target.value));
+
+        customerList.addEventListener('click', (e) => {
+            const editBtn = e.target.closest('.edit-btn');
+            const deleteBtn = e.target.closest('.delete-btn');
+            const shareBtn = e.target.closest('.share-btn');
+            const printBtn = e.target.closest('.print-btn');
+
+            if (editBtn) {
+                const id = editBtn.dataset.id;
+                const customer = getCustomers().find(c => c.id === id);
+                
+                customerIdInput.value = customer.id;
+                document.getElementById('fullName').value = customer.fullName;
+                document.getElementById('nickname').value = customer.nickname;
+                document.getElementById('cpf').value = customer.cpf;
+                document.getElementById('birthDate').value = customer.birthDate;
+                document.getElementById('phone').value = customer.phone;
+                document.getElementById('whatsapp').value = customer.whatsapp;
+                document.getElementById('email').value = customer.email;
+                document.getElementById('address').value = customer.address;
+                document.getElementById('geolocation').value = customer.geolocation || '';
+                document.getElementById('reference').value = customer.reference;
+                planSelect.value = customer.plan;
+                document.getElementById('devices').value = customer.devices || '';
+                document.getElementById('freeTrial').value = customer.freeTrial || 'nao';
+                document.getElementById('dueDate').value = customer.dueDate || '';
+                document.getElementById('observations').value = customer.observations || '';
+                photoDataInput.value = customer.photo || '';
+                
+                if(customer.photo) {
+                    photoPreview.src = customer.photo;
+                    photoPreview.classList.remove('hidden');
+                    removePhotoBtn.classList.remove('hidden');
+                } else {
+                    photoPreview.src = '';
+                    photoPreview.classList.add('hidden');
+                    removePhotoBtn.classList.add('hidden');
+                }
+
+                planSelect.dispatchEvent(new Event('change'));
+
+                if (customer.plan === 'outro') {
+                    customPlanInput.value = customer.planText;
+                }
+                
+                formTitle.textContent = 'Editar Cliente';
+                saveBtn.textContent = 'Atualizar Cliente';
+                saveBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+                
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            if (deleteBtn) {
+                const id = deleteBtn.dataset.id;
+                showDeleteModal(id);
+            }
+            
+            if (shareBtn) {
+                const id = shareBtn.dataset.id;
+                const customer = getCustomers().find(c => c.id === id);
+                const planInfo = customer.plan === 'outro' 
+                    ? customer.planText 
+                    : `${customer.planText} - R$ ${customer.planValue.toFixed(2)}`;
+                const freeTrialText = customer.freeTrial && customer.freeTrial !== 'nao' ? document.querySelector(`#freeTrial option[value="${customer.freeTrial}"]`).textContent : 'Não';
+                const settings = getAppSettings();
+
+                const message = `*${settings.title}*%0A%0A` +
+                                `*Ficha do Cliente*%0A%0A` +
+                                `🆔 *Nome completo:* ${customer.fullName}%0A` +
+                                `🏷 *Apelido:* ${customer.nickname || 'N/A'}%0A` +
+                                `🪪 *CPF:* ${customer.cpf}%0A` +
+                                `🎂 *Data de nascimento:* ${customer.birthDate ? new Date(customer.birthDate + 'T00:00:00').toLocaleDateString('pt-BR') : 'N/A'}%0A` +
+                                `📞 *Telefone:* ${customer.phone || 'N/A'}%0A` +
+                                `💬 *WhatsApp:* ${customer.whatsapp || 'N/A'}%0A` +
+                                `✉ *E-mail:* ${customer.email || 'N/A'}%0A` +
+                                `🏡 *Endereço:* ${customer.address || 'N/A'}%0A` +
+                                `📍 *Geolocalização:* ${customer.geolocation || 'N/A'}%0A` +
+                                `📌 *Ponto de referência:* ${customer.reference || 'N/A'}%0A` +
+                                `📃 *Plano escolhido:* ${planInfo || 'N/A'}%0A` +
+                                `📱 *Aparelhos conectados:* ${customer.devices || 'N/A'}%0A` +
+                                `🎁 *Teste grátis:* ${freeTrialText}%0A` +
+                                `🗓️ *Vencimento:* Dia ${customer.dueDate || 'N/A'}%0A` +
+                                `📝 *OBS.:* ${customer.observations || 'N/A'}` +
+                                `${customer.photo ? '%0A📸 *Foto Anexada:* Sim' : ''}`;
+                
+                window.open(`https://api.whatsapp.com/send?text=${message}`, '_blank');
+            }
+            
+            if (printBtn) {
+                const id = printBtn.dataset.id;
+                const customer = getCustomers().find(c => c.id === id);
+                printArea.innerHTML = generateCustomerSheetHTML(customer);
+                document.body.classList.add('printing-customer-sheet');
+                window.print();
+                document.body.classList.remove('printing-customer-sheet');
+            }
+        });
+        
+        confirmDeleteBtn.addEventListener('click', () => {
+            let customers = getCustomers();
+            customers = customers.filter(c => c.id !== customerToDeleteId);
+            setCustomers(customers);
+            renderCustomers(searchInput.value);
+            hideDeleteModal();
+        });
+        
+        cancelDeleteBtn.addEventListener('click', hideDeleteModal);
+
+        backupBtn.addEventListener('click', () => {
+            const customers = getCustomers();
+            if (customers.length === 0) {
+                alert('Não há clientes para fazer backup.');
+                return;
+            }
+            const dataToBackup = {
+                customers: customers,
+                plans: getPlans(),
+                settings: getAppSettings()
+            };
+            const dataStr = JSON.stringify(dataToBackup, null, 2);
+            const blob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'backup_clientes_telecom.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        restoreBtn.addEventListener('click', () => {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = '.json';
+            fileInput.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const restoredData = JSON.parse(event.target.result);
+                        if (confirm('Isso substituirá todos os dados atuais. Deseja continuar?')) {
+                            if (Array.isArray(restoredData.customers)) {
+                                setCustomers(restoredData.customers);
+                            }
+                            if (Array.isArray(restoredData.plans)) {
+                                setPlans(restoredData.plans);
+                                populatePlansDropdown();
+                            }
+                            if (restoredData.settings) {
+                                setAppSettings(restoredData.settings);
+                                document.getElementById('app-title').textContent = restoredData.settings.title;
+                                document.getElementById('app-slogan').textContent = restoredData.settings.slogan;
+                            }
+                            renderCustomers();
+                            alert('Dados restaurados com sucesso!');
+                        }
+                    } catch (err) {
+                        alert('Erro ao ler o arquivo de backup.');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            fileInput.click();
+        });
+
+        // --- Event Listeners dos Planos ---
+        managePlansBtn.addEventListener('click', () => {
+            renderPlansModal();
+            plansModal.style.display = 'flex';
+        });
+
+        closePlansModalBtn.addEventListener('click', () => {
+            plansModal.style.display = 'none';
+        });
+
+        addPlanBtn.addEventListener('click', () => {
+            const planDiv = document.createElement('div');
+            planDiv.className = 'flex items-center gap-2';
+            planDiv.dataset.id = `new_${Date.now()}`;
+            planDiv.innerHTML = `
+                <input type="text" class="plan-name-input flex-grow p-1 border rounded-md" placeholder="Nome do Plano">
+                <input type="number" step="0.01" class="plan-value-input w-24 p-1 border rounded-md" placeholder="Valor">
+                <button class="delete-plan-btn text-red-500 hover:text-red-700 font-bold text-xl">&times;</button>
+            `;
+            plansList.appendChild(planDiv);
+        });
+
+        plansList.addEventListener('click', (e) => {
+            if (e.target.closest('.delete-plan-btn')) {
+                e.target.closest('.flex').remove();
+            }
+        });
+        
+        savePlansBtn.addEventListener('click', () => {
+            const newPlans = [];
+            const planRows = plansList.querySelectorAll('.flex');
+            planRows.forEach(row => {
+                const nameInput = row.querySelector('.plan-name-input');
+                const valueInput = row.querySelector('.plan-value-input');
+                if (nameInput.value && valueInput.value) {
+                    newPlans.push({
+                        id: row.dataset.id.startsWith('new_') ? nameInput.value.toLowerCase().replace(/\s+/g, '_') : row.dataset.id,
+                        name: nameInput.value,
+                        value: parseFloat(valueInput.value)
+                    });
+                }
+            });
+            setPlans(newPlans);
+            populatePlansDropdown();
+            alert('Planos salvos com sucesso!');
+            plansModal.style.display = 'none';
+        });
+        
+        // --- Geolocalização ---
+        getLocationBtn.addEventListener('click', () => {
+            if ("geolocation" in navigator) {
+                geolocationInput.value = "Obtendo localização...";
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        const mapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                        geolocationInput.value = mapsLink;
+                    },
+                    (error) => {
+                        let errorMessage = "Não foi possível obter a localização.";
+                        switch(error.code) {
+                            case error.PERMISSION_DENIED:
+                                errorMessage = "Permissão de localização negada.";
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                errorMessage = "Informação de localização indisponível.";
+                                break;
+                            case error.TIMEOUT:
+                                errorMessage = "Tempo esgotado para obter localização.";
+                                break;
+                        }
+                        geolocationInput.value = errorMessage;
+                    }
+                );
+            } else {
+                geolocationInput.value = "Geolocalização não suportada neste navegador.";
+            }
+        });
+        
+        const generateCustomerSheetHTML = (customer) => {
+            const planInfo = customer.plan === 'outro' 
+                ? customer.planText 
+                : `${customer.planText} - R$ ${customer.planValue.toFixed(2)}`;
+            const freeTrialText = customer.freeTrial && customer.freeTrial !== 'nao' ? document.querySelector(`#freeTrial option[value="${customer.freeTrial}"]`).textContent : 'Não';
+            const settings = getAppSettings();
+
+            return `
+                <div class="printable-sheet p-8">
+                    <h1 class="text-3xl font-bold mb-6 border-b pb-4">${settings.title}</h1>
+                    <div class="space-y-3 text-lg">
+                        <p><strong>🆔 Nome completo:</strong> ${customer.fullName}</p>
+                        <p><strong>🏷 Apelido:</strong> ${customer.nickname || 'N/A'}</p>
+                        <p><strong>🪪 CPF:</strong> ${customer.cpf}</p>
+                        <p><strong>🎂 Data de nascimento:</strong> ${customer.birthDate ? new Date(customer.birthDate + 'T00:00:00').toLocaleDateString('pt-BR') : 'N/A'}</p>
+                        <p><strong>📞 Telefone:</strong> ${customer.phone || 'N/A'}</p>
+                        <p><strong>💬 WhatsApp:</strong> ${customer.whatsapp || 'N/A'}</p>
+                        <p><strong>✉ E-mail:</strong> ${customer.email || 'N/A'}</p>
+                        <p><strong>🏡 Endereço:</strong> ${customer.address || 'N/A'}</p>
+                        <p><strong>📍 Geolocalização:</strong> <a href="${customer.geolocation}" target="_blank">${customer.geolocation || 'N/A'}</a></p>
+                        <p><strong>📌 Ponto de referência:</strong> ${customer.reference || 'N/A'}</p>
+                        <p><strong>📃 Plano escolhido:</strong> ${planInfo || 'N/A'}</p>
+                        <p><strong>📱 Aparelhos conectados:</strong> ${customer.devices || 'N/A'}</p>
+                        <p><strong>🎁 Teste grátis:</strong> ${freeTrialText}</p>
+                        <p><strong>🗓️ Vencimento:</strong> Dia ${customer.dueDate || 'N/A'}</p>
+                        <p><strong>📝 OBS.:</strong> ${customer.observations || 'N/A'}</p>
+                        ${customer.photo ? `<div class="mt-4"><p><strong>📸 Foto:</strong></p><img src="${customer.photo}" class="w-full max-w-sm mx-auto mt-2 rounded-md border"></div>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+        
+        printAllBtn.addEventListener('click', () => {
+            const customers = getCustomers();
+            if (customers.length === 0) {
+                alert('Não há clientes para imprimir.');
+                return;
+            }
+            
+            let allCustomersHTML = '';
+            customers.forEach(customer => {
+                allCustomersHTML += generateCustomerSheetHTML(customer);
+            });
+
+            printArea.innerHTML = allCustomersHTML;
+            document.body.classList.add('printing-customer-sheet');
+            window.print();
+            document.body.classList.remove('printing-customer-sheet');
+        });
+
+        shareAllBtn.addEventListener('click', () => {
+            const customers = getCustomers();
+            if (customers.length === 0) {
+                alert('Não há clientes para compartilhar.');
+                return;
+            }
+            
+            const settings = getAppSettings();
+            let reportText = `*${settings.title.toUpperCase()}*%0A%0A`;
+            customers.forEach((customer, index) => {
+                const planInfo = customer.plan === 'outro' 
+                    ? customer.planText 
+                    : `${customer.planText} - R$ ${customer.planValue.toFixed(2)}`;
+                const freeTrialText = customer.freeTrial && customer.freeTrial !== 'nao' ? document.querySelector(`#freeTrial option[value="${customer.freeTrial}"]`).textContent : 'Não';
+
+                reportText += `*Cliente ${index + 1}*%0A` +
+                                `🆔 *Nome completo:* ${customer.fullName}%0A` +
+                                `🏷 *Apelido:* ${customer.nickname || 'N/A'}%0A` +
+                                `🪪 *CPF:* ${customer.cpf}%0A` +
+                                `🎂 *Data de nascimento:* ${customer.birthDate ? new Date(customer.birthDate + 'T00:00:00').toLocaleDateString('pt-BR') : 'N/A'}%0A` +
+                                `📞 *Telefone:* ${customer.phone || 'N/A'}%0A` +
+                                `💬 *WhatsApp:* ${customer.whatsapp || 'N/A'}%0A` +
+                                `✉ *E-mail:* ${customer.email || 'N/A'}%0A` +
+                                `🏡 *Endereço:* ${customer.address || 'N/A'}%0A` +
+                                `📍 *Geolocalização:* ${customer.geolocation || 'N/A'}%0A` +
+                                `📌 *Ponto de referência:* ${customer.reference || 'N/A'}%0A` +
+                                `📃 *Plano escolhido:* ${planInfo || 'N/A'}%0A` +
+                                `📱 *Aparelhos conectados:* ${customer.devices || 'N/A'}%0A` +
+                                `🎁 *Teste grátis:* ${freeTrialText}%0A` +
+                                `🗓️ *Vencimento:* Dia ${customer.dueDate || 'N/A'}%0A` +
+                                `📝 *OBS.:* ${customer.observations || 'N/A'}%0A` +
+                                `--------------------%0A%0A`;
+            });
+            
+            window.open(`https://api.whatsapp.com/send?text=${reportText}`, '_blank');
+        });
+
+
+        // Initial setup
+        const appTitleEl = document.getElementById('app-title');
+        const appSloganEl = document.getElementById('app-slogan');
+        const settings = getAppSettings();
+        appTitleEl.textContent = settings.title;
+        appSloganEl.textContent = settings.slogan;
+
+        appTitleEl.addEventListener('blur', () => {
+            const currentSettings = getAppSettings();
+            currentSettings.title = appTitleEl.textContent;
+            setAppSettings(currentSettings);
+        });
+        appSloganEl.addEventListener('blur', () => {
+            const currentSettings = getAppSettings();
+            currentSettings.slogan = appSloganEl.textContent;
+            setAppSettings(currentSettings);
+        });
+
+        // Photo functionality
+        takePhotoBtn.addEventListener('click', () => photoInput.click());
+        removePhotoBtn.addEventListener('click', () => {
+            photoInput.value = '';
+            photoDataInput.value = '';
+            photoPreview.src = '';
+            photoPreview.classList.add('hidden');
+            removePhotoBtn.classList.add('hidden');
+        });
+
+        photoInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    photoDataInput.value = event.target.result;
+                    photoPreview.src = event.target.result;
+                    photoPreview.classList.remove('hidden');
+                    removePhotoBtn.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        populatePlansDropdown();
+        renderCustomers();
+    });
     </script>
 </body>
 </html>
