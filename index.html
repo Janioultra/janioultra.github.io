@@ -83,10 +83,12 @@
                         <input type="text" id="cpf" required class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="000.000.000-00">
                     </div>
 
+                    <!-- CAMPO DE DATA DE NASCIMENTO MODIFICADO -->
                     <div class="relative">
                         <label for="birthDate" class="block text-sm font-medium text-slate-700 mb-1">🎂 Data de nascimento</label>
-                        <input type="date" id="birthDate" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="birthDate" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="dd/mm/aaaa">
                     </div>
+                    <!-- FIM DA MODIFICAÇÃO -->
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="relative">
@@ -279,6 +281,7 @@
         const cpfInput = document.getElementById('cpf');
         const phoneInput = document.getElementById('phone');
         const whatsappInput = document.getElementById('whatsapp');
+        const birthDateInput = document.getElementById('birthDate'); // <-- ADICIONADO
         const planSelect = document.getElementById('plan');
         const customPlanInput = document.getElementById('customPlan');
         const planValueSpan = document.getElementById('plan-value');
@@ -318,9 +321,19 @@
                 .substring(0, 15);
         };
         
+        // <-- FUNÇÃO DE MÁSCARA DE DATA ADICIONADA -->
+        const maskDate = (value) => {
+            return value
+                .replace(/\D/g, '')
+                .replace(/(\d{2})(\d)/, '$1/$2')
+                .replace(/(\d{2})(\d)/, '$1/$2')
+                .substring(0, 10);
+        };
+        
         cpfInput.addEventListener('input', (e) => { e.target.value = maskCpf(e.target.value); });
         phoneInput.addEventListener('input', (e) => { e.target.value = maskPhone(e.target.value); });
         whatsappInput.addEventListener('input', (e) => { e.target.value = maskWhatsapp(e.target.value); });
+        birthDateInput.addEventListener('input', (e) => { e.target.value = maskDate(e.target.value); }); // <-- LISTENER ADICIONADO
 
         // --- Funções de Dados ---
         const getCustomers = () => JSON.parse(localStorage.getItem('telecom_customers')) || [];
@@ -403,8 +416,9 @@
             geolocationInput.value = '';
             document.getElementById('devices').value = '';
             document.getElementById('freeTrial').value = 'nao';
-            document.getElementById('observations').value = '';
             document.getElementById('dueDate').value = '';
+            document.getElementById('observations').value = '';
+            document.getElementById('birthDate').value = ''; // <-- ADICIONADO
             photoDataInput.value = '';
             photoPreview.src = '';
             photoPreview.classList.add('hidden');
@@ -482,12 +496,17 @@
                 planValue = selectedPlan.value;
             }
 
+            // <-- CONVERSÃO DE DATA ADICIONADA -->
+            const birthDateValue = document.getElementById('birthDate').value; // Ex: "31/10/1990"
+            const parts = birthDateValue.split('/');
+            const birthDateISO = parts.length === 3 ? `${parts[2]}-${parts[1]}-${parts[0]}` : '';
+
             const newCustomer = {
                 id: id ? id : Date.now().toString(),
                 fullName: document.getElementById('fullName').value,
                 nickname: document.getElementById('nickname').value,
                 cpf: document.getElementById('cpf').value,
-                birthDate: document.getElementById('birthDate').value,
+                birthDate: birthDateISO, // <-- VALOR MODIFICADO
                 phone: document.getElementById('phone').value,
                 whatsapp: document.getElementById('whatsapp').value,
                 email: document.getElementById('email').value,
@@ -533,7 +552,17 @@
                 document.getElementById('fullName').value = customer.fullName;
                 document.getElementById('nickname').value = customer.nickname;
                 document.getElementById('cpf').value = customer.cpf;
-                document.getElementById('birthDate').value = customer.birthDate;
+                
+                // <-- LÓGICA DE FORMATAÇÃO DE DATA ADICIONADA -->
+                const birthDateISO = customer.birthDate; // Ex: "1990-10-31"
+                let birthDateFormatted = '';
+                if (birthDateISO) {
+                    const parts = birthDateISO.split('-');
+                    if (parts.length === 3) birthDateFormatted = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                }
+                document.getElementById('birthDate').value = birthDateFormatted;
+                // <-- FIM DA LÓGICA -->
+
                 document.getElementById('phone').value = customer.phone;
                 document.getElementById('whatsapp').value = customer.whatsapp;
                 document.getElementById('email').value = customer.email;
@@ -584,12 +613,20 @@
                 const freeTrialText = customer.freeTrial && customer.freeTrial !== 'nao' ? document.querySelector(`#freeTrial option[value="${customer.freeTrial}"]`).textContent : 'Não';
                 const settings = getAppSettings();
 
+                // <-- LÓGICA DE FORMATAÇÃO DE DATA ADICIONADA -->
+                const birthDateISO_Share = customer.birthDate; // "1990-10-31"
+                let birthDateFormatted_Share = 'N/A';
+                if (birthDateISO_Share) {
+                  const parts = birthDateISO_Share.split('-');
+                  if (parts.length === 3) birthDateFormatted_Share = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                }
+
                 const message = `*${settings.title}*%0A%0A` +
                                 `*Ficha do Cliente*%0A%0A` +
                                 `🆔 *Nome completo:* ${customer.fullName}%0A` +
                                 `🏷 *Apelido:* ${customer.nickname || 'N/A'}%0A` +
                                 `🪪 *CPF:* ${customer.cpf}%0A` +
-                                `🎂 *Data de nascimento:* ${customer.birthDate ? new Date(customer.birthDate + 'T00:00:00').toLocaleDateString('pt-BR') : 'N/A'}%0A` +
+                                `🎂 *Data de nascimento:* ${birthDateFormatted_Share}%0A` + // <-- LINHA MODIFICADA
                                 `📞 *Telefone:* ${customer.phone || 'N/A'}%0A` +
                                 `💬 *WhatsApp:* ${customer.whatsapp || 'N/A'}%0A` +
                                 `✉ *E-mail:* ${customer.email || 'N/A'}%0A` +
@@ -770,6 +807,14 @@
             const freeTrialText = customer.freeTrial && customer.freeTrial !== 'nao' ? document.querySelector(`#freeTrial option[value="${customer.freeTrial}"]`).textContent : 'Não';
             const settings = getAppSettings();
 
+            // <-- LÓGICA DE FORMATAÇÃO DE DATA ADICIONADA -->
+            const birthDateISO_Print = customer.birthDate; // "1990-10-31"
+            let birthDateFormatted_Print = 'N/A';
+            if (birthDateISO_Print) {
+              const parts = birthDateISO_Print.split('-');
+              if (parts.length === 3) birthDateFormatted_Print = `${parts[2]}/${parts[1]}/${parts[0]}`;
+            }
+
             return `
                 <div class="printable-sheet p-8">
                     <h1 class="text-3xl font-bold mb-6 border-b pb-4">${settings.title}</h1>
@@ -777,7 +822,7 @@
                         <p><strong>🆔 Nome completo:</strong> ${customer.fullName}</p>
                         <p><strong>🏷 Apelido:</strong> ${customer.nickname || 'N/A'}</p>
                         <p><strong>🪪 CPF:</strong> ${customer.cpf}</p>
-                        <p><strong>🎂 Data de nascimento:</strong> ${customer.birthDate ? new Date(customer.birthDate + 'T00:00:00').toLocaleDateString('pt-BR') : 'N/A'}</p>
+                        <p><strong>🎂 Data de nascimento:</strong> ${birthDateFormatted_Print}</p> <!-- LINHA MODIFICADA -->
                         <p><strong>📞 Telefone:</strong> ${customer.phone || 'N/A'}</p>
                         <p><strong>💬 WhatsApp:</strong> ${customer.whatsapp || 'N/A'}</p>
                         <p><strong>✉ E-mail:</strong> ${customer.email || 'N/A'}</p>
@@ -828,11 +873,19 @@
                     : `${customer.planText} - R$ ${customer.planValue.toFixed(2)}`;
                 const freeTrialText = customer.freeTrial && customer.freeTrial !== 'nao' ? document.querySelector(`#freeTrial option[value="${customer.freeTrial}"]`).textContent : 'Não';
 
+                // <-- LÓGICA DE FORMATAÇÃO DE DATA ADICIONADA -->
+                const birthDateISO_All = customer.birthDate; // "1990-10-31"
+                let birthDateFormatted_All = 'N/A';
+                if (birthDateISO_All) {
+                  const parts = birthDateISO_All.split('-');
+                  if (parts.length === 3) birthDateFormatted_All = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                }
+
                 reportText += `*Cliente ${index + 1}*%0A` +
                                 `🆔 *Nome completo:* ${customer.fullName}%0A` +
                                 `🏷 *Apelido:* ${customer.nickname || 'N/A'}%0A` +
                                 `🪪 *CPF:* ${customer.cpf}%0A` +
-                                `🎂 *Data de nascimento:* ${customer.birthDate ? new Date(customer.birthDate + 'T00:00:00').toLocaleDateString('pt-BR') : 'N/A'}%0A` +
+                                `🎂 *Data de nascimento:* ${birthDateFormatted_All}%0A` + // <-- LINHA MODIFICADA
                                 `📞 *Telefone:* ${customer.phone || 'N/A'}%0A` +
                                 `💬 *WhatsApp:* ${customer.whatsapp || 'N/A'}%0A` +
                                 `✉ *E-mail:* ${customer.email || 'N/A'}%0A` +
@@ -899,4 +952,3 @@
     </script>
 </body>
 </html>
-
