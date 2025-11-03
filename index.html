@@ -1,1468 +1,902 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultra Fibra - Provedor de Internet</title>
+    <title>Cadastro de Clientes Telecom</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <style>
-        html {
-            scroll-behavior: smooth;
-        }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0d1128; /* Azul marinho escuro */
         }
-        .hero-gradient {
-            background: linear-gradient(90deg, #1e1b4b 0%, #4c1d95 100%);
-            position: relative;
-            overflow: hidden;
+        .form-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af; /* gray-400 */
         }
-        .plan-gradient {
-            background: linear-gradient(160deg, #1e40af, #1e293b);
+        .form-input {
+            padding-left: 2.5rem;
         }
-        /* Estilo para placeholder do formulário no tema escuro */
-        ::placeholder {
-            color: #64748b;
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-        /* Cor da data no input date */
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(1);
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; /* slate-100 */
         }
-        /* Swiper custom overrides */
-        .swiper-pagination-bullet {
-            background: #fff; /* Cor das bolinhas de paginação */
-            opacity: 0.5;
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8; /* slate-400 */
+            border-radius: 10px;
         }
-        .swiper-pagination-bullet-active {
-            background: #a78bfa; /* Cor da bolinha ativa */
-            opacity: 1;
-        }
-        .swiper-button-next, .swiper-button-prev {
-            color: #a78bfa;
-        }
-        /* Garante que o swiper ocupe a largura correta */
-        .swiper-container {
-            width: 100%;
-            overflow: hidden;
-        }
-        .swiper-slide {
-            height: auto; /* Permite que o slide ajuste a altura ao conteúdo */
-        }
-        .app-icon-btn {
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 0.75rem;
-            padding: 0.5rem;
-            transition: all 0.2s ease-in-out;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .app-icon-btn:hover {
-            transform: scale(1.1);
-            background-color: rgba(255, 255, 255, 0.1);
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b; /* slate-500 */
         }
         
-        /* =================================== */
-        /* === ESTILOS DO GERADOR DE QR CODE === */
-        /* =================================== */
-
-        #gerador-qr h2.gerador-subtitle {
-            border-bottom: 2px solid #334155; /* slate-700 */
-            padding-bottom: 8px;
-            margin-top: 0;
-            color: #f1f5f9; /* slate-100 */
-        }
-
-        #gerador-qr .geradores {
-            display: grid;
-            grid-template-columns: 1fr; 
-            gap: 20px;
-        }
-
-        @media (min-width: 768px) {
-            #gerador-qr .geradores {
-                grid-template-columns: 1fr 1fr; 
-            }
-        }
-        @media (min-width: 1024px) {
-            #gerador-qr .geradores {
-                grid-template-columns: 1fr 1fr 1fr; 
-            }
-        }
-
-        /* Estilo da caixa adaptado para o tema escuro */
-        #gerador-qr .box {
-            background-color: #1e293b; /* bg-slate-800 */
-            border: 1px solid #334155; /* border-slate-700 */
-            border-radius: 8px;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Estilo dos inputs adaptado para o tema escuro */
-        #gerador-qr .box input[type="text"],
-        #gerador-qr .box input[type="password"],
-        #gerador-qr .box input[type="number"],
-        #gerador-qr .box input[type="tel"], 
-        #gerador-qr .box input[type="email"], 
-        #gerador-qr .box textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 12px;
-            border: 1px solid #475569; /* border-slate-600 */
-            border-radius: 4px;
-            box-sizing: border-box;
-            background-color: #334155; /* bg-slate-700 */
-            color: #f1f5f9; /* text-slate-100 */
-        }
-        
-        #gerador-qr .box input#input-geo-url {
-            background-color: #475569; /* slate-600 */
-            color: #94a3b8; /* slate-400 */
-            font-size: 0.9em;
-        }
-        
-        #gerador-qr .box textarea {
-            min-height: 80px;
-            resize: vertical;
-        }
-
-        /* Botão principal do gerador */
-        #gerador-qr .box button {
-            width: 100%;
-            padding: 12px;
-            background-color: #34c759; /* Verde */
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-        }
-        
-        #gerador-qr .box > button:last-of-type {
-            margin-top: auto;
-        }
-
-        #gerador-qr .box button:hover {
-            background-color: #28a745; 
-        }
-
-        #gerador-qr .btn-geo-auto {
-            background-color: #475569; /* slate-600 */
-            color: #f1f5f9; /* slate-100 */
-            font-size: 14px;
-            padding: 8px;
-            margin-top: -5px; 
-            margin-bottom: 12px;
-        }
-        #gerador-qr .btn-geo-auto:hover {
-            background-color: #64748b; /* slate-500 */
-        }
-
-        #gerador-qr .color-inputs {
-            display: flex;
-            justify-content: space-around;
-            gap: 15px;
-            padding: 10px 0;
-            margin-top: auto; 
-            padding-top: 15px;
-            border-top: 1px solid #334155; /* slate-700 */
-        }
-        #gerador-qr .color-inputs > div {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        #gerador-qr .color-inputs label {
-            font-size: 14px;
-            font-weight: 500;
-            color: #cbd5e1; /* slate-300 */
-        }
-        #gerador-qr .color-inputs input[type="color"] {
-            width: 40px;
-            height: 40px;
-            padding: 0;
-            border: 1px solid #475569; /* slate-600 */
-            border-radius: 6px;
-            cursor: pointer;
-        }
-        #gerador-qr input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
-        #gerador-qr input[type="color"]::-webkit-color-swatch { border: none; border-radius: 6px; }
-        #gerador-qr input[type="color"]::-moz-color-swatch { border: none; border-radius: 6px; }
-
-
-        #gerador-qr .resultado {
-            margin-top: 24px;
-            text-align: center;
-        }
-        #gerador-qr .resultado h2 {
-            color: #f1f5f9; /* slate-100 */
-        }
-
-        #gerador-qr #qrcode {
-            width: 256px;
-            height: 256px;
-            margin: 16px auto;
-            border: 1px solid #334155; /* slate-700 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px;
-            background-color: #fafafa; /* Fundo branco é essencial para QR Code */
-            color: transparent; 
-        }
-
-        #gerador-qr #qrcode img,
-        #gerador-qr #qrcode canvas {
-            max-width: 100%;
-            max-height: 100%;
-        }
-
-        #gerador-qr .botoes-resultado {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            max-width: 278px;
-            margin: 0 auto;
-            margin-top: 16px;
-        }
-        #gerador-qr .botoes-resultado button { width: auto; flex-grow: 1; }
-        #gerador-qr #btn-download { background-color: #28a745; }
-        #gerador-qr #btn-download:hover { background-color: #218838; }
-        #gerador-qr #btn-print { background-color: #6c757d; }
-        #gerador-qr #btn-print:hover { background-color: #5a6268; }
-        #gerador-qr #btn-limpar { background-color: #dc3545; }
-        #gerador-qr #btn-limpar:hover { background-color: #c82333; }
-
-        /* A classe .hidden do Tailwind já faz isso, mas garantimos */
-        .hidden {
-            display: none;
-        }
-
-        /* Estilos de Impressão (Atualizados) */
         @media print {
-            /* Esconde tudo no site */
-            body > * {
-                display: none;
-                visibility: hidden;
+            body.printing-customer-sheet > *:not(#print-area) {
+                display: none !important;
             }
-            /* Mostra APENAS a seção do gerador e seu conteúdo */
-            body > main, 
-            main > #gerador-qr, 
-            #gerador-qr, 
-            #gerador-qr * {
-                display: block;
-                visibility: visible;
+            #print-area {
+                display: block !important;
             }
-            /* Esconde as partes desnecessárias do gerador na impressão */
-            #gerador-qr h2,
-            #gerador-qr .botoes-resultado,
-            #gerador-qr .color-inputs,
-            #gerador-qr .geradores,
-            #gerador-qr .container > div:first-child /* Esconde o div do título/botão fechar */
-            {
-                display: none;
-                visibility: hidden;
+            .printable-sheet {
+                page-break-after: always;
             }
-            /* Garante que o resultado e o QR Code ocupem a página */
-            #gerador-qr .resultado {
-                margin-top: 0;
-                padding: 0;
-            }
-            #gerador-qr #qrcode {
-                border: none;
-                box-shadow: none;
-                margin: 0 auto;
-                padding: 0;
+            .printable-sheet:last-child {
+                page-break-after: auto;
             }
         }
-        
     </style>
 </head>
-<body class="text-gray-200">
+<body class="bg-slate-100 text-slate-800">
 
-    <header class="bg-slate-900/70 backdrop-blur-sm shadow-lg sticky top-0 z-50">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-white">
-               ULTRA FIBRA
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-8">
+            <h1 id="app-title" contenteditable="true" class="text-4xl md:text-5xl font-bold text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 rounded-md">Gestão de Clientes Telecom</h1>
+            <p id="app-slogan" contenteditable="true" class="text-lg text-slate-600 mt-2 outline-none focus:ring-2 focus:ring-blue-500 rounded-md">Cadastre, visualize e gerencie seus clientes com facilidade.</p>
+        </header>
+
+        <main class="space-y-8">
+            <!-- Coluna do Formulário -->
+            <div>
+                <form id="customer-form" class="bg-white p-6 rounded-lg shadow-lg space-y-4 max-w-2xl mx-auto">
+                    <h2 id="form-title" class="text-2xl font-semibold border-b pb-3 mb-4">Cadastrar Novo Cliente</h2>
+                    
+                    <input type="hidden" id="customer-id">
+                    <input type="hidden" id="photo-data">
+
+                    <div class="relative">
+                        <label for="fullName" class="block text-sm font-medium text-slate-700 mb-1">🆔 Nome completo</label>
+                        <input type="text" id="fullName" required class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="Ex: João da Silva">
+                    </div>
+                    
+                    <div class="relative">
+                        <label for="nickname" class="block text-sm font-medium text-slate-700 mb-1">🏷 Apelido</label>
+                        <input type="text" id="nickname" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="Ex: João">
+                    </div>
+
+                    <div class="relative">
+                        <label for="cpf" class="block text-sm font-medium text-slate-700 mb-1">🪪 CPF</label>
+                        <input type="text" id="cpf" required class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="000.000.000-00">
+                    </div>
+
+                    <div class="relative">
+                        <label for="birthDate" class="block text-sm font-medium text-slate-700 mb-1">🎂 Data de nascimento</label>
+                        <input type="date" id="birthDate" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="relative">
+                            <label for="phone" class="block text-sm font-medium text-slate-700 mb-1">📞 Telefone</label>
+                            <input type="tel" id="phone" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="(00) 0000-0000">
+                        </div>
+                        <div class="relative">
+                            <label for="whatsapp" class="block text-sm font-medium text-slate-700 mb-1">💬 WhatsApp</label>
+                            <input type="tel" id="whatsapp" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="(00) 00000-0000">
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <label for="email" class="block text-sm font-medium text-slate-700 mb-1">✉ E-mail</label>
+                        <input type="email" id="email" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="exemplo@email.com">
+                    </div>
+
+                    <div class="relative">
+                        <label for="address" class="block text-sm font-medium text-slate-700 mb-1">🏡 Endereço</label>
+                        <input type="text" id="address" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="Rua, Número, Bairro, Cidade">
+                    </div>
+                    
+                    <div class="relative">
+                        <label for="geolocation" class="flex items-center justify-between text-sm font-medium text-slate-700 mb-1">
+                            <span>📍 Geolocalização</span>
+                            <button type="button" id="get-location-btn" class="text-xs bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-1 px-2 rounded-md">Obter Localização</button>
+                        </label>
+                        <input type="text" id="geolocation" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500 bg-slate-50" placeholder="Clique em 'Obter Localização'">
+                    </div>
+
+                    <div class="relative">
+                        <label for="reference" class="block text-sm font-medium text-slate-700 mb-1">📌 Ponto de referência</label>
+                        <input type="text" id="reference" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="Próximo ao mercado X">
+                    </div>
+
+                    <div class="relative">
+                        <label for="plan" class="block text-sm font-medium text-slate-700 mb-1">📃 Plano escolhido</label>
+                        <select id="plan" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                            <!-- Planos carregados via JS -->
+                        </select>
+                        <input type="text" id="customPlan" class="hidden w-full p-2 border border-slate-300 rounded-md mt-2" placeholder="Digite o nome do plano">
+                        <span id="plan-value" class="text-sm text-slate-500 mt-1 block"></span>
+                    </div>
+                    
+                    <div class="relative">
+                        <label for="devices" class="block text-sm font-medium text-slate-700 mb-1">📱 Quantos aparelhos conectados?</label>
+                        <input type="number" id="devices" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="Ex: 5">
+                    </div>
+                    
+                    <div class="relative">
+                        <label for="freeTrial" class="block text-sm font-medium text-slate-700 mb-1">🎁 Teste grátis</label>
+                        <select id="freeTrial" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                            <option value="nao">Não</option>
+                            <option value="15_dias">15 dias</option>
+                            <option value="1_mes">1 mês</option>
+                            <option value="2_meses">2 meses</option>
+                            <option value="3_meses">3 meses</option>
+                        </select>
+                    </div>
+                    
+                    <div class="relative">
+                        <label for="dueDate" class="block text-sm font-medium text-slate-700 mb-1">🗓️ Data de Vencimento</label>
+                        <select id="dueDate" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                            <option value="">Selecione o dia</option>
+                            <option value="01">Dia 01</option>
+                            <option value="10">Dia 10</option>
+                            <option value="15">Dia 15</option>
+                            <option value="20">Dia 20</option>
+                        </select>
+                    </div>
+
+                    <div class="relative">
+                        <label for="observations" class="block text-sm font-medium text-slate-700 mb-1">📝 OBS.:</label>
+                        <textarea id="observations" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" rows="3" placeholder="Observações adicionais sobre o cliente ou instalação..."></textarea>
+                    </div>
+
+                    <div class="relative">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">📸 Foto (Documento/Fachada)</label>
+                        <div class="flex items-center gap-4">
+                            <input type="file" id="photo-input" class="hidden" accept="image/*" capture="environment">
+                            <button type="button" id="take-photo-btn" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-2 px-4 rounded-md">Tirar Foto</button>
+                            <img id="photo-preview" src="" class="w-24 h-24 rounded-md object-cover hidden">
+                            <button type="button" id="remove-photo-btn" class="hidden text-red-500 hover:text-red-700 text-2xl font-bold">&times;</button>
+                        </div>
+                    </div>
+
+
+                    <div class="flex items-center gap-4 pt-4 border-t">
+                        <button type="submit" id="save-btn" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">Salvar Cliente</button>
+                        <button type="button" id="clear-btn" class="w-full bg-slate-200 text-slate-800 font-bold py-2 px-4 rounded-md hover:bg-slate-300 transition-colors">Limpar</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Coluna da Lista de Clientes -->
+            <div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
+                        <h2 class="text-2xl font-semibold">Clientes Cadastrados</h2>
+                    </div>
+                    <div class="relative mb-4">
+                         <span class="form-icon">🔍</span>
+                        <input type="text" id="search" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="Buscar por nome, apelido ou CPF...">
+                    </div>
+                    <div id="customer-list" class="space-y-3 max-h-[70vh] overflow-y-auto pr-2">
+                        <!-- Clientes serão inseridos aqui -->
+                    </div>
+                    <div class="flex flex-col sm:flex-row items-center gap-2 border-t pt-4 mt-4">
+                        <button id="manage-plans-btn" class="w-full sm:w-auto bg-purple-600 text-white font-bold py-2 px-4 rounded-md hover:bg-purple-700 transition-colors text-sm">Gerenciar Planos</button>
+                        <button id="backup-btn" class="w-full sm:w-auto bg-blue-800 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-900 transition-colors text-sm">Backup</button>
+                        <button id="restore-btn" class="w-full sm:w-auto bg-slate-600 text-white font-bold py-2 px-4 rounded-md hover:bg-slate-700 transition-colors text-sm">Restaurar</button>
+                        <button id="print-all-btn" class="w-full sm:w-auto bg-gray-700 text-white font-bold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors text-sm">Imprimir Tudo</button>
+                        <button id="share-all-btn" class="w-full sm:w-auto bg-green-600 text-white font-bold py-2 px-4 rounded-md hover:bg-green-700 transition-colors text-sm">Compartilhar Relatório</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="text-center mt-12 py-4 border-t border-slate-200">
+            <h3 class="font-semibold text-slate-800">Suporte e Contato</h3>
+            <p class="text-slate-600 text-sm mt-2">Para dúvidas ou sugestões, entre em contato:</p>
+            <a href="https://wa.me/5575998312170" target="_blank" class="text-blue-600 hover:text-blue-800 inline-flex items-center justify-center mt-2 font-bold">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.654 4.502 1.905 6.344l-1.225 4.485 4.653-1.222zM8.053 7.331c-.162-.375-.527-.456-.74-.465-.213-.01-.444-.01-.675-.01-.272 0-.686.095-.994.465-.309.369-1.206 1.176-1.206 2.867 0 1.691 1.237 3.328 1.405 3.554.169.227 2.373 3.659 5.728 5.053 2.879 1.144 3.353 1.054 3.935.955.582-.099 1.834-.75 2.096-1.469.262-.719.262-1.335.183-1.469-.079-.134-.309-.214-.618-.369-.309-.155-1.834-.906-2.115-1.012-.282-.106-.487-.155-.693.155-.205.309-.798.906-.979 1.096-.181.19-.362.219-.618.064-.256-.155-1.076-.395-2.048-1.272-1.524-1.378-1.834-1.666-1.834-1.892.079-.227.182-.369.272-.464.09-.095.205-.24.309-.369.104-.13.155-.213.234-.368.079-.155.039-.282-.019-.418-.058-.134-.693-1.666-.924-2.279z"/></svg>
+                +55 75 99831-2170
             </a>
-            <div class="hidden md:flex space-x-6 items-center">
-                <a href="#planos" class="text-gray-300 hover:text-violet-400 transition duration-300">Nossos Planos</a>
-                
-                <a href="#gerador-qr" class="js-show-qr text-violet-300 border border-violet-400 px-3 py-1 rounded-full text-sm hover:bg-violet-700 hover:text-white transition duration-300">
-                    Gerador QR Grátis
-                </a>
+            <p class="text-xs text-slate-500 mt-4">Desenvolvido por Jânio Carlos &copy; 2025</p>
+        </footer>
+    </div>
 
-                <a href="#contato" class="text-gray-300 hover:text-violet-400 transition duration-300">Contato</a>
-                <a href="#" class="bg-violet-600 text-white px-4 py-2 rounded-md hover:bg-violet-700 transition duration-300 shadow">
-                    Área do Cliente
-                </a>
-            </div>
-            <button class="md:hidden flex items-center" id="mobile-menu-button">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-            </button>
-        </nav>
-        
-        <div class="hidden md:hidden bg-slate-900" id="mobile-menu">
-            <a href="#planos" class="block py-2 px-4 text-sm text-gray-300 hover:bg-slate-800">Nossos Planos</a>
-            
-            <a href="#gerador-qr" class="js-show-qr block py-2 px-4 text-sm text-violet-300 hover:bg-slate-800">Gerador QR (Grátis)</a>
-
-            <a href="#contato" class="block py-2 px-4 text-sm text-gray-300 hover:bg-slate-800">Contato</a>
-            <a href="#" class="block py-2 px-4 text-sm text-white bg-violet-600 hover:bg-violet-700">Área do Cliente</a>
-        </div>
-    </header>
-
-    <main>
-        <section class="hero-gradient text-white py-20">
-            <div class="container mx-auto px-6 text-center relative z-10">
-                <h1 class="text-4xl md:text-6xl font-bold mb-4 leading-tight">A melhor conexão da sua região</h1>
-                <p class="text-lg md:text-xl mb-8 text-violet-200">Internet 100% Fibra Óptica com ultravelocidade e estabilidade para você e sua família.</p>
-                <a href="#planos" class="bg-white text-violet-600 font-bold py-3 px-8 rounded-full hover:bg-gray-200 transition duration-300 transform hover:scale-105">
-                    Conheça os Planos
-                </a>
-                
-                <div class="mt-16">
-                    <p class="text-sm text-violet-300 mb-6">Aproveite seus apps favoritos:</p>
-                    <div class="flex justify-center items-center gap-4 md:gap-6 flex-wrap px-4 max-w-lg mx-auto">
-                        <button class="app-icon-btn" data-app-id="sky"><img src="https://logodownload.org/wp-content/uploads/2022/10/sky-logo-1.png" alt="Logo Sky+" class="h-12 w-12 object-contain bg-white p-1 rounded-md"></button>
-                        <button class="app-icon-btn" data-app-id="disney"><img src="https://logodownload.org/wp-content/uploads/2020/11/disney-plus-logo-1.png" alt="Logo Disney+" class="h-12 w-12 object-contain bg-white p-1 rounded-md"></button>
-                        <button class="app-icon-btn" data-app-id="max"><img src="https://logodownload.org/wp-content/uploads/2023/05/max-logo-0.png" alt="Logo Max" class="h-12 w-12 object-contain bg-white p-1 rounded-md"></button>
-                        <button class="app-icon-btn" data-app-id="nba"><img src="https://logodownload.org/wp-content/uploads/2017/04/nba-logo-1.png" alt="Logo NBA" class="h-12 w-12 object-contain bg-white p-1 rounded-md"></button>
-                        <button class="app-icon-btn" data-app-id="deezer"><img src="https://logodownload.org/wp-content/uploads/2017/04/deezer-logo-1.png" alt="Logo Deezer" class="h-12 w-12 object-contain bg-white p-1 rounded-md"></button>
-                    </div>
-                    <button id="open-all-apps-btn" class="mt-8 text-violet-300 font-semibold hover:text-white transition duration-300 underline">
-                        Conhecer todos os aplicativos
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <section id="planos" class="py-20">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center mb-12 text-white">Os melhores planos que combinam com você</h2>
-                
-                <div class="swiper-container group">
-                    <div class="swiper-wrapper">
-                    
-                        <div class="swiper-slide">
-                            <div class="plan-gradient border-2 border-violet-500 rounded-lg p-6 text-center shadow-lg hover:shadow-violet-500/20 hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 relative flex flex-col h-full">
-                                <span class="bg-violet-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase absolute -top-4 left-1/2 -translate-x-1/2">Recomendado</span>
-                                <h3 class="text-xl font-bold my-2 pt-8 text-white">Plano 525 Mega</h3>
-                                <p class="text-5xl font-bold text-violet-400">525<span class="text-2xl align-baseline">Mbps</span></p>
-                                <div class="my-4 text-white">
-                                    <span class="text-xl align-top">R$</span>
-                                    <span class="text-4xl font-bold">99</span>
-                                    <span class="text-xl">,99</span>
-                                    <span class="text-gray-400 text-sm">/mês</span>
-                                </div>
-                                <ul class="text-left mb-6 space-y-2 text-gray-300 text-sm flex-grow">
-                                    <li class="flex items-center"><svg class="w-4 h-4 text-green-400 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Bônus Telemedicina</li>
-                                    <li class="flex items-center"><svg class="w-4 h-4 text-green-400 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Bônus TV</li>
-                                </ul>
-                                <a href="#contato" class="w-full mt-auto bg-violet-600 text-white px-6 py-3 rounded-md hover:bg-violet-700 transition duration-300 font-semibold">Assinar Ultra Fibra</a>
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class="plan-gradient border border-slate-700 rounded-lg p-6 text-center shadow-lg hover:shadow-violet-500/20 hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 relative flex flex-col h-full">
-                                <h3 class="text-xl font-bold my-2 text-white">Plano 375 Mega</h3>
-                                <p class="text-5xl font-bold text-violet-400">375<span class="text-2xl align-baseline">Mbps</span></p>
-                                <div class="my-4 text-white">
-                                    <span class="text-xl align-top">R$</span>
-                                    <span class="text-4xl font-bold">84</span>
-                                    <span class="text-xl">,99</span>
-                                    <span class="text-gray-400 text-sm">/mês</span>
-                                </div>
-                                <ul class="text-left mb-6 space-y-2 text-gray-300 text-sm flex-grow">
-                                    <li class="flex items-center"><svg class="w-4 h-4 text-green-400 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Bônus Telemedicina</li>
-                                    <li class="flex items-center"><svg class="w-4 h-4 text-green-400 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Bônus TV</li>
-                                </ul>
-                                <a href="#contato" class="w-full mt-auto bg-violet-600 text-white px-6 py-3 rounded-md hover:bg-violet-700 transition duration-300 font-semibold">Assinar Ultra Fibra</a>
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class="plan-gradient border border-slate-700 rounded-lg p-6 text-center shadow-lg hover:shadow-violet-500/20 hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 relative flex flex-col h-full">
-                                <h3 class="text-xl font-bold my-2 text-white">Plano 175 Mega</h3>
-                                <p class="text-5xl font-bold text-violet-400">175<span class="text-2xl align-baseline">Mbps</span></p>
-                                <div class="my-4 text-white">
-                                    <span class="text-xl align-top">R$</span>
-                                    <span class="text-4xl font-bold">74</span>
-                                    <span class="text-xl">,99</span>
-                                    <span class="text-gray-400 text-sm">/mês</span>
-                                </div>
-                                <ul class="text-left mb-6 space-y-2 text-gray-300 text-sm flex-grow">
-                                    <li class="flex items-center"><svg class="w-4 h-4 text-green-400 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Bônus Rede Net TV</li>
-                                </ul>
-                                <a href="#contato" class="w-full mt-auto bg-violet-600 text-white px-6 py-3 rounded-md hover:bg-violet-700 transition duration-300 font-semibold">Assinar Ultra Fibra</a>
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class="plan-gradient border border-slate-700 rounded-lg p-6 text-center shadow-lg hover:shadow-violet-500/20 hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 relative flex flex-col h-full">
-                                <h3 class="text-xl font-bold my-2 text-white">Plano 85 Mega</h3>
-                                <p class="text-5xl font-bold text-violet-400">85<span class="text-2xl align-baseline">Mbps</span></p>
-                                <div class="my-4 text-white">
-                                    <span class="text-xl align-top">R$</span>
-                                    <span class="text-4xl font-bold">64</span>
-                                    <span class="text-xl">,99</span>
-                                    <span class="text-gray-400 text-sm">/mês</span>
-                                </div>
-                                <ul class="text-left mb-6 space-y-2 text-gray-300 text-sm flex-grow">
-                                    <li class="flex items-center"><svg class="w-4 h-4 text-green-400 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Roteador em Comodato</li>
-                                </ul>
-                                <a href="#contato" class="w-full mt-auto bg-violet-600 text-white px-6 py-3 rounded-md hover:bg-violet-700 transition duration-300 font-semibold">Assinar Ultra Fibra</a>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="swiper-pagination md:hidden mt-8 !relative"></div>
-                    <div class="swiper-button-next hidden md:block opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div class="swiper-button-prev hidden md:block opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </div>
-            </div>
-        </section>
-        
-        <section id="viabilidade" class="py-10 bg-slate-800">
-             <div class="container mx-auto px-6 text-center">
-                 <h2 class="text-2xl font-bold mb-6 text-white">Verifique a Viabilidade na sua Localização</h2>
-                 <p class="text-gray-400 mb-6">Clique no botão abaixo para obter suas coordenadas e envie para análise.</p>
-                 <button id="locate-me-viability-btn" class="mb-4 bg-violet-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-violet-700 transition duration-300 flex items-center justify-center mx-auto shadow-md">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    Obter Minha Localização
-                 </button>
-                 <div id="location-display-viability" class="mt-4 p-4 bg-slate-700 rounded-lg max-w-md mx-auto text-center hidden">
-                     <p class="text-gray-300 font-medium">Suas coordenadas:</p>
-                     <div class="flex items-center justify-center mt-2">
-                         <code id="coordinates-viability" class="text-lg font-mono bg-slate-600 text-white p-2 rounded-l-md w-full text-center"></code>
-                         <button id="copy-coords-viability-btn" class="bg-violet-600 text-white p-3 rounded-r-md hover:bg-violet-700" disabled>
-                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                         </button>
-                     </div>
-                     <p id="copy-feedback-viability" class="text-green-400 text-sm mt-2 hidden">Copiado!</p>
-                     <button id="send-location-btn" class="mt-4 w-full bg-green-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600 transition duration-300 flex items-center justify-center shadow-md" disabled>
-                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.626-2.957 6.584-6.591 6.584zm-1.13-4.243c-.225.084-1.295.64-1.492.72-.192.08-.343.12-.478.24-.135.12-.27.24-.27.42s-.012.51.05.59c.06.08.27.31.576.62.308.308.552.53.81.73.26.19.51.3.81.42.3.12.57.1.76.02.19-.08 1.13-0.47 1.29-1.26.16-.8.16-1.48.12-1.62-.04-.14-.12-.22-.24-.3s-.27-.24-.42-.32c-.15-.08-.27-.12-.42-.2-.15-.08-.34-.12-.48-.04s-.42.48-.52.56c-.1.08-.2.12-.28.12s-.16-.04-.24-.08c-.08-.04-.36-.12-.66-.36-.3-.24-.55-.52-.66-.73-.11-.21-.03-.33.04-.42.08-.08.16-.2.24-.28.08-.08.12-.16.16-.24.04-.08.02-.16-.02-.24s-.42-1.02-.56-1.4c-.15-.38-.3-.32-.43-.32-.12 0-.27-.01-.4-.01z"/>
-                         </svg>
-                         Enviar Localização para Análise
-                     </button>
-                 </div>
-             </div>
-        </section>
-
-        <section id="gerador-qr" class="py-20 bg-slate-900 hidden"> <div class="container mx-auto px-6">
-                
-                <div class="flex justify-between items-center mb-12">
-                    <h2 class="text-3xl font-bold text-white">Ferramenta Grátis: Gerador de QR Code</h2>
-                    <button id="btn-hide-qr" class="text-slate-400 hover:text-white transition-colors" title="Fechar Gerador">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </button>
-                </div>
-
-                <div class="geradores">
-                    <div class="box">
-                        <h2 class="gerador-subtitle">Site / URL</h2>
-                        <input type="text" id="input-url" placeholder="https://seusite.com.br">
-                        <div class="color-inputs">
-                            <div>
-                                <label>Cor:</label>
-                                <input type="color" class="color-dark-input" value="#000000">
-                            </div>
-                            <div>
-                                <label>Fundo:</label>
-                                <input type="color" class="color-light-input" value="#ffffff">
-                            </div>
-                        </div>
-                        <button id="btn-url">Gerar QR Code</button>
-                    </div>
-                    
-                    <div class="box">
-                        <h2 class="gerador-subtitle">Conexão Wi-Fi</h2>
-                        <input type="text" id="input-wifi-ssid" placeholder="Nome da rede (SSID)">
-                        <input type="password" id="input-wifi-pass" placeholder="Senha da rede">
-                        <div class="color-inputs">
-                            <div>
-                                <label>Cor:</label>
-                                <input type="color" class="color-dark-input" value="#000000">
-                            </div>
-                            <div>
-                                <label>Fundo:</label>
-                                <input type="color" class="color-light-input" value="#ffffff">
-                            </div>
-                        </div>
-                        <button id="btn-wifi">Gerar QR Code</button>
-                    </div>
-                    
-                    <div class="box">
-                        <h2 class="gerador-subtitle">PIX (Gerador BR Code)</h2>
-                        <input type="text" id="input-pix-key" placeholder="Sua Chave PIX (CPF, e-mail, etc)">
-                        <input type="text" id="input-pix-name" placeholder="Seu Nome (até 25 chars)">
-                        <input type="text" id="input-pix-city" placeholder="Sua Cidade (até 15 chars)">
-                        <input type="text" id="input-pix-amount" placeholder="Valor (Ex: 10,50) (opcional)">
-                        <input type="text" id="input-pix-txid" placeholder="ID da Transação (opcional)">
-                        <div class="color-inputs">
-                            <div>
-                                <label>Cor:</label>
-                                <input type="color" class="color-dark-input" value="#000000">
-                            </div>
-                            <div>
-                                <label>Fundo:</label>
-                                <input type="color" class="color-light-input" value="#ffffff">
-                            </div>
-                        </div>
-                        <button id="btn-pix">Gerar QR Code PIX</button>
-                    </div>
-
-                    <div class="box">
-                        <h2 class="gerador-subtitle">Cartão de Visita (vCard)</h2>
-                        <input type="text" id="input-vcard-nome" placeholder="Nome Completo">
-                        <input type="text" id="input-vcard-cargo" placeholder="Cargo (Ex: Desenvolvedor)">
-                        <input type="text" id="input-vcard-empresa" placeholder="Empresa">
-                        <input type="tel" id="input-vcard-tel" placeholder="Telefone (ex: +55 75 9...)">
-                        <input type="email" id="input-vcard-email" placeholder="E-mail">
-                        <input type="text" id="input-vcard-site" placeholder="Site (ex: https://...)">
-                        <input type="text" id="input-vcard-lat" placeholder="Latitude (opcional)">
-                        <input type="text" id="input-vcard-long" placeholder="Longitude (opcional)">
-                        <button type="button" id="btn-vcard-geo-auto" class="btn-geo-auto">📍 Usar minha localização</button>
-                        <div class="color-inputs">
-                            <div>
-                                <label>Cor:</label>
-                                <input type="color" class="color-dark-input" value="#000000">
-                            </div>
-                            <div>
-                                <label>Fundo:</label>
-                                <input type="color" class="color-light-input" value="#ffffff">
-                            </div>
-                        </div>
-                        <button id="btn-vcard">Gerar vCard</button>
-                    </div>
-                    
-                    <div class="box">
-                        <h2 class="gerador-subtitle">WhatsApp</h2>
-                        <input type="tel" id="input-whatsapp-tel" placeholder="Nº (ex: 5575998312170)">
-                        <textarea id="input-whatsapp-msg" placeholder="Mensagem padrão (opcional)"></textarea>
-                        <div class="color-inputs">
-                            <div>
-                                <label>Cor:</label>
-                                <input type="color" class="color-dark-input" value="#000000">
-                            </div>
-                            <div>
-                                <label>Fundo:</label>
-                                <input type="color" class="color-light-input" value="#ffffff">
-                            </div>
-                        </div>
-                        <button id="btn-whatsapp">Gerar Link Zap</button>
-                    </div>
-                    
-                    <div class="box">
-                        <h2 class="gerador-subtitle">Localização (Google Maps)</h2>
-                        <p class="text-sm text-slate-400 mb-2">Clique no botão para pegar sua localização atual e gerar um link do Google Maps.</p>
-                        <input type="text" id="input-geo-url" placeholder="Link do Google Maps aparecerá aqui..." readonly>
-                        <button type="button" id="btn-mapas-geo-auto" class="btn-geo-auto">📍 Obter Localização (Google Maps)</button>
-                        <div class="color-inputs">
-                            <div>
-                                <label>Cor:</label>
-                                <input type="color" class="color-dark-input" value="#000000">
-                            </div>
-                            <div>
-                                <label>Fundo:</label>
-                                <input type="color" class="color-light-input" value="#ffffff">
-                            </div>
-                        </div>
-                        <button id="btn-geo">Gerar Mapa</button>
-                    </div>
-
-                </div> 
-                
-                <div class="resultado">
-                    <h2>Seu QR Code:</h2>
-                    <div id="qrcode"></div>
-                    
-                    <div class="botoes-resultado">
-                        <button id="btn-download" class="hidden">Download (PNG)</button>
-                        <button id="btn-print" class="hidden">Imprimir</button>
-                        <button id="btn-limpar" class="hidden">Limpar</button>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <section id="contato" class="py-20">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center mb-12 text-white">Faça seu Cadastro Completo</h2>
-                <div class="max-w-2xl mx-auto">
-                    <div class="w-full bg-slate-800 p-8 rounded-lg shadow-lg">
-                        
-                        <div class="flex justify-between items-center mb-6">
-                            <h3 class="text-2xl font-bold text-white">Ficha do Cliente</h3>
-                            <button type="button" id="unlock-gift-btn" class="text-3xl hover:opacity-75 transition-opacity" title="Desbloquear Bônus">🎁</button>
-                        </div>
-
-                        <form id="cadastro-form" class="space-y-4">
-                            
-                            <div>
-                                <label for="full_name" class="block text-gray-300 font-medium mb-1">🆔 Nome completo:</label>
-                                <input type="text" id="full_name" name="full_name" placeholder="Digite seu nome completo" class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 bg-slate-700 text-white" required>
-                            </div>
-
-                            <div>
-                                <label for="nickname" class="block text-gray-300 font-medium mb-1">🏷️ Apelido:</label>
-                                <input type="text" id="nickname" name="nickname" placeholder="Como gostaria de ser chamado" class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 bg-slate-700 text-white">
-                            </div>
-
-                            <div>
-                                <label for="cpf" class="block text-gray-300 font-medium mb-1">🪪 CPF:</label>
-                                <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 bg-slate-700 text-white" required>
-                            </div>
-                            
-                            <div>
-                                <label for="birth_date" class="block text-gray-300 font-medium mb-1">🎂 Data de nascimento:</label>
-                                <input type="date" id="birth_date" name="birth_date" class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 bg-slate-700 text-white" required>
-                            </div>
-                            
-                            <div>
-                                <label for="whatsapp" class="block text-gray-300 font-medium mb-1">💬 WhatsApp:</label>
-                                <input type="tel" id="whatsapp" name="whatsapp" placeholder="(XX) 9XXXX-XXXX" class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 bg-slate-700 text-white" required>
-                            </div>
-
-                            <div>
-                                <label for="email" class="block text-gray-300 font-medium mb-1">✉️ E-mail:</label>
-                                <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com" class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 bg-slate-700 text-white" required>
-                            </div>
-
-                            <div>
-                                <label for="address" class="block text-gray-300 font-medium mb-1">🏡 Endereço:</label>
-                                <input type="text" id="address" name="address" placeholder="Rua, Nº, Bairro" class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 bg-slate-700 text-white" required>
-                            </div>
-
-                            <div>
-                                <label for="geolocation" class="block text-gray-300 font-medium mb-1">📍 Geolocalização:</label>
-                                <div class="flex items-center">
-                                    <input type="text" id="geolocation" name="geolocation" placeholder="Clique no botão ao lado ou preencha" class="w-full px-4 py-2 border border-slate-600 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-violet-500 bg-slate-700 text-white">
-                                    <button type="button" id="locate-me-form-btn" class="bg-violet-600 text-white p-3 rounded-r-lg hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                             <div>
-                                <label for="reference" class="block text-gray-300 font-medium mb-1">📌 Ponto de referência:</label>
-                                <input type="text" id="reference" name="reference" placeholder="Próximo a..." class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 bg-slate-700 text-white">
-                            </div>
-                            
-                             <div>
-                                <label for="plan" class="block text-gray-300 font-medium mb-1">📃 Plano escolhido:</label>
-                                <select id="plan" name="plan" class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 bg-slate-700 text-white" required>
-                                    <option value="" disabled selected>Selecione um plano</option>
-                                    <option value="Plano 525 Mega - R$ 99,99">Plano 525 Mega - R$ 99,99</option>
-                                    <option value="Plano 375 Mega - R$ 84,99">Plano 375 Mega - R$ 84,99</option>
-                                    <option value="Plano 175 Mega - R$ 74,99">Plano 175 Mega - R$ 74,99</option>
-                                    <option value="Plano 85 Mega - R$ 64,99">Plano 85 Mega - R$ 64,99</option>
-                                </select>
-                            </div>
-                            
-                            <div>
-                                <label for="devices" class="block text-gray-300 font-medium mb-1">📱 Nº de aparelhos conectados:</label>
-                                <input type="number" id="devices" name="devices" placeholder="Ex: 3" class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 bg-slate-700 text-white" min="1">
-                            </div>
-
-                            <div>
-                                <label for="due_date" class="block text-gray-300 font-medium mb-1">🗓️ Dia de vencimento:</label>
-                                <select id="due_date" name="due_date" class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 bg-slate-700 text-white" required>
-                                    <option value="" disabled selected>Selecione uma data</option>
-                                    <option value="05">Dia 05</option>
-                                    <option value="10">Dia 10</option>
-                                    <option value="15">Dia 15</option>
-                                    <option value="20">Dia 20</option>
-                                    <option value="25">Dia 25</option>
-                                </select>
-                            </div>
-
-                            <div id="free-trial-container" class="hidden">
-                                <label for="free_trial" class="block text-gray-300 font-medium mb-1">🎁 Teste grátis (Bônus)</label>
-                                <select id="free_trial" name="free_trial" class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 bg-slate-700 text-white">
-                                    <option value="Não">Não</option>
-                                    <option value="15 dias">15 dias</option>
-                                    <option value="1 mês">1 mês</option>
-                                    <option value="2 meses">2 meses</option>
-                                    <option value="3 meses">3 meses</option>
-                                </select>
-                            </div>
-
-                             <div>
-                                <label for="obs" class="block text-gray-300 font-medium mb-1">📝 Observações:</label>
-                                <textarea id="obs" name="obs" rows="3" placeholder="Alguma observação?" class="w-full px-4 py-2 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 bg-slate-700 text-white"></textarea>
-                            </div>
-                            
-                            <button type="submit" class="w-full bg-green-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600 transition duration-300 flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.626-2.957 6.584-6.591 6.584zm-1.13-4.243c-.225.084-1.295.64-1.492.72-.192.08-.343.12-.478.24-.135.12-.27.24-.27.42s-.012.51.05.59c.06.08.27.31.576.62.308.308.552.53.81.73.26.19.51.3.81.42.3.12.57.1.76.02.19-.08 1.13-0.47 1.29-1.26.16-.8.16-1.48.12-1.62-.04-.14-.12-.22-.24-.3s-.27-.24-.42-.32c-.15-.08-.27-.12-.42-.2-.15-.08-.34-.12-.48-.04s-.42.48-.52.56c-.1.08-.2.12-.28.12s-.16-.04-.24-.08c-.08-.04-.36-.12-.66-.36-.3-.24-.55-.52-.66-.73-.11-.21-.03-.33.04-.42.08-.08.16-.2.24-.28.08-.08.12-.16.16-.24.04-.08.02-.16-.02-.24s-.42-1.02-.56-1.4c-.15-.38-.3-.32-.43-.32-.12 0-.27-.01-.4-.01z"/>
-                                </svg>
-                                Enviar Cadastro Completo
-                            </button>
-                        </form>
-                    </div>
-                </div>
-                 <div class="mt-12 text-center text-gray-400">
-                    <p class="mb-2"><strong>Endereço:</strong> Rua MAJ. PRAZERES 2-110 - São Felipe/BA</p>
-                    <p class="mb-2"><strong>WhatsApp:</strong> (75) 3199-9981</p>
-                    <p><strong>CNPJ:</strong> 36.712.901/0001-53</p>
-                 </div>
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="bg-slate-900 text-white py-12">
-        <div class="container mx-auto px-6 text-center">
-             <p class="text-gray-400 text-sm">Ultra Fibra</p>
-             <p class="text-gray-400 text-sm">Rua MAJ. PRAZERES 2-110 - São Felipe/BA</p>
-             <p class="text-gray-400 text-sm mb-6">CNPJ: 36.712.901/0001-53</p>
-             <div class="border-t border-slate-700 pt-6">
-                <p>© 2024 Ultra Fibra. Todos os direitos reservados.</p>
+    <!-- Modal de Confirmação de Exclusão -->
+    <div id="delete-modal" class="hidden fixed inset-0 bg-black/50 z-50 items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-xl text-center max-w-sm mx-4">
+            <h3 class="text-xl font-bold mb-4">Confirmar Exclusão</h3>
+            <p class="text-slate-600 mb-6">Você tem certeza que deseja excluir este cliente? Esta ação não pode ser desfeita.</p>
+            <div class="flex gap-4">
+                <button id="confirm-delete-btn" class="w-full bg-red-600 text-white font-bold py-2 px-4 rounded-md hover:bg-red-700 transition-colors">Excluir</button>
+                <button id="cancel-delete-btn" class="w-full bg-slate-200 text-slate-800 font-bold py-2 px-4 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
             </div>
         </div>
-    </footer>
+    </div>
     
-    <div id="apps-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50 hidden">
-        <div class="bg-slate-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[80vh] overflow-y-auto p-6 relative">
-            <button id="close-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-            <h3 id="modal-title" class="text-2xl font-bold text-white mb-6">Apps Inclusos no Plano</h3>
-            <div id="modal-apps-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
-                </div>
-        </div>
-    </div>
-    <div id="all-apps-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50 hidden">
-        <div class="bg-slate-800 rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6 relative">
-            <button id="close-all-apps-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-            <h3 class="text-2xl font-bold text-white mb-6">Todos os Aplicativos Disponíveis</h3>
-            <div class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-3 md:gap-4 max-w-4xl mx-auto">
-                <button class="app-icon-btn" data-app-id="looke"><img src="https://logodownload.org/wp-content/uploads/2020/09/looke-logo.png" alt="Logo Looke" class="h-12 w-12 object-contain bg-white p-1 rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="sky"><img src="https://logodownload.org/wp-content/uploads/2022/10/sky-logo-1.png" alt="Logo Sky+" class="h-12 w-12 object-contain bg-white p-1 rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="kiddiepass"><img src="https://placehold.co/64x64/facc15/000000?text=KiddiePass" alt="Logo Kiddie Pass" class="h-12 w-12 object-contain rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="nutri"><img src="https://placehold.co/64x64/22c55e/FFFFFF?text=%2BNutri" alt="Logo +Nutri" class="h-12 w-12 object-contain rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="efit"><img src="https://placehold.co/64x64/3b82f6/FFFFFF?text=E-Fit" alt="Logo E-fit" class="h-12 w-12 object-contain rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="playkids"><img src="https://logospng.org/download/playkids/logo-playkids-2048.png" alt="Logo PlayKids+" class="h-12 w-12 object-contain bg-white p-1 rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="hub"><img src="httpsG://placehold.co/64x64/14b8a6/FFFFFF?text=Hub" alt="Logo HUB" class="h-12 w-12 object-contain rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="ubook"><img src="https://placehold.co/64x64/a855f7/FFFFFF?text=Ubook" alt="Logo ubookPLUS" class="h-12 w-12 object-contain rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="estuda"><img src="https://placehold.co/64x64/f97316/FFFFFF?text=Estuda%2B" alt="Logo Estuda+" class="h-12 w-12 object-contain rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="leitores"><img src="https://placehold.co/64x64/ec4899/FFFFFF?text=Leitores" alt="Logo Pequenos Leitores" class="h-12 w-12 object-contain rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="fluid"><img src="https://placehold.co/64x64/6366f1/FFFFFF?text=Fluid" alt="Logo fluid" class="h-12 w-12 object-contain rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="socialcomics"><img src="https://placehold.co/64x64/ef4444/FFFFFF?text=Social" alt="Logo Social Comics" class="h-12 w-12 object-contain rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="revistaria"><img src="https://placehold.co/64x64/d946ef/FFFFFF?text=Revista" alt="Logo revistaria" class="h-12 w-12 object-contain rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="playlist"><img src="https://placehold.co/64x64/8b5cf6/FFFFFF?text=Playlist" alt="Logo Playlist" class="h-12 w-12 object-contain rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="deezer"><img src="https://logodownload.org/wp-content/uploads/2017/04/deezer-logo-1.png" alt="Logo Deezer" class="h-12 w-12 object-contain bg-white p-1 rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="klicencas"><img src="https://placehold.co/64x64/6366f1/FFFFFF?text=K" alt="Logo K Licenças" class="h-12 w-12 object-contain rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="hotgo"><img src="httpsad://placehold.co/64x64/dc2626/FFFFFF?text=HotGo" alt="Logo Hotgo" class="h-12 w-12 object-contain rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="curtaon"><img src="https://placehold.co/64x64/1f2937/FFFFFF?text=CurtaOn" alt="Logo CurtaOn" class="h-12 w-12 object-contain rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="jornalista"><img src="https://placehold.co/64x64/4b5563/FFFFFF?text=Jornal" alt="Logo O Jornalista" class="h-12 w-12 object-contain rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="docway"><img src="https://placehold.co/64x64/10b981/FFFFFF?text=Doc" alt="Logo Docway" class="h-12 w-12 object-contain rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="disney"><img src="https://logodownload.org/wp-content/uploads/2020/11/disney-plus-logo-1.png" alt="Logo Disney+" class="h-12 w-12 object-contain bg-white p-1 rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="max"><img src="https://logodownload.org/wp-content/uploads/2023/05/max-logo-0.png" alt="Logo Max" class="h-12 w-12 object-contain bg-white p-1 rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="indie"><img src="httpss://placehold.co/64x64/f59e0b/FFFFFF?text=Indie" alt="Logo Indie" class="h-12 w-12 object-contain rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="leitura360"><img src="https://placehold.co/64x64/0891b2/FFFFFF?text=Leitura" alt="Logo Leitura 360" class="h-12 w-12 object-contain rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="nba"><img src="https://logodownload.org/wp-content/uploads/2017/04/nba-logo-1.png" alt="Logo NBA" class="h-12 w-12 object-contain bg-white p-1 rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="smartcontent"><img src="https://placehold.co/64x64/ef4444/FFFFFF?text=Smart" alt="Logo SmartContent" class="h-12 w-12 object-contain rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="queima"><img src="https://seeklogo.com/images/Q/queima-diaria-logo-653593254B-seeklogo.com.png" alt="Logo Queima Diária" class="h-12 w-12 object-contain bg-white p-1 rounded-md"></button>
-                <button class="app-icon-btn" data-app-id="zen"><img src="https://logodownload.org/wp-content/uploads/2021/04/zen-logo-0.png" alt="Logo Zen" class="h-12 w-12 object-contain bg-white p-1 rounded-md"></button>
+    <!-- Modal de Gerenciamento de Planos -->
+    <div id="plans-modal" class="hidden fixed inset-0 bg-black/50 z-50 items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Gerenciar Planos e Valores</h3>
+                <button id="close-plans-modal-btn" class="text-2xl font-bold">&times;</button>
+            </div>
+            <div id="plans-list" class="space-y-2 max-h-64 overflow-y-auto mb-4 pr-2">
+                <!-- Lista de planos será inserida aqui -->
+            </div>
+            <div class="flex justify-between items-center border-t pt-4">
+                 <button id="add-plan-btn" class="bg-green-600 text-white font-bold py-2 px-4 rounded-md hover:bg-green-700 transition-colors">Adicionar Plano</button>
+                 <button id="save-plans-btn" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">Salvar Alterações</button>
             </div>
         </div>
     </div>
-    <div id="app-description-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50 hidden">
-        <div class="bg-slate-800 rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6 relative">
-            <button id="close-app-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-            <div class="text-center">
-                <img id="modal-app-img" src="" alt="Logo do App" class="rounded-lg w-32 h-32 mx-auto mb-4 shadow-md bg-white p-2 object-contain">
-                <h3 id="modal-app-title" class="text-2xl font-bold text-white mb-4"></h3>
-                <p id="modal-app-desc" class="text-gray-300 text-left"></p>
-            </div>
-        </div>
-    </div>
-
-
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Área de Impressão (invisível) -->
+    <div id="print-area" class="hidden"></div>
     
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            
-            // Lógica do Menu Mobile
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
+    document.addEventListener('DOMContentLoaded', () => {
+        const customerForm = document.getElementById('customer-form');
+        const formTitle = document.getElementById('form-title');
+        const customerList = document.getElementById('customer-list');
+        const searchInput = document.getElementById('search');
+        const saveBtn = document.getElementById('save-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const customerIdInput = document.getElementById('customer-id');
+        
+        const deleteModal = document.getElementById('delete-modal');
+        const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+        const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
+        
+        const backupBtn = document.getElementById('backup-btn');
+        const restoreBtn = document.getElementById('restore-btn');
+        const printArea = document.getElementById('print-area');
+        
+        const plansModal = document.getElementById('plans-modal');
+        const managePlansBtn = document.getElementById('manage-plans-btn');
+        const closePlansModalBtn = document.getElementById('close-plans-modal-btn');
+        const plansList = document.getElementById('plans-list');
+        const addPlanBtn = document.getElementById('add-plan-btn');
+        const savePlansBtn = document.getElementById('save-plans-btn');
+        const printAllBtn = document.getElementById('print-all-btn');
+        const shareAllBtn = document.getElementById('share-all-btn');
 
-            // ===========================================
-            // === LÓGICA PARA MOSTRAR/ESCONDER GERADOR QR ===
-            // ===========================================
-            const showQrButtons = document.querySelectorAll('.js-show-qr');
-            const qrSection = document.getElementById('gerador-qr');
-            const btnHideQr = document.getElementById('btn-hide-qr'); // O 'X' de fechar
-            
-            // Botões do menu para MOSTRAR o gerador
-            showQrButtons.forEach(button => {
-                button.addEventListener('click', (e) => {
-                    e.preventDefault(); // Impede o pulo brusco do link
-                    
-                    // Mostra a seção
-                    qrSection.classList.remove('hidden');
-                    
-                    // Rola suavemente para a seção
-                    qrSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        let customerToDeleteId = null;
 
-                    // Fecha o menu mobile se estiver aberto
-                    if (!mobileMenu.classList.contains('hidden')) {
-                        mobileMenu.classList.add('hidden');
-                    }
-                });
-            });
-            
-            // Botão 'X' para ESCONDER o gerador
-            btnHideQr.addEventListener('click', () => {
-                // 1. Esconde a seção
-                qrSection.classList.add('hidden');
-                
-                // 2. Limpa qualquer QR code gerado (para não ficar lá da próxima vez)
-                limparQRCode(true); // 'limparQRCode' é a função do gerador
-                
-                // 3. Rola suavemente de volta para o topo da página
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            });
-            // ===========================================
-            // === FIM DA LÓGICA DO GERADOR QR ===
-            // ===========================================
+        const cpfInput = document.getElementById('cpf');
+        const phoneInput = document.getElementById('phone');
+        const whatsappInput = document.getElementById('whatsapp');
+        const planSelect = document.getElementById('plan');
+        const customPlanInput = document.getElementById('customPlan');
+        const planValueSpan = document.getElementById('plan-value');
+        const getLocationBtn = document.getElementById('get-location-btn');
+        const geolocationInput = document.getElementById('geolocation');
+        const takePhotoBtn = document.getElementById('take-photo-btn');
+        const photoInput = document.getElementById('photo-input');
+        const photoPreview = document.getElementById('photo-preview');
+        const removePhotoBtn = document.getElementById('remove-photo-btn');
+        const photoDataInput = document.getElementById('photo-data');
+        const dueDateSelect = document.getElementById('dueDate');
 
 
-            // Lógica de Geolocalização (Viabilidade e Formulário)
-            const locateViabilityButton = document.getElementById('locate-me-viability-btn');
-            const locationDisplayViability = document.getElementById('location-display-viability');
-            const coordinatesViabilityEl = document.getElementById('coordinates-viability');
-            const copyCoordsViabilityBtn = document.getElementById('copy-coords-viability-btn');
-            const copyFeedbackViability = document.getElementById('copy-feedback-viability');
-            const sendLocationBtn = document.getElementById('send-location-btn');
+        // --- Máscaras de Input ---
+        const maskCpf = (value) => {
+            return value
+                .replace(/\D/g, '')
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+                .substring(0, 14);
+        };
+        
+        const maskPhone = (value) => {
+            return value
+                .replace(/\D/g, '')
+                .replace(/(\d{2})(\d)/, '($1) $2')
+                .replace(/(\d{4})(\d)/, '$1-$2')
+                .substring(0, 14);
+        };
+        
+        const maskWhatsapp = (value) => {
+             return value
+                .replace(/\D/g, '')
+                .replace(/(\d{2})(\d)/, '($1) $2')
+                .replace(/(\d{5})(\d)/, '$1-$2')
+                .substring(0, 15);
+        };
+        
+        cpfInput.addEventListener('input', (e) => { e.target.value = maskCpf(e.target.value); });
+        phoneInput.addEventListener('input', (e) => { e.target.value = maskPhone(e.target.value); });
+        whatsappInput.addEventListener('input', (e) => { e.target.value = maskWhatsapp(e.target.value); });
 
-            const locateFormButton = document.getElementById('locate-me-form-btn');
-            const geolocationInput = document.getElementById('geolocation');
+        // --- Funções de Dados ---
+        const getCustomers = () => JSON.parse(localStorage.getItem('telecom_customers')) || [];
+        const setCustomers = (customers) => localStorage.setItem('telecom_customers', JSON.stringify(customers));
+        const getPlans = () => {
+            const plans = localStorage.getItem('telecom_plans');
+            if (plans) {
+                return JSON.parse(plans);
+            }
+            // Default plans
+            return [
+                { id: '85_mega', name: 'Fibra 85 Mega', value: 64.99 },
+                { id: '175_mega', name: 'Fibra 175 Mega', value: 74.99 },
+                { id: '375_mega', name: 'Fibra 375 Mega', value: 84.99 },
+                { id: '525_mega', name: 'Fibra 525 Mega', value: 99.99 },
+                { id: '1_giga', name: 'Fibra 1 Giga', value: 189.99 }
+            ];
+        };
+        const setPlans = (plans) => localStorage.setItem('telecom_plans', JSON.stringify(plans));
 
-            function getGeoLocation(callbackSuccess, callbackError) {
-                 if ('geolocation' in navigator) {
-                    navigator.geolocation.getCurrentPosition(
-                        (position) => {
-                            const coordsText = `${position.coords.latitude.toFixed(5)}, ${position.coords.longitude.toFixed(5)}`;
-                            callbackSuccess(coordsText);
-                        },
-                        (error) => {
-                            console.error("Erro ao obter localização: ", error);
-                            const errorMsg = "Não foi possível obter sua localização.";
-                            callbackError(errorMsg);
-                        },
-                        {
-                            enableHighAccuracy: true,
-                            timeout: 10000, 
-                            maximumAge: 0 
-                        }
-                    );
-                } else {
-                    const errorMsg = "Geolocalização não é suportada.";
-                    callbackError(errorMsg);
-                }
+        const getAppSettings = () => JSON.parse(localStorage.getItem('telecom_settings')) || {
+            title: 'Gestão de Clientes Telecom',
+            slogan: 'Cadastre, visualize e gerencie seus clientes com facilidade.'
+        };
+        const setAppSettings = (settings) => localStorage.setItem('telecom_settings', JSON.stringify(settings));
+
+        const renderCustomers = (filter = '') => {
+            customerList.innerHTML = '';
+            const customers = getCustomers();
+            const filteredCustomers = customers.filter(c =>
+                c.fullName.toLowerCase().includes(filter.toLowerCase()) ||
+                (c.nickname && c.nickname.toLowerCase().includes(filter.toLowerCase())) ||
+                c.cpf.includes(filter)
+            );
+
+            if (filteredCustomers.length === 0) {
+                customerList.innerHTML = `<p class="text-slate-500 text-center py-4">Nenhum cliente encontrado.</p>`;
+                return;
             }
 
-            locateViabilityButton.addEventListener('click', () => {
-                coordinatesViabilityEl.textContent = 'A obter...';
-                coordinatesViabilityEl.classList.remove('text-red-500');
-                locationDisplayViability.classList.remove('hidden');
-                copyCoordsViabilityBtn.disabled = true;
-                sendLocationBtn.disabled = true;
-
-                getGeoLocation(
-                    (coordsText) => {
-                        coordinatesViabilityEl.textContent = coordsText;
-                        copyCoordsViabilityBtn.disabled = false; 
-                        sendLocationBtn.disabled = false; 
-                    },
-                    (errorMsg) => {
-                         coordinatesViabilityEl.textContent = errorMsg;
-                         coordinatesViabilityEl.classList.add('text-red-500');
-                    }
-                );
+            filteredCustomers.forEach(customer => {
+                const customerDiv = document.createElement('div');
+                customerDiv.className = 'bg-slate-50 p-4 rounded-lg border border-slate-200 flex flex-col';
+                customerDiv.innerHTML = `
+                    <div class="flex-grow">
+                        <h3 class="font-bold text-lg text-blue-600">${customer.fullName} ${customer.nickname ? `(${customer.nickname})` : ''}</h3>
+                        <p class="text-sm text-slate-600">🪪 ${customer.cpf}</p>
+                        <p class="text-sm text-slate-600">📞 ${customer.phone || 'Não informado'}</p>
+                    </div>
+                    <div class="flex gap-2 justify-end mt-4 pt-4 border-t border-slate-200">
+                         <button class="share-btn text-green-500 hover:text-green-700" data-id="${customer.id}" title="Compartilhar no WhatsApp">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.654 4.502 1.905 6.344l-1.225 4.485 4.653-1.222zM8.053 7.331c-.162-.375-.527-.456-.74-.465-.213-.01-.444-.01-.675-.01-.272 0-.686.095-.994.465-.309.369-1.206 1.176-1.206 2.867 0 1.691 1.237 3.328 1.405 3.554.169.227 2.373 3.659 5.728 5.053 2.879 1.144 3.353 1.054 3.935.955.582-.099 1.834-.75 2.096-1.469.262-.719.262-1.335.183-1.469-.079-.134-.309-.214-.618-.369-.309-.155-1.834-.906-2.115-1.012-.282-.106-.487-.155-.693.155-.205.309-.798.906-.979 1.096-.181.19-.362.219-.618.064-.256-.155-1.076-.395-2.048-1.272-1.524-1.378-1.834-1.666-1.834-1.892.079-.227.182-.369.272-.464.09-.095.205-.24.309-.369.104-.13.155-.213.234-.368.079-.155.039-.282-.019-.418-.058-.134-.693-1.666-.924-2.279z"/></svg>
+                            </button>
+                             <button class="print-btn text-gray-500 hover:text-gray-700" data-id="${customer.id}" title="Imprimir / Salvar PDF">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v6a2 2 0 002 2h12a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zM4 9h12v6H4V9z" clip-rule="evenodd" /></svg>
+                            </button>
+                            <button class="edit-btn text-blue-500 hover:text-blue-700" data-id="${customer.id}" title="Editar">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
+                            </button>
+                            <button class="delete-btn text-red-500 hover:text-red-700" data-id="${customer.id}" title="Excluir">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                customerList.appendChild(customerDiv);
             });
+        };
 
-             locateFormButton.addEventListener('click', () => {
-                 geolocationInput.value = 'A obter...'; 
-                 getGeoLocation(
-                    (coordsText) => {
-                        geolocationInput.value = coordsText;
-                    },
-                    (errorMsg) => {
-                        geolocationInput.value = errorMsg; 
-                    }
-                );
-             });
-
-            copyCoordsViabilityBtn.addEventListener('click', () => {
-                const textToCopy = coordinatesViabilityEl.textContent;
-                 if (!textToCopy || textToCopy.startsWith('Não foi possível') || textToCopy.startsWith('Geolocalização não é suportada')) return; 
-
-                navigator.clipboard.writeText(textToCopy).then(() => {
-                    copyFeedbackViability.textContent = 'Copiado!';
-                    copyFeedbackViability.classList.remove('text-red-500');
-                    copyFeedbackViability.classList.add('text-green-400');
-                    copyFeedbackViability.classList.remove('hidden');
-                    setTimeout(() => copyFeedbackViability.classList.add('hidden'), 2500);
-                }).catch(err => {
-                    console.error('Falha ao copiar:', err);
-                    copyFeedbackViability.textContent = 'Erro ao copiar!';
-                    copyFeedbackViability.classList.remove('text-green-400');
-                    copyFeedbackViability.classList.add('text-red-500');
-                    copyFeedbackViability.classList.remove('hidden');
-                    setTimeout(() => copyFeedbackViability.classList.add('hidden'), 2500);
-                });
+        const clearForm = () => {
+            customerForm.reset();
+            customerIdInput.value = '';
+            formTitle.textContent = 'Cadastrar Novo Cliente';
+            saveBtn.textContent = 'Salvar Cliente';
+            saveBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+            saveBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+            customPlanInput.classList.add('hidden');
+            customPlanInput.value = '';
+            planValueSpan.textContent = '';
+            geolocationInput.value = '';
+            document.getElementById('devices').value = '';
+            document.getElementById('freeTrial').value = 'nao';
+            document.getElementById('observations').value = '';
+            document.getElementById('dueDate').value = '';
+            photoDataInput.value = '';
+            photoPreview.src = '';
+            photoPreview.classList.add('hidden');
+            removePhotoBtn.classList.add('hidden');
+        };
+        
+        const showDeleteModal = (id) => {
+            customerToDeleteId = id;
+            deleteModal.style.display = 'flex';
+        };
+        
+        const hideDeleteModal = () => {
+            customerToDeleteId = null;
+            deleteModal.style.display = 'none';
+        };
+        
+        // --- Funções de Planos ---
+        const populatePlansDropdown = () => {
+            const plans = getPlans();
+            planSelect.innerHTML = `<option value="">Selecione um plano</option>`;
+            plans.forEach(plan => {
+                const option = document.createElement('option');
+                option.value = plan.id;
+                option.textContent = `${plan.name} - R$ ${plan.value.toFixed(2)}`;
+                planSelect.appendChild(option);
             });
+            planSelect.innerHTML += `<option value="outro">Outro (especificar)</option>`;
+        };
 
-            sendLocationBtn.addEventListener('click', () => {
-                const coords = coordinatesViabilityEl.textContent;
-                if (!coords || coords.startsWith('Não foi possível') || coords.startsWith('Geolocalização não é suportada') || coords.startsWith('A obter...')) {
-                   console.warn('Coordenadas inválidas para envio.');
-                    return;
+        const renderPlansModal = () => {
+            plansList.innerHTML = '';
+            const plans = getPlans();
+            plans.forEach(plan => {
+                const planDiv = document.createElement('div');
+                planDiv.className = 'flex items-center gap-2';
+                planDiv.dataset.id = plan.id;
+                planDiv.innerHTML = `
+                    <input type="text" value="${plan.name}" class="plan-name-input flex-grow p-1 border rounded-md" placeholder="Nome do Plano">
+                    <input type="number" step="0.01" value="${plan.value.toFixed(2)}" class="plan-value-input w-24 p-1 border rounded-md" placeholder="Valor">
+                    <button class="delete-plan-btn text-red-500 hover:text-red-700 font-bold text-xl">&times;</button>
+                `;
+                plansList.appendChild(planDiv);
+            });
+        };
+
+        // --- Event Listeners ---
+        planSelect.addEventListener('change', () => {
+            if (planSelect.value === 'outro') {
+                customPlanInput.classList.remove('hidden');
+                planValueSpan.textContent = '';
+            } else {
+                customPlanInput.classList.add('hidden');
+                const selectedPlan = getPlans().find(p => p.id === planSelect.value);
+                if (selectedPlan) {
+                    planValueSpan.textContent = `Valor: R$ ${selectedPlan.value.toFixed(2)}`;
+                } else {
+                    planValueSpan.textContent = '';
                 }
-                const message = `Olá! Gostaria de verificar a viabilidade da instalação na seguinte localização:\n${coords}`;
-                const phoneNumber = "557531999981"; 
-                const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`; 
-                window.open(whatsappUrl, '_blank').focus();
-            });
+            }
+        });
 
-            // ===========================================
-            // === LÓGICA DO PRESENTE (COM SENHA E ROLAGEM) ===
-            // ===========================================
-            const unlockGiftBtn = document.getElementById('unlock-gift-btn');
-            const freeTrialContainer = document.getElementById('free-trial-container');
-            const correctPassword = "#ultra8752#";
+        customerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = customerIdInput.value;
+            const customers = getCustomers();
             
-            unlockGiftBtn.addEventListener('click', () => {
-                const password = prompt("Digite a senha para desbloquear o bônus:");
-                if(password === correctPassword) {
-                    // 1. Mostra o campo de bônus
-                    freeTrialContainer.classList.remove('hidden');
-                    // 2. Esconde o botão de presente
-                    unlockGiftBtn.classList.add('hidden');
-                    // 3. ROLA a página suavemente até o campo
-                    freeTrialContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                } else if (password !== null) {
-                    // Feedback de senha errada
-                    alert("Senha incorreta!");
-                }
-            });
-            // ===========================================
-            // === FIM DA LÓGICA DO PRESENTE ===
-            // ===========================================
+            const selectedPlan = getPlans().find(p => p.id === planSelect.value);
+            let planText = '';
+            let planValue = 0;
 
+            if (planSelect.value === 'outro') {
+                planText = customPlanInput.value;
+            } else if (selectedPlan) {
+                planText = selectedPlan.name;
+                planValue = selectedPlan.value;
+            }
 
-            // --- Lógica do Modal de Apps (Hero) ---
-            const appDescriptionModal = document.getElementById('app-description-modal');
-            const closeAppModalBtn = document.getElementById('close-app-modal-btn');
-            const allAppsModal = document.getElementById('all-apps-modal');
-            const closeAllAppsModalBtn = document.getElementById('close-all-apps-btn');
-            const openAllAppsBtn = document.getElementById('open-all-apps-btn');
-            const allAppIconBtns = document.querySelectorAll('.app-icon-btn');
-            
-            const allAppInfo = {
-                'looke': { name: 'Looke', img: 'https://logodownload.org/wp-content/uploads/2020/09/looke-logo.png', desc: 'Os melhores filmes e séries de aventura você encontra no Looke. Conheça nossos títulos. No Looke você tem acesso a mais de 10.000 conteúdos entre filmes e séries. Filmes e Séries à Vontade. Quando e Onde Quiser.' },
-                'sky': { name: 'Sky+', img: 'https://logodownload.org/wp-content/uploads/2022/10/sky-logo-1.png', desc: 'Todo o entretenimento da Sky agora no streaming. Filmes, séries e canais ao vivo para você assistir onde e quando quiser.' },
-                'kiddiepass': { name: 'Kiddie Pass', img: 'https://placehold.co/100x100/facc15/000000?text=KiddiePass', desc: 'Conteúdo infantil seguro e divertido. Desenhos, jogos e atividades educativas para crianças.' },
-                'nutri': { name: '+Nutri', img: 'https://placehold.co/100x100/22c55e/FFFFFF?text=%2BNutri', desc: 'Sua plataforma de saúde e bem-estar. Receitas, dicas de nutrição e treinos para uma vida mais saudável.' },
-                'efit': { name: 'E-fit AG', img: 'https://placehold.co/100x100/3b82f6/FFFFFF?text=E-Fit', desc: 'Seu personal trainer digital. Programas de exercícios para fazer em casa ou na academia.' },
-                'playkids': { name: 'PlayKids+', img: 'https://logospng.org/download/playkids/logo-playkids-2048.png', desc: 'Plataforma educativa com desenhos, jogos e livros para o desenvolvimento infantil.' },
-                'hub': { name: 'HUB', img: 'https://placehold.co/100x100/14b8a6/FFFFFF?text=Hub', desc: 'Um hub de conteúdo digital com diversos serviços e facilidades para o seu dia a dia.' },
-                'ubook': { name: 'UbookPLUS', img: 'https://placehold.co/100x100/a855f7/FFFFFF?text=Ubook', desc: 'Milhares de audiolivros e ebooks para ouvir e ler onde quiser. Histórias, negócios, ficção e mais.' },
-                'estuda': { name: 'Estuda+', img: 'https://placehold.co/100x100/f97316/FFFFFF?text=Estuda%2B', desc: 'Plataforma de estudos completa com videoaulas, exercícios e simulados para ENEM e vestibulares.' },
-                'leitores': { name: 'Pequenos Leitores', img: 'https://placehold.co/100x100/ec4899/FFFFFF?text=Leitores', desc: 'Incentive a leitura dos pequenos com um catálogo incrível de livros infantis interativos.' },
-                'fluid': { name: 'Fluid', img: 'https://placehold.co/64x64/6366f1/FFFFFF?text=Fluid', desc: 'Conteúdo variado de streaming para todos os gostos. Filmes, documentários e mais.' },
-                'socialcomics': { name: 'Social Comics', img: 'https://placehold.co/64x64/ef4444/FFFFFF?text=Social', desc: 'O maior serviço de streaming de HQs da América Latina. Milhares de quadrinhos no seu celular.' },
-                'revistaria': { name: 'Revistaria', img: 'https://placehold.co/64x64/d946ef/FFFFFF?text=Revista', desc: 'Acesse centenas de revistas digitais. Notícias, entretenimento, esportes e muito mais.' },
-                'playlist': { name: 'Playlist', img: 'https://placehold.co/64x64/8b5cf6/FFFFFF?text=Playlist', desc: 'Crie e ouça playlists de música selecionadas para todos os momentos do seu dia.' },
-                'deezer': { name: 'Deezer', img: 'https://logodownload.org/wp-content/uploads/2017/04/deezer-logo-1.png', desc: 'Milhões de músicas, podcasts e playlists ao seu alcance. Ouça suas faixas favoritas offline e descubra novos artistas.' },
-                'klicencas': { name: 'K Licenças', img: 'https://placehold.co/100x100/6366f1/FFFFFF?text=K', desc: 'Acesso a licenças de software e antivírus para manter seus dispositivos seguros e atualizados.' },
-                'hotgo': { name: 'Hotgo', img: 'https://placehold.co/100x100/dc2626/FFFFFF?text=HotGo', desc: 'Conteúdo adulto exclusivo para maiores de 18 anos.' },
-                'curtaon': { name: 'CurtaOn', img: 'https://placehold.co/100x100/1f2937/FFFFFF?text=CurtaOn', desc: 'O melhor do cinema e documentários brasileiros. Filmes premiados e séries independentes.' },
-                'jornalista': { name: 'O Jornalista', img: 'https://placehold.co/100x100/4b5563/FFFFFF?text=Jornal', desc: 'Acesso digital a jornais e notícias em tempo real. Mantenha-se informado sobre o Brasil e o mundo.' },
-                'docway': { name: 'Docway', img: 'https://placehold.co/100x100/10b981/FFFFFF?text=Doc', desc: 'Serviço de telemedicina para você e sua família. Consultas médicas por vídeo, 24h por dia.' },
-                'disney': { name: 'Disney+', img: 'https://logodownload.org/wp-content/uploads/2020/11/disney-plus-logo-1.png', desc: 'O streaming com o entretenimento da Disney, Pixar, Marvel, Star Wars, National Geographic e muito mais.' },
-                'max': { name: 'Max', img: 'https://logodownload.org/wp-content/uploads/2023/05/max-logo-0.png', desc: 'O streaming da HBO, Warner Bros, DC, Discovery e muito mais. Séries, filmes e realities imperdíveis.' },
-                'indie': { name: 'Indie', img: 'https://placehold.co/100x100/f59e0b/FFFFFF?text=Indie', desc: 'Plataforma de streaming focada em cinema independente e filmes de arte premiados.' },
-                'leitura360': { name: 'Leitura 360', img: 'https://placehold.co/100x100/0891b2/FFFFFF?text=Leitura', desc: 'Uma biblioteca digital completa com livros, audiobooks e revistas para todos os gostos.' },
-                'nba': { name: 'NBA League Pass', img: 'https://logodownload.org/wp-content/uploads/2017/04/nba-logo-1.png', desc: 'Assista a todos os jogos da NBA, ao vivo e sob demanda. Acompanhe seu time e jogadores favoritos durante toda a temporada.' },
-                'smartcontent': { name: 'SmartContent', img: 'https://placehold.co/100x100/ef4444/FFFFFF?text=Smart', desc: 'Conteúdo inteligente e educacional para toda a família. Cursos, documentários e muito mais.' },
-                'queima': { name: 'Queima Diária', img: 'https://seeklogo.com/images/Q/queima-diaria-logo-653593254B-seeklogo.com.png', desc: 'A maior plataforma de exercícios e bem-estar em casa da América Latina. Aulas, programas e desafios.' },
-                'zen': { name: 'Zen', img: 'https://logodownload.org/wp-content/uploads/2021/04/zen-logo-0.png', desc: 'Aplicativo de meditação, sono e relaxamento. Encontre sua paz interior e durma melhor.' }
+            const newCustomer = {
+                id: id ? id : Date.now().toString(),
+                fullName: document.getElementById('fullName').value,
+                nickname: document.getElementById('nickname').value,
+                cpf: document.getElementById('cpf').value,
+                birthDate: document.getElementById('birthDate').value,
+                phone: document.getElementById('phone').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                email: document.getElementById('email').value,
+                address: document.getElementById('address').value,
+                geolocation: document.getElementById('geolocation').value,
+                reference: document.getElementById('reference').value,
+                plan: planSelect.value,
+                planText: planText,
+                planValue: planValue,
+                devices: document.getElementById('devices').value,
+                freeTrial: document.getElementById('freeTrial').value,
+                dueDate: document.getElementById('dueDate').value,
+                observations: document.getElementById('observations').value,
+                photo: photoDataInput.value
             };
 
-            function openAppDescriptionModal(event) {
-                const appId = event.currentTarget.dataset.appId;
-                const appData = allAppInfo[appId];
-                if (!appData) return;
-
-                document.getElementById('modal-app-img').src = appData.img;
-                document.getElementById('modal-app-title').textContent = appData.name;
-                document.getElementById('modal-app-desc').textContent = appData.desc;
-
-                appDescriptionModal.classList.remove('hidden');
-            }
-
-            function closeAppDescriptionModal() {
-                appDescriptionModal.classList.add('hidden');
-            }
-
-            allAppIconBtns.forEach(btn => {
-                btn.addEventListener('click', openAppDescriptionModal);
-            });
-
-            closeAppModalBtn.addEventListener('click', closeAppDescriptionModal);
-            appDescriptionModal.addEventListener('click', (e) => {
-                if (e.target === appDescriptionModal) {
-                    closeAppDescriptionModal();
-                }
-            });
-            
-            function openAllAppsModal() {
-                allAppsModal.classList.remove('hidden');
-            }
-            function closeAllAppsModal() {
-                allAppsModal.classList.add('hidden');
-            }
-
-            openAllAppsBtn.addEventListener('click', openAllAppsModal);
-            closeAllAppsModalBtn.addEventListener('click', closeAllAppsModal);
-            allAppsModal.addEventListener('click', (e) => {
-                if (e.target === allAppsModal) {
-                    closeAllAppsModal();
-                }
-            });
-           
-            // Lógica para enviar formulário COMPLETO para o WhatsApp
-            const cadastroForm = document.getElementById('cadastro-form');
-            cadastroForm.addEventListener('submit', function(event) {
-                event.preventDefault();
-                const formData = new FormData(cadastroForm);
-                const planSelect = document.getElementById('plan');
-                const selectedPlanText = planSelect.options[planSelect.selectedIndex].text;
-                
-                const freeTrialSelect = document.getElementById('free_trial');
-                const selectedFreeTrialText = freeTrialSelect.options[freeTrialSelect.selectedIndex].text;
-
-                const getValue = (key) => formData.get(key) || '';
-
-                let messageParts = [
-                    '*Ficha do Cliente*', '', 
-                    `🆔 *Nome completo:* ${getValue('full_name')}`,
-                    `🏷️ *Apelido:* ${getValue('nickname') || 'N/A'}`,
-                    `🪪 *CPF:* ${getValue('cpf')}`,
-                    `🎂 *Data de nascimento:* ${getValue('birth_date') ? new Date(getValue('birth_date') + 'T00:00:00').toLocaleDateString('pt-BR') : 'N/A'}`, 
-                    `💬 *WhatsApp:* ${getValue('whatsapp')}`,
-                    `✉️ *E-mail:* ${getValue('email')}`,
-                    `🏡 *Endereço:* ${getValue('address')}`,
-                    `📍 *Geolocalização:* ${getValue('geolocation') || 'N/A'}`,
-                    `📌 *Ponto de referência:* ${getValue('reference') || 'N/A'}`,
-                    `📃 *Plano escolhido:* ${selectedPlanText || 'N/A'}`, 
-                ];
-
-                messageParts.push(`📱 *Aparelhos conectados:* ${getValue('devices') || 'N/A'}`);
-                messageParts.push(`🗓️ *Vencimento:* Dia ${getValue('due_date') || 'N/A'}`);
-
-                if (!freeTrialContainer.classList.contains('hidden') && getValue('free_trial') !== 'Não') {
-                     messageParts.push(`🎁 *Teste grátis:* ${selectedFreeTrialText}`);
-                }
-
-                messageParts.push(`📝 *OBS.:* ${getValue('obs') || 'N/A'}`);
-
-                const message = messageParts.join('\n'); 
-
-                const phoneNumber = "557531999981"; 
-                const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`; 
-                window.open(whatsappUrl, '_blank').focus();
-            });
-
-
-            // Inicialização do Swiper
-            if (window.innerWidth < 768) {
-                const swiper = new Swiper('.swiper-container', {
-                    slidesPerView: 1.2,
-                    spaceBetween: 16,
-                    centeredSlides: true,
-                    loop: false, 
-                    pagination: {
-                        el: '.swiper-pagination',
-                        clickable: true,
-                    },
-                     breakpoints: {
-                        640: {
-                          slidesPerView: 2.2,
-                          centeredSlides: false,
-                        }
-                    }
-                });
+            if (id) {
+                const index = customers.findIndex(c => c.id === id);
+                customers[index] = newCustomer;
             } else {
-                 const swiperContainer = document.querySelector('.swiper-container');
-                 const swiperWrapper = document.querySelector('.swiper-wrapper');
-                 const swiperSlides = document.querySelectorAll('.swiper-container .swiper-slide');
-
-                 swiperContainer.classList.add('grid', 'grid-cols-2', 'lg:grid-cols-4', 'gap-8');
-                 swiperWrapper.classList.add('contents'); 
-                 
-                 swiperSlides.forEach(slide => {
-                     slide.classList.remove('swiper-slide'); 
-                 });
-                 const pagination = document.querySelector('.swiper-pagination');
-                 const nextButton = document.querySelector('.swiper-button-next');
-                 const prevButton = document.querySelector('.swiper-button-prev');
-                 if(pagination) pagination.remove();
-                 if(nextButton) nextButton.remove();
-                 if(prevButton) prevButton.remove();
+                customers.push(newCustomer);
             }
+            setCustomers(customers);
+            renderCustomers(searchInput.value);
+            clearForm();
+        });
 
+        clearBtn.addEventListener('click', clearForm);
 
-            /* ============================================= */
-            /* ===== INÍCIO DA LÓGICA DO GERADOR DE QR ===== */
-            /* ============================================= */
+        searchInput.addEventListener('input', (e) => renderCustomers(e.target.value));
 
-            // --- Seletores Básicos ---
-            const qrContainer = document.getElementById('qrcode');
-            const resultadoSection = document.querySelector('#gerador-qr .resultado'); // Escopo para a nova seção
-            let qrcode = null;
+        customerList.addEventListener('click', (e) => {
+            const editBtn = e.target.closest('.edit-btn');
+            const deleteBtn = e.target.closest('.delete-btn');
+            const shareBtn = e.target.closest('.share-btn');
+            const printBtn = e.target.closest('.print-btn');
 
-            // --- Seletores dos Geradores (Bloco 1) ---
-            const btnUrl = document.getElementById('btn-url');
-            const inputUrl = document.getElementById('input-url');
-            const btnWifi = document.getElementById('btn-wifi');
-            const inputWifiSsid = document.getElementById('input-wifi-ssid');
-            const inputWifiPass = document.getElementById('input-wifi-pass');
-            
-            // --- Seletores dos Geradores (Bloco 2) ---
-            const btnPix = document.getElementById('btn-pix');
-            const inputPixKey = document.getElementById('input-pix-key');
-            const inputPixName = document.getElementById('input-pix-name');
-            const inputPixCity = document.getElementById('input-pix-city');
-            const inputPixAmount = document.getElementById('input-pix-amount');
-            const inputPixTxid = document.getElementById('input-pix-txid');
-            
-            // --- Seletores do vCard ---
-            const btnVCard = document.getElementById('btn-vcard');
-            const inputVCardNome = document.getElementById('input-vcard-nome');
-            const inputVCardCargo = document.getElementById('input-vcard-cargo');
-            const inputVCardEmpresa = document.getElementById('input-vcard-empresa');
-            const inputVCardTel = document.getElementById('input-vcard-tel');
-            const inputVCardEmail = document.getElementById('input-vcard-email');
-            const inputVCardSite = document.getElementById('input-vcard-site');
-            const inputVCardLat = document.getElementById('input-vcard-lat');
-            const inputVCardLong = document.getElementById('input-vcard-long');
-            const btnVCardGeoAuto = document.getElementById('btn-vcard-geo-auto'); 
-            
-            // --- Seletores (WhatsApp) ---
-            const btnWhatsapp = document.getElementById('btn-whatsapp');
-            const inputWhatsappTel = document.getElementById('input-whatsapp-tel');
-            const inputWhatsappMsg = document.getElementById('input-whatsapp-msg');
-
-            // --- Seletores (Geo Mapas) ---
-            const btnGeo = document.getElementById('btn-geo');
-            const inputGeoUrl = document.getElementById('input-geo-url'); 
-            const btnMapasGeoAuto = document.getElementById('btn-mapas-geo-auto'); 
-
-            // --- Seletores (Resultado) ---
-            const btnLimpar = document.getElementById('btn-limpar');
-            const btnDownload = document.getElementById('btn-download');
-            const btnPrint = document.getElementById('btn-print');
-
-            function gerarQRCode(texto, event) {
-                limparQRCode(false); 
+            if (editBtn) {
+                const id = editBtn.dataset.id;
+                const customer = getCustomers().find(c => c.id === id);
                 
-                const box = event.target.closest('.box');
-                const corPrincipal = box.querySelector('.color-dark-input').value;
-                const corFundo = box.querySelector('.color-light-input').value;
-
-                qrcode = new QRCode(qrContainer, {
-                    text: texto,
-                    width: 256,
-                    height: 256,
-                    colorDark: corPrincipal, 
-                    colorLight: corFundo,   
-                    correctLevel: QRCode.CorrectLevel.H 
-                });
+                customerIdInput.value = customer.id;
+                document.getElementById('fullName').value = customer.fullName;
+                document.getElementById('nickname').value = customer.nickname;
+                document.getElementById('cpf').value = customer.cpf;
+                document.getElementById('birthDate').value = customer.birthDate;
+                document.getElementById('phone').value = customer.phone;
+                document.getElementById('whatsapp').value = customer.whatsapp;
+                document.getElementById('email').value = customer.email;
+                document.getElementById('address').value = customer.address;
+                document.getElementById('geolocation').value = customer.geolocation || '';
+                document.getElementById('reference').value = customer.reference;
+                planSelect.value = customer.plan;
+                document.getElementById('devices').value = customer.devices || '';
+                document.getElementById('freeTrial').value = customer.freeTrial || 'nao';
+                document.getElementById('dueDate').value = customer.dueDate || '';
+                document.getElementById('observations').value = customer.observations || '';
+                photoDataInput.value = customer.photo || '';
                 
-                btnLimpar.classList.remove('hidden');
-                btnDownload.classList.remove('hidden');
-                btnPrint.classList.remove('hidden');
-
-                resultadoSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-
-            // A função 'limparQRCode' agora é chamada pelo botão 'X' de fechar
-            function limparQRCode(resetColors = true) {
-                if (qrcode) {
-                    qrcode.clear();
-                }
-                qrContainer.innerHTML = ''; 
-                
-                btnLimpar.classList.add('hidden');
-                btnDownload.classList.add('hidden');
-                btnPrint.classList.add('hidden');
-
-                if (resetColors) {
-                    // Seleciona as cores apenas dentro do gerador
-                    const allDark = document.querySelectorAll('#gerador-qr .color-dark-input');
-                    const allLight = document.querySelectorAll('#gerador-qr .color-light-input');
-                    allDark.forEach(input => input.value = "#000000");
-                    allLight.forEach(input => input.value = "#ffffff");
-                }
-            }
-            
-            btnLimpar.addEventListener('click', () => limparQRCode(true)); 
-
-            btnPrint.addEventListener('click', () => {
-                window.print();
-            });
-
-            btnDownload.addEventListener('click', () => {
-                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-                const canvas = document.querySelector('#qrcode canvas');
-                if (!canvas) {
-                    alert('Erro: Canvas do QR Code não encontrado.');
-                    return;
-                }
-                const imgURL = canvas.toDataURL('image/png');
-
-                if (isIOS) {
-                    const newTab = window.open();
-                    newTab.document.write(`<img src="${imgURL}" alt="QR Code" style="width:100%;">`);
+                if(customer.photo) {
+                    photoPreview.src = customer.photo;
+                    photoPreview.classList.remove('hidden');
+                    removePhotoBtn.classList.remove('hidden');
                 } else {
-                    const link = document.createElement('a');
-                    link.href = imgURL;
-                    link.download = 'qrcode.png';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
+                    photoPreview.src = '';
+                    photoPreview.classList.add('hidden');
+                    removePhotoBtn.classList.add('hidden');
+                }
+
+                planSelect.dispatchEvent(new Event('change'));
+
+                if (customer.plan === 'outro') {
+                    customPlanInput.value = customer.planText;
+                }
+                
+                formTitle.textContent = 'Editar Cliente';
+                saveBtn.textContent = 'Atualizar Cliente';
+                saveBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+                
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            if (deleteBtn) {
+                const id = deleteBtn.dataset.id;
+                showDeleteModal(id);
+            }
+            
+            if (shareBtn) {
+                const id = shareBtn.dataset.id;
+                const customer = getCustomers().find(c => c.id === id);
+                const planInfo = customer.plan === 'outro' 
+                    ? customer.planText 
+                    : `${customer.planText} - R$ ${customer.planValue.toFixed(2)}`;
+                const freeTrialText = customer.freeTrial && customer.freeTrial !== 'nao' ? document.querySelector(`#freeTrial option[value="${customer.freeTrial}"]`).textContent : 'Não';
+                const settings = getAppSettings();
+
+                const message = `*${settings.title}*%0A%0A` +
+                                `*Ficha do Cliente*%0A%0A` +
+                                `🆔 *Nome completo:* ${customer.fullName}%0A` +
+                                `🏷 *Apelido:* ${customer.nickname || 'N/A'}%0A` +
+                                `🪪 *CPF:* ${customer.cpf}%0A` +
+                                `🎂 *Data de nascimento:* ${customer.birthDate ? new Date(customer.birthDate + 'T00:00:00').toLocaleDateString('pt-BR') : 'N/A'}%0A` +
+                                `📞 *Telefone:* ${customer.phone || 'N/A'}%0A` +
+                                `💬 *WhatsApp:* ${customer.whatsapp || 'N/A'}%0A` +
+                                `✉ *E-mail:* ${customer.email || 'N/A'}%0A` +
+                                `🏡 *Endereço:* ${customer.address || 'N/A'}%0A` +
+                                `📍 *Geolocalização:* ${customer.geolocation || 'N/A'}%0A` +
+                                `📌 *Ponto de referência:* ${customer.reference || 'N/A'}%0A` +
+                                `📃 *Plano escolhido:* ${planInfo || 'N/A'}%0A` +
+                                `📱 *Aparelhos conectados:* ${customer.devices || 'N/A'}%0A` +
+                                `🎁 *Teste grátis:* ${freeTrialText}%0A` +
+                                `🗓️ *Vencimento:* Dia ${customer.dueDate || 'N/A'}%0A` +
+                                `📝 *OBS.:* ${customer.observations || 'N/A'}` +
+                                `${customer.photo ? '%0A📸 *Foto Anexada:* Sim' : ''}`;
+                
+                window.open(`https://api.whatsapp.com/send?text=${message}`, '_blank');
+            }
+            
+            if (printBtn) {
+                const id = printBtn.dataset.id;
+                const customer = getCustomers().find(c => c.id === id);
+                printArea.innerHTML = generateCustomerSheetHTML(customer);
+                document.body.classList.add('printing-customer-sheet');
+                window.print();
+                document.body.classList.remove('printing-customer-sheet');
+            }
+        });
+        
+        confirmDeleteBtn.addEventListener('click', () => {
+            let customers = getCustomers();
+            customers = customers.filter(c => c.id !== customerToDeleteId);
+            setCustomers(customers);
+            renderCustomers(searchInput.value);
+            hideDeleteModal();
+        });
+        
+        cancelDeleteBtn.addEventListener('click', hideDeleteModal);
+
+        backupBtn.addEventListener('click', () => {
+            const customers = getCustomers();
+            if (customers.length === 0) {
+                alert('Não há clientes para fazer backup.');
+                return;
+            }
+            const dataToBackup = {
+                customers: customers,
+                plans: getPlans(),
+                settings: getAppSettings()
+            };
+            const dataStr = JSON.stringify(dataToBackup, null, 2);
+            const blob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'backup_clientes_telecom.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        restoreBtn.addEventListener('click', () => {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = '.json';
+            fileInput.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const restoredData = JSON.parse(event.target.result);
+                        if (confirm('Isso substituirá todos os dados atuais. Deseja continuar?')) {
+                            if (Array.isArray(restoredData.customers)) {
+                                setCustomers(restoredData.customers);
+                            }
+                            if (Array.isArray(restoredData.plans)) {
+                                setPlans(restoredData.plans);
+                                populatePlansDropdown();
+                            }
+                            if (restoredData.settings) {
+                                setAppSettings(restoredData.settings);
+                                document.getElementById('app-title').textContent = restoredData.settings.title;
+                                document.getElementById('app-slogan').textContent = restoredData.settings.slogan;
+                            }
+                            renderCustomers();
+                            alert('Dados restaurados com sucesso!');
+                        }
+                    } catch (err) {
+                        alert('Erro ao ler o arquivo de backup.');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            fileInput.click();
+        });
+
+        // --- Event Listeners dos Planos ---
+        managePlansBtn.addEventListener('click', () => {
+            renderPlansModal();
+            plansModal.style.display = 'flex';
+        });
+
+        closePlansModalBtn.addEventListener('click', () => {
+            plansModal.style.display = 'none';
+        });
+
+        addPlanBtn.addEventListener('click', () => {
+            const planDiv = document.createElement('div');
+            planDiv.className = 'flex items-center gap-2';
+            planDiv.dataset.id = `new_${Date.now()}`;
+            planDiv.innerHTML = `
+                <input type="text" class="plan-name-input flex-grow p-1 border rounded-md" placeholder="Nome do Plano">
+                <input type="number" step="0.01" class="plan-value-input w-24 p-1 border rounded-md" placeholder="Valor">
+                <button class="delete-plan-btn text-red-500 hover:text-red-700 font-bold text-xl">&times;</button>
+            `;
+            plansList.appendChild(planDiv);
+        });
+
+        plansList.addEventListener('click', (e) => {
+            if (e.target.closest('.delete-plan-btn')) {
+                e.target.closest('.flex').remove();
+            }
+        });
+        
+        savePlansBtn.addEventListener('click', () => {
+            const newPlans = [];
+            const planRows = plansList.querySelectorAll('.flex');
+            planRows.forEach(row => {
+                const nameInput = row.querySelector('.plan-name-input');
+                const valueInput = row.querySelector('.plan-value-input');
+                if (nameInput.value && valueInput.value) {
+                    newPlans.push({
+                        id: row.dataset.id.startsWith('new_') ? nameInput.value.toLowerCase().replace(/\s+/g, '_') : row.dataset.id,
+                        name: nameInput.value,
+                        value: parseFloat(valueInput.value)
+                    });
                 }
             });
-            
-            function checkSecureContext() {
-                // Verificação de HTTPS removida para facilitar testes locais
-                // if (window.location.protocol !== 'https:') {
-                //     alert('Este recurso só funciona em sites seguros (https).\n\nFunciona no link do GitHub Pages, mas não no arquivo local (C:\\...).');
-                //     return false;
-                // }
-                if (!navigator.geolocation) {
-                    alert('Geolocalização não é suportada pelo seu navegador.');
-                    return false;
-                }
-                return true;
-            }
-            function handleGeoError(error) {
-                switch(error.code) {
-                    case error.PERMISSION_DENIED:
-                        alert('Você negou o pedido de geolocalização.');
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        alert('Informação de localização indisponível.');
-                        break;
-                    case error.TIMEOUT:
-                        alert('Pedido de localização expirou.');
-                        break;
-                    default:
-                        alert('Um erro desconhecido ocorreu ao buscar localização.');
-                        break;
-                }
-            }
-            function obterGeolocalizacaoLatLng(idLat, idLong) {
-                if (!checkSecureContext()) return;
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        document.getElementById(idLat).value = position.coords.latitude.toFixed(6);
-                        document.getElementById(idLong).value = position.coords.longitude.toFixed(6);
-                    },
-                    handleGeoError
-                );
-            }
-            
-            function obterGeolocalizacaoURL(idInputURL) {
-                if (!checkSecureContext()) return;
-                const input = document.getElementById(idInputURL);
-                input.value = "Obtendo...";
+            setPlans(newPlans);
+            populatePlansDropdown();
+            alert('Planos salvos com sucesso!');
+            plansModal.style.display = 'none';
+        });
+        
+        // --- Geolocalização ---
+        getLocationBtn.addEventListener('click', () => {
+            if ("geolocation" in navigator) {
+                geolocationInput.value = "Obtendo localização...";
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         const lat = position.coords.latitude;
                         const lon = position.coords.longitude;
                         const mapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
-                        input.value = mapsLink;
+                        geolocationInput.value = mapsLink;
                     },
                     (error) => {
-                        handleGeoError(error);
-                        input.value = "Falha ao obter localização.";
+                        let errorMessage = "Não foi possível obter a localização.";
+                        switch(error.code) {
+                            case error.PERMISSION_DENIED:
+                                errorMessage = "Permissão de localização negada.";
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                errorMessage = "Informação de localização indisponível.";
+                                break;
+                            case error.TIMEOUT:
+                                errorMessage = "Tempo esgotado para obter localização.";
+                                break;
+                        }
+                        geolocationInput.value = errorMessage;
                     }
                 );
+            } else {
+                geolocationInput.value = "Geolocalização não suportada neste navegador.";
             }
-
-            // --- Event Listeners dos Geradores ---
-            btnUrl.addEventListener('click', (event) => { 
-                const url = inputUrl.value;
-                if (url) { gerarQRCode(url, event); } else { alert("Por favor, digite uma URL."); }
-            });
-
-            btnWifi.addEventListener('click', (event) => { 
-                const ssid = inputWifiSsid.value;
-                const pass = inputWifiPass.value;
-                if (ssid) {
-                    const wifiString = `WIFI:T:WPA;S:${ssid};P:${pass};;`;
-                    gerarQRCode(wifiString, event);
-                } else { alert("Por favor, digite pelo menos o nome da rede (SSID)."); }
-            });
-            
-            btnVCard.addEventListener('click', (event) => { 
-                const nome = inputVCardNome.value;
-                const cargo = inputVCardCargo.value;
-                const empresa = inputVCardEmpresa.value;
-                const tel = inputVCardTel.value;
-                const email = inputVCardEmail.value;
-                const site = inputVCardSite.value;
-                const lat = inputVCardLat.value.replace(',', '.'); 
-                const long = inputVCardLong.value.replace(',', '.'); 
-
-                if (!nome || (!tel && !email)) {
-                    alert('Nome e pelo menos um Telefone ou E-mail são obrigatórios!');
-                    return;
-                }
-                
-                let vCardString = [
-                    'BEGIN:VCARD', 'VERSION:3.0',
-                    `N:${nome}`, `FN:${nome}`, `ORG:${empresa}`, `TITLE:${cargo}`,
-                    `TEL;TYPE=WORK,VOICE:${tel}`, `EMAIL:${email}`, `URL:${site}`
-                ];
-                
-                if (lat && long) {
-                    vCardString.push(`GEO:${lat},${long}`);
-                    const mapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
-                    vCardString.push(`NOTE:Ver no mapa: ${mapsLink}`);
-                }
-                
-                vCardString.push('END:VCARD');
-                
-                gerarQRCode(vCardString.join('\n'), event);
-            });
-
-            btnWhatsapp.addEventListener('click', (event) => { 
-                let tel = inputWhatsappTel.value;
-                let msg = inputWhatsappMsg.value;
-
-                if (!tel) {
-                    alert('O número de telefone é obrigatório!');
-                    return;
-                }
-                tel = tel.replace(/\D/g, '');
-                const encodedMsg = encodeURIComponent(msg);
-                
-                const whatsappString = `https://wa.me/${tel}?text=${encodedMsg}`;
-                gerarQRCode(whatsappString, event);
-            });
-            
-            btnGeo.addEventListener('click', (event) => { 
-                const url = inputGeoUrl.value;
-                
-                if (!url || url === "Obtendo..." || url === "Falha ao obter localização.") {
-                    alert('Por favor, obtenha um link de localização válido primeiro.');
-                    return;
-                }
-                gerarQRCode(url, event);
-            });
-            
-            btnVCardGeoAuto.addEventListener('click', () => {
-                obterGeolocalizacaoLatLng('input-vcard-lat', 'input-vcard-long');
-            });
-            btnMapasGeoAuto.addEventListener('click', () => {
-                obterGeolocalizacaoURL('input-geo-url');
-            });
-
-            // --- Funções do PIX ---
-            function formatarEMV(id, value) {
-                const length = ('00' + value.length).slice(-2);
-                return `${id}${length}${value}`;
-            }
-            function simplificarTexto(text) {
-                return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\w\s]/g, '');
-            }
-            function crc16(data) {
-                let crc = 0xFFFF;
-                for (let i = 0; i < data.length; i++) {
-                    crc ^= data.charCodeAt(i) << 8;
-                    for (let j = 0; j < 8; j++) {
-                        crc = (crc & 0x8000) ? (crc << 1) ^ 0x1021 : crc << 1;
-                    }
-                }
-                return ('0000' + (crc & 0xFFFF).toString(16).toUpperCase()).slice(-4);
-            }
-            btnPix.addEventListener('click', (event) => { 
-                const key = inputPixKey.value;
-                let name = inputPixName.value;
-                let city = inputPixCity.value;
-                let amount = inputPixAmount.value;
-                let txid = inputPixTxid.value;
-
-                if (!key || !name || !city) {
-                    alert("Chave PIX, Nome e Cidade são obrigatórios!");
-                    return;
-                }
-                const merchantAccountInfo = [
-                    formatarEMV('00', 'br.gov.bcb.pix'),
-                    formatarEMV('01', key)
-                ].join('');
-                let brCode = [
-                    formatarEMV('00', '01'),
-                    formatarEMV('26', merchantAccountInfo),
-                    formatarEMV('52', '0000'),
-                    formatarEMV('53', '986')
-                ];
-                if (amount) {
-                    const amountComPonto = amount.replace(",", "."); 
-                    const valorFormatado = parseFloat(amountComPonto).toFixed(2);
-                    brCode.push(formatarEMV('54', valorFormatado));
-                }
-                brCode.push(formatarEMV('58', 'BR'));
-                name = simplificarTexto(name).substring(0, 25);
-                brCode.push(formatarEMV('59', name));
-                city = simplificarTexto(city).substring(0, 15);
-                brCode.push(formatarEMV('60', city));
-                txid = txid ? txid.replace(/\s/g, '') : '***';
-                const additionalData = formatarEMV('05', txid);
-                brCode.push(formatarEMV('62', additionalData));
-                brCode.push('6304');
-                let stringPIX = brCode.join('');
-                const checksum = crc16(stringPIX);
-                const brCodeCompleto = stringPIX + checksum;
-                
-                gerarQRCode(brCodeCompleto, event);
-            });
-            
-            /* ============================================= */
-            /* ====== FIM DA LÓGICA DO GERADOR DE QR ======= */
-            /* ============================================= */
-
         });
-    </script>
+        
+        const generateCustomerSheetHTML = (customer) => {
+            const planInfo = customer.plan === 'outro' 
+                ? customer.planText 
+                : `${customer.planText} - R$ ${customer.planValue.toFixed(2)}`;
+            const freeTrialText = customer.freeTrial && customer.freeTrial !== 'nao' ? document.querySelector(`#freeTrial option[value="${customer.freeTrial}"]`).textContent : 'Não';
+            const settings = getAppSettings();
 
+            return `
+                <div class="printable-sheet p-8">
+                    <h1 class="text-3xl font-bold mb-6 border-b pb-4">${settings.title}</h1>
+                    <div class="space-y-3 text-lg">
+                        <p><strong>🆔 Nome completo:</strong> ${customer.fullName}</p>
+                        <p><strong>🏷 Apelido:</strong> ${customer.nickname || 'N/A'}</p>
+                        <p><strong>🪪 CPF:</strong> ${customer.cpf}</p>
+                        <p><strong>🎂 Data de nascimento:</strong> ${customer.birthDate ? new Date(customer.birthDate + 'T00:00:00').toLocaleDateString('pt-BR') : 'N/A'}</p>
+                        <p><strong>📞 Telefone:</strong> ${customer.phone || 'N/A'}</p>
+                        <p><strong>💬 WhatsApp:</strong> ${customer.whatsapp || 'N/A'}</p>
+                        <p><strong>✉ E-mail:</strong> ${customer.email || 'N/A'}</p>
+                        <p><strong>🏡 Endereço:</strong> ${customer.address || 'N/A'}</p>
+                        <p><strong>📍 Geolocalização:</strong> <a href="${customer.geolocation}" target="_blank">${customer.geolocation || 'N/A'}</a></p>
+                        <p><strong>📌 Ponto de referência:</strong> ${customer.reference || 'N/A'}</p>
+                        <p><strong>📃 Plano escolhido:</strong> ${planInfo || 'N/A'}</p>
+                        <p><strong>📱 Aparelhos conectados:</strong> ${customer.devices || 'N/A'}</p>
+                        <p><strong>🎁 Teste grátis:</strong> ${freeTrialText}</p>
+                        <p><strong>🗓️ Vencimento:</strong> Dia ${customer.dueDate || 'N/A'}</p>
+                        <p><strong>📝 OBS.:</strong> ${customer.observations || 'N/A'}</p>
+                        ${customer.photo ? `<div class="mt-4"><p><strong>📸 Foto:</strong></p><img src="${customer.photo}" class="w-full max-w-sm mx-auto mt-2 rounded-md border"></div>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+        
+        printAllBtn.addEventListener('click', () => {
+            const customers = getCustomers();
+            if (customers.length === 0) {
+                alert('Não há clientes para imprimir.');
+                return;
+            }
+            
+            let allCustomersHTML = '';
+            customers.forEach(customer => {
+                allCustomersHTML += generateCustomerSheetHTML(customer);
+            });
+
+            printArea.innerHTML = allCustomersHTML;
+            document.body.classList.add('printing-customer-sheet');
+            window.print();
+            document.body.classList.remove('printing-customer-sheet');
+        });
+
+        shareAllBtn.addEventListener('click', () => {
+            const customers = getCustomers();
+            if (customers.length === 0) {
+                alert('Não há clientes para compartilhar.');
+                return;
+            }
+            
+            const settings = getAppSettings();
+            let reportText = `*${settings.title.toUpperCase()}*%0A%0A`;
+            customers.forEach((customer, index) => {
+                const planInfo = customer.plan === 'outro' 
+                    ? customer.planText 
+                    : `${customer.planText} - R$ ${customer.planValue.toFixed(2)}`;
+                const freeTrialText = customer.freeTrial && customer.freeTrial !== 'nao' ? document.querySelector(`#freeTrial option[value="${customer.freeTrial}"]`).textContent : 'Não';
+
+                reportText += `*Cliente ${index + 1}*%0A` +
+                                `🆔 *Nome completo:* ${customer.fullName}%0A` +
+                                `🏷 *Apelido:* ${customer.nickname || 'N/A'}%0A` +
+                                `🪪 *CPF:* ${customer.cpf}%0A` +
+                                `🎂 *Data de nascimento:* ${customer.birthDate ? new Date(customer.birthDate + 'T00:00:00').toLocaleDateString('pt-BR') : 'N/A'}%0A` +
+                                `📞 *Telefone:* ${customer.phone || 'N/A'}%0A` +
+                                `💬 *WhatsApp:* ${customer.whatsapp || 'N/A'}%0A` +
+                                `✉ *E-mail:* ${customer.email || 'N/A'}%0A` +
+                                `🏡 *Endereço:* ${customer.address || 'N/A'}%0A` +
+                                `📍 *Geolocalização:* ${customer.geolocation || 'N/A'}%0A` +
+                                `📌 *Ponto de referência:* ${customer.reference || 'N/A'}%0A` +
+                                `📃 *Plano escolhido:* ${planInfo || 'N/A'}%0A` +
+                                `📱 *Aparelhos conectados:* ${customer.devices || 'N/A'}%0A` +
+                                `🎁 *Teste grátis:* ${freeTrialText}%0A` +
+                                `🗓️ *Vencimento:* Dia ${customer.dueDate || 'N/A'}%0A` +
+                                `📝 *OBS.:* ${customer.observations || 'N/A'}%0A` +
+                                `--------------------%0A%0A`;
+            });
+            
+            window.open(`https://api.whatsapp.com/send?text=${reportText}`, '_blank');
+        });
+
+
+        // Initial setup
+        const appTitleEl = document.getElementById('app-title');
+        const appSloganEl = document.getElementById('app-slogan');
+        const settings = getAppSettings();
+        appTitleEl.textContent = settings.title;
+        appSloganEl.textContent = settings.slogan;
+
+        appTitleEl.addEventListener('blur', () => {
+            const currentSettings = getAppSettings();
+            currentSettings.title = appTitleEl.textContent;
+            setAppSettings(currentSettings);
+        });
+        appSloganEl.addEventListener('blur', () => {
+            const currentSettings = getAppSettings();
+            currentSettings.slogan = appSloganEl.textContent;
+            setAppSettings(currentSettings);
+        });
+
+        // Photo functionality
+        takePhotoBtn.addEventListener('click', () => photoInput.click());
+        removePhotoBtn.addEventListener('click', () => {
+            photoInput.value = '';
+            photoDataInput.value = '';
+            photoPreview.src = '';
+            photoPreview.classList.add('hidden');
+            removePhotoBtn.classList.add('hidden');
+        });
+
+        photoInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    photoDataInput.value = event.target.result;
+                    photoPreview.src = event.target.result;
+                    photoPreview.classList.remove('hidden');
+                    removePhotoBtn.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        populatePlansDropdown();
+        renderCustomers();
+    });
+    </script>
 </body>
 </html>
+
