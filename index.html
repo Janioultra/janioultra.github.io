@@ -1,1746 +1,893 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultra Fibra - Internet Neon</title>
-    
-    <link rel="icon" type="image/png" href="https://placehold.co/32x32/2563eb/FFFFFF?text=UF">
-    <link rel="apple-touch-icon" href="https://placehold.co/32x32/2563eb/FFFFFF?text=UF">
-    
+    <title>Cadastro de Clientes Telecom</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        orbitron: ['Orbitron', 'sans-serif'], 
-                    },
-                    colors: {
-                        neon: {
-                            blue: '#0066FF',   /* Azul Principal */
-                            green: '#00e1ff',  /* Ciano Elétrico */
-                            dark: '#010414',   /* Azul Noite Profundo */
-                            card: '#0a0f26',   /* Azul Tech Escuro */
-                            silver: '#e2e8f0'  /* Prata base */
-                        }
-                    },
-                    boxShadow: {
-                        'neon-blue': '0 0 15px rgba(0, 102, 255, 0.4)',
-                        'neon-green': '0 0 15px rgba(0, 225, 255, 0.4)',
-                        'neon-card': '0 0 25px rgba(0, 102, 255, 0.15)',
-                    },
-                    backgroundImage: {
-                        'silver-gradient': 'linear-gradient(to bottom, #ffffff 0%, #d1d5db 40%, #9ca3af 100%)',
-                    },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'pulse-glow': 'pulseGlow 3s infinite',
-                        'shimmer': 'shimmer 2.5s infinite',
-                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        },
-                        pulseGlow: {
-                            '0%, 100%': { boxShadow: '0 0 15px rgba(0, 225, 255, 0.4)' },
-                            '50%': { boxShadow: '0 0 25px rgba(0, 225, 255, 0.7)' },
-                        },
-                        shimmer: {
-                            '100%': { transform: 'translateX(100%)' },
-                        },
-                        fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #010414;
-            color: #e2e8f0;
-            scroll-behavior: smooth;
-            overflow-x: hidden; /* Previne scroll horizontal indesejado */
         }
-
-        /* TEXTO PRATEADO (Efeito Metálico) */
-        .text-silver-metallic {
-            background: linear-gradient(to bottom, #FFFFFF 20%, #cbd5e1 50%, #64748b 80%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 2px rgba(255,255,255,0.2));
-        }
-
-        /* Hero com background */
-        .hero-gradient {
-            background: linear-gradient(to bottom, rgba(1,4,20,0.3) 0%, rgba(1,4,20,0.95) 90%, #010414 100%), 
-                        url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop');
-            background-attachment: fixed;
-            background-size: cover;
-            background-position: center 30%; 
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Efeito de vidro para os cartões */
-        .plan-card {
-            background: rgba(10, 15, 38, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 102, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .plan-card:hover {
-            border-color: #00e1ff;
-            box-shadow: 0 0 30px rgba(0, 225, 255, 0.25);
-            transform: translateY(-8px);
-        }
-
-        /* Botões Neon com Efeito Shine */
-        .btn-neon-green {
-            background-color: #00e1ff;
-            color: #000;
-            font-weight: 800;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 10px rgba(0, 225, 255, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn-neon-green::after {
-            content: '';
+        .form-icon {
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: 0.5s;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af; /* gray-400 */
+        }
+        .form-input {
+            padding-left: 2.5rem;
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; /* slate-100 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8; /* slate-400 */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b; /* slate-500 */
         }
         
-        .btn-neon-green:hover::after {
-            left: 100%;
-        }
-
-        .btn-neon-green:hover {
-            background-color: #7dd3fc;
-            box-shadow: 0 0 20px rgba(0, 225, 255, 0.6);
-            transform: scale(1.02);
-        }
-
-        /* Botões Outline Azul */
-        .btn-outline-blue {
-            border: 1px solid #0066FF;
-            color: #0066FF;
-            transition: all 0.3s ease;
-        }
-        .btn-outline-blue:hover {
-            background-color: #0066FF;
-            color: #fff;
-            box-shadow: 0 0 15px rgba(0, 102, 255, 0.5);
-        }
-
-        /* Inputs customizados */
-        input, select, textarea {
-            background-color: #0a0f26 !important;
-            border: 1px solid #1e293b !important;
-            color: #fff !important;
-        }
-        input:focus, select:focus, textarea:focus {
-            border-color: #00e1ff !important;
-            box-shadow: 0 0 10px rgba(0, 225, 255, 0.3) !important;
-            outline: none;
-        }
-
-        ::placeholder { color: #64748b; }
-        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
-
-        /* Swiper custom overrides */
-        .swiper-pagination-bullet { background: #fff; opacity: 0.3; }
-        .swiper-pagination-bullet-active { background: #00e1ff; opacity: 1; box-shadow: 0 0 8px #00e1ff; }
-        .swiper-button-next, .swiper-button-prev { color: #0066FF; text-shadow: 0 0 5px rgba(0, 102, 255, 0.8); }
-        .swiper-container { width: 100%; overflow: hidden; padding-bottom: 3rem; position: relative; }
-        .swiper-slide { height: auto; }
-
-        /* Ícones dos Apps */
-        .app-icon-btn {
-            background-color: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 0.75rem;
-            padding: 0.5rem;
-            transition: all 0.2s ease-in-out;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            height: 100%;
-            cursor: pointer;
-        }
-        .app-icon-btn:hover {
-            transform: scale(1.05);
-            background-color: rgba(0, 225, 255, 0.1);
-            border-color: #00e1ff;
-            box-shadow: 0 0 10px rgba(0, 225, 255, 0.3);
-        }
-        .app-icon-btn img {
-            width: 48px; 
-            height: 48px;
-            object-fit: contain;
-            border-radius: 8px;
-            margin-bottom: 4px;
-        }
-        .app-icon-btn .app-label {
-            font-size: 0.75rem;
-            color: #e2e8f0;
-            font-weight: 500;
-        }
-
-        /* Marquee */
-        .marquee-container { width: 100%; white-space: nowrap; background: #00020a; border-top: 1px solid #1e293b; border-bottom: 1px solid #1e293b; }
-        .marquee-content { display: inline-block; animation: marquee-scroll 60s linear infinite; }
-        .marquee-container:hover .marquee-content { animation-play-state: paused; }
-        .marquee-content img { display: inline-block; vertical-align: middle; transition: all 0.3s ease; max-height: 40px; margin: 0 2rem; opacity: 0.9; filter: drop-shadow(0 0 2px rgba(255,255,255,0.3)); }
-        .marquee-content img:hover { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 8px rgba(0, 225, 255, 0.8)); z-index: 10; position: relative; }
-        .logo-white { filter: brightness(0) invert(1) drop-shadow(0 0 2px rgba(255,255,255,0.5)) !important; }
-        .logo-white:hover { filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(0, 225, 255, 0.8)) !important; }
-        @keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #010414; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #00e1ff; }
-
-        /* Estilo para os cards do modal de sites */
-        .site-card-item {
-            display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1rem;
-            background-color: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 0.75rem;
-            transition: all 0.3s ease; text-align: center; color: #e2e8f0; height: 100%;
-            cursor: pointer; /* Adicionado cursor pointer para indicar que é clicável */
-        }
-        .site-card-item:hover { background-color: rgba(0, 102, 255, 0.1); border-color: #0066FF; transform: translateY(-2px); }
-        .site-card-item img { width: 32px; height: 32px; margin-bottom: 0.5rem; border-radius: 4px; }
-        .site-card-item span { font-size: 0.85rem; font-weight: 500; }
-
-        /* Navegação Swiper */
-        .swiper-button-next, .swiper-button-prev { display: none; }
-        @media (min-width: 768px) {
-            .swiper-button-next, .swiper-button-prev { display: flex; opacity: 0.5; }
-            .swiper-container:hover .swiper-button-next, .swiper-container:hover .swiper-button-prev { opacity: 1; }
-        }
-
-        /* Gradiente Instagram */
-        .insta-gradient {
-            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-            background-size: 200% 200%;
-            animation: gradientMove 3s ease infinite;
-        }
-        
-        /* Gradiente para o Portal do Assinante (Azul Neon) - NOVO */
-        .portal-gradient {
-            background: linear-gradient(45deg, #0066FF 0%, #00e1ff 100%); /* Neon Blue to Cyan */
-            background-size: 200% 200%;
-            animation: gradientMove 3s ease infinite;
-        }
-        
-        @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-
-        /* Reveal on Scroll Class */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease-out;
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        /* Estilo específico para o modal de apps do botão TOP APPS BRASIL */
-        .app-category-title {
-            font-size: 1.125rem; /* text-xl */
-            font-weight: 700; /* font-bold */
-            color: #00e1ff; /* neon-green */
-            margin-top: 1rem;
-            margin-bottom: 0.5rem;
-            text-align: left;
-            width: 100%;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 0.25rem;
+        @media print {
+            body.printing-customer-sheet > *:not(#print-area) {
+                display: none !important;
+            }
+            #print-area {
+                display: block !important;
+            }
+            .printable-sheet {
+                page-break-after: always;
+            }
+            .printable-sheet:last-child {
+                page-break-after: auto;
+            }
         }
     </style>
 </head>
-<body class="text-gray-200">
+<body class="bg-slate-100 text-slate-800">
 
-    <header class="fixed w-full top-0 z-50 bg-[#010414]/80 backdrop-blur-md border-b border-white/5 transition-all duration-300" id="main-header">
-        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
-            
-            <a href="#" class="flex flex-col items-center group leading-none relative">
-                <div class="absolute -inset-4 bg-neon-blue/20 blur-xl rounded-full opacity-0 group-hover:opacity-40 transition duration-700"></div>
-                
-                <div class="relative pr-2 z-10">
-                    <h1 class="font-orbitron font-black text-4xl md:text-5xl text-silver-metallic tracking-tighter drop-shadow-lg transform scale-x-125 origin-center py-1 relative overflow-hidden">
-                        ULTRA
-                        <span class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full animate-[shimmer_3s_infinite]"></span>
-                    </h1>
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-8">
+            <h1 id="app-title" contenteditable="true" class="text-4xl md:text-5xl font-bold text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 rounded-md">Gestão de Clientes Telecom</h1>
+            <p id="app-slogan" contenteditable="true" class="text-lg text-slate-600 mt-2 outline-none focus:ring-2 focus:ring-blue-500 rounded-md">Cadastre, visualize e gerencie seus clientes com facilidade.</p>
+        </header>
+
+        <main class="space-y-8">
+            <!-- Coluna do Formulário -->
+            <div>
+                <form id="customer-form" class="bg-white p-6 rounded-lg shadow-lg space-y-4 max-w-2xl mx-auto">
+                    <h2 id="form-title" class="text-2xl font-semibold border-b pb-3 mb-4">Cadastrar Novo Cliente</h2>
                     
-                    <div class="absolute -bottom-1.5 right-0 translate-x-[10%] flex justify-end w-full">
-                        <span class="font-orbitron font-bold text-[0.5rem] text-silver-metallic tracking-[0.6em] uppercase block opacity-90 drop-shadow-md">
-                            FIBRA
-                        </span>
+                    <input type="hidden" id="customer-id">
+                    <input type="hidden" id="photo-data">
+
+                    <div class="relative">
+                        <label for="fullName" class="block text-sm font-medium text-slate-700 mb-1">🆔 Nome completo</label>
+                        <input type="text" id="fullName" required class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="Ex: João da Silva">
                     </div>
-                </div>
-                
-                <div class="text-[0.45rem] text-gray-400 font-orbitron tracking-[0.35em] font-bold mt-2 group-hover:text-white transition-colors uppercase text-center w-full scale-x-110 z-10">
-                    A SUA MELHOR CONEXÃO
-                </div>
-            </a>
-            
-            <div class="hidden md:flex space-x-8 items-center font-medium">
-                <a href="#planos" class="text-gray-300 hover:text-neon-green transition duration-300 hover:drop-shadow-[0_0_5px_rgba(0,225,255,0.8)]">Nossos Planos</a>
-                
-                <button type="button" class="open-form-btn text-gray-300 hover:text-neon-green transition duration-300 hover:drop-shadow-[0_0_5px_rgba(0,225,255,0.8)]">Cadastro</button>
-                
-                <a href="https://www.speedtest.net/" target="_blank" rel="noopener noreferrer" class="text-gray-300 hover:text-neon-green transition duration-300 flex items-center space-x-2">
-                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6.75 12 12.75l-3.75-6" />
-                    </svg>
-                    <span>Teste Velocidade</span>
-                </a>
-                
-                <a href="https://sistema.ultranetelecom.com.br/central_assinante_web/login" target="_blank" rel="noopener noreferrer" class="btn-outline-blue px-5 py-2 rounded-full font-bold text-sm">
-                    2ª Via Boleto
-                </a>
-            </div>
-            
-            <button class="md:hidden flex items-center text-neon-blue" id="mobile-menu-button" aria-label="Abrir menu mobile">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-            </button>
-        </nav>
-        
-        <div class="hidden md:hidden bg-[#020617] border-b border-neon-blue/30 backdrop-blur-xl" id="mobile-menu">
-            <a href="#planos" class="block py-3 px-4 text-sm text-gray-300 hover:text-neon-green hover:bg-white/5 mobile-menu-link border-b border-white/5">Nossos Planos</a>
-            
-            <button type="button" class="open-form-btn block w-full text-left py-3 px-4 text-sm text-gray-300 hover:text-neon-green hover:bg-white/5 mobile-menu-link border-b border-white/5">Cadastro</button>
-            
-            <a href="https://www.speedtest.net/" target="_blank" rel="noopener noreferrer" class="block py-3 px-4 text-sm text-gray-300 hover:text-neon-green hover:bg-white/5 flex items-center space-x-2 mobile-menu-link border-b border-white/5">
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6.75 12 12.75l-3.75-6" />
-                </svg>
-                <span>Teste de Velocidade</span>
-            </a>
-            
-            <a href="https://sistema.ultranetelecom.com.br/central_assinante_web/login" target="_blank" rel="noopener noreferrer" class="block py-3 px-4 text-sm text-neon-blue font-bold hover:bg-white/5 mobile-menu-link">2ª Via Boleto</a>
-        </div>
-    </header>
-
-    <section class="bg-[#010414] py-4 overflow-hidden relative border-y border-white/10 mt-[6rem] md:mt-[5.5rem]">
-        <div class="absolute top-0 left-0 bottom-0 w-20 bg-gradient-to-r from-[#010414] to-transparent z-10 pointer-events-none"></div>
-        <div class="absolute top-0 right-0 bottom-0 w-20 bg-gradient-to-l from-[#010414] to-transparent z-10 pointer-events-none"></div>
-
-        <div class="marquee-container">
-            <div class="marquee-content">
-                <img alt="Champions League" src="https://www.mma.com.br/mma6/wp-content/uploads/2025/03/brand-champions-league.png">
-                <img alt="Leveduca" src="https://www.mma.com.br/mma6/wp-content/uploads/2025/03/brand-leveduca.png">
-                <img alt="Playkids" src="https://www.mma.com.br/mma6/wp-content/uploads/2025/03/brand-playkids.png">
-                <img alt="Kaspersky" src="https://www.mma.com.br/mma6/wp-content/uploads/2025/03/brand-kaspersky.png">
-                <img class="logo-white" alt="Black" src="https://www.mma.com.br/mma6/wp-content/uploads/2025/03/Black.png">
-                <img class="logo-white" alt="Discovery" src="https://www.mma.com.br/mma6/wp-content/uploads/2025/03/brand-discovery.png">
-                <img class="logo-white" alt="Harry Potter" src="https://www.mma.com.br/mma6/wp-content/uploads/2025/03/brand-harrypotter.png">
-                <img alt="Discovery Kids" src="https://www.mma.com.br/mma6/wp-content/uploads/2025/03/brand-discovery-kids.png">
-                <img alt="Deezer" src="https://logodownload.org/wp-content/uploads/2017/04/deezer-logo-1.png">
-                <img alt="DC" src="https://www.mma.com.br/mma6/wp-content/uploads/2025/03/brand-dc.png">
-                <img alt="Cartoon" src="https://www.mma.com.br/mma6/wp-content/uploads/2025/03/brand-cartoon.png">
-                <img alt="Logo 859" src="https://www.mma.com.br/mma6/wp-content/uploads/2025/03/6132217b00feb70004beb7cc.png">
-                <img alt="Champions League" src="https://www.mma.com.br/mma6/wp-content/uploads/2025/03/brand-champions-league.png">
-                <img alt="Leveduca" src="https://www.mma.com.br/mma6/wp-content/uploads/2025/03/brand-leveduca.png">
-                <img alt="Playkids" src="https://www.mma.com.br/mma6/wp-content/uploads/2025/03/brand-playkids.png">
-                <img alt="Kaspersky" src="https://www.mma.com.br/mma6/wp-content/uploads/2025/03/brand-kaspersky.png">
-                <img class="logo-white" alt="Black" src="https://www.mma.com.br/mma6/wp-content/uploads/2025/03/Black.png">
-                <img class="logo-white" alt="Discovery" src="https://www.mma.com.br/mma6/wp-content/uploads/2025/03/brand-discovery.png">
-            </div>
-        </div>
-    </section>
-
-    <main>
-        <section class="hero-gradient text-white py-24 relative overflow-hidden">
-            <div class="absolute inset-0 z-0">
-                <div class="absolute top-1/4 left-1/4 w-2 h-2 bg-neon-green rounded-full opacity-50 animate-pulse"></div>
-                <div class="absolute top-3/4 right-1/4 w-1.5 h-1.5 bg-neon-blue rounded-full opacity-60 animate-bounce"></div>
-                <div class="absolute top-1/2 left-3/4 w-2.5 h-2.5 bg-white rounded-full opacity-30 animate-pulse" style="animation-duration: 4s;"></div>
-            </div>
-            
-            <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(#2563eb 1px, transparent 1px); background-size: 30px 30px;"></div>
-
-            <div class="container mx-auto px-6 text-center relative z-10">
-                <h1 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight tracking-tight animate-fade-in-up">
-                    <span class="block">CONEXÃO</span>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-blue via-cyan-400 to-white drop-shadow-lg">ULTRA VELOZ</span>
-                </h1>
-                
-                <p class="text-lg md:text-xl mb-10 text-gray-300 max-w-2xl mx-auto animate-fade-in-up" style="animation-delay: 0.2s; opacity: 0; animation-fill-mode: forwards;">
-                    Internet 100% Fibra Óptica com tecnologia <span class="text-neon-green font-bold">WI-FI 6</span>. Estabilidade e potência para jogos, streaming e trabalho.
-                </p>
-                
-                <div class="animate-fade-in-up" style="animation-delay: 0.4s; opacity: 0; animation-fill-mode: forwards;">
-                    <a href="#planos" class="btn-neon-green py-4 px-10 rounded-full inline-block text-lg transform hover:-translate-y-1 animate-pulse-glow">
-                        VER PLANOS OFERTA
-                    </a>
-                </div>
-                
-                <div class="mt-20 animate-fade-in-up" style="animation-delay: 0.6s; opacity: 0; animation-fill-mode: forwards;">
-                    <p class="text-sm text-neon-blue font-bold tracking-widest uppercase mb-6">Apps Favoritos Inclusos</p>
-                    <div class="flex justify-center items-center gap-4 md:gap-6 flex-wrap px-4 max-w-3xl mx-auto">
-                        <button class="app-icon-btn" data-app-id="sky_light"><img src="https://logodownload.org/wp-content/uploads/2022/10/sky-logo-1.png" alt="Logo Sky+" class="h-10 w-10 object-contain" onerror="this.onerror=null;this.src='https://placehold.co/64x64/FFFFFF/000000?text=Sky%2B';"></button>
-                        <button class="app-icon-btn" data-app-id="disney_top"><img src="https://logodownload.org/wp-content/uploads/2020/11/disney-plus-logo-1.png" alt="Logo Disney+" class="h-10 w-10 object-contain" onerror="this.onerror=null;this.src='https://placehold.co/64x64/FFFFFF/000000?text=Disney%2B';"></button>
-                        <button class="app-icon-btn" data-app-id="max_top"><img src="https://logodownload.org/wp-content/uploads/2023/05/max-logo-0.png" alt="Logo Max" class="h-10 w-10 object-contain" onerror="this.onerror=null;this.src='https://placehold.co/64x64/FFFFFF/000000?text=Max';"></button>
-                        <button class="app-icon-btn" data-app-id="nba"><img src="https://logodownload.org/wp-content/uploads/2017/04/nba-logo-1.png" alt="Logo NBA" class="h-10 w-10 object-contain" onerror="this.onerror=null;this.src='https://placehold.co/64x64/FFFFFF/000000?text=NBA';"></button>
-                        <button class="app-icon-btn" data-app-id="deezer"><img src="https://logodownload.org/wp-content/uploads/2017/04/deezer-logo-1.png" alt="Logo Deezer" class="h-10 w-10 object-contain" onerror="this.onerror=null;this.src='https://placehold.co/64x64/FFFFFF/000000?text=Deezer';"></button>
-                    </div>
-                    <button id="open-all-apps-btn" class="mt-6 text-gray-400 hover:text-neon-green text-sm transition duration-300 underline decoration-neon-green decoration-2 underline-offset-4">
-                        Conhecer todos os aplicativos
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <section id="planos" class="py-20 scroll-mt-20 bg-gradient-to-b from-[#010414] to-[#020617] reveal"> 
-            <div class="container mx-auto px-6">
-                <h2 class="text-4xl font-black text-center mb-16 text-white uppercase tracking-tighter">
-                    Escolha seu <span class="text-neon-blue">Power-Up</span>
-                </h2>
-                
-                <div class="swiper-container group px-4">
-                    <div class="swiper-wrapper py-4"> <div class="swiper-slide">
-                            <div class="plan-card rounded-2xl p-6 text-center relative flex flex-col h-full hover:z-10">
-                                <span class="bg-gradient-to-r from-neon-blue to-blue-700 text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase absolute -top-3 left-1/2 transform -translate-x-1/2 shadow-lg shadow-blue-500/30">Premium WiFi 6</span>
-                                
-                                <h3 class="text-xl font-bold mt-6 mb-2 text-white">Ultra Premium</h3>
-                                <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-4">Conexão de Elite</p>
-                                
-                                <p class="text-6xl font-black text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">825<span class="text-2xl font-bold text-gray-400">Mega</span></p>
-                                
-                                <div class="my-6 p-4 bg-white/5 rounded-xl border border-white/5">
-                                    <span class="text-lg align-top text-gray-400">R$</span>
-                                    <span class="text-5xl font-black text-neon-green drop-shadow-[0_0_8px_rgba(0,225,255,0.5)]">149</span>
-                                    <span class="text-2xl text-neon-green">,99</span>
-                                    <div class="text-gray-500 text-xs mt-1">mensais</div>
-                                </div>
-                                
-                                <ul class="text-left mb-8 space-y-3 text-gray-300 text-sm flex-grow px-2">
-                                    <li class="flex items-center"><svg class="w-5 h-5 text-neon-green mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Roteador <strong class="text-white ml-1">WiFi 6</strong></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 text-neon-green mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>App de TV (Canais)</li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 text-neon-blue mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>1 App Premium</li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 text-gray-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>2 Apps Standard</li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 text-gray-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>1 App Advanced</li>
-                                </ul>
-                                
-                                <button data-plan="ultra_premium_wifi6" class="open-modal-btn w-full text-center text-neon-blue text-sm font-semibold hover:text-white mb-4 transition">Ver Apps Inclusos</button>
-                                <button type="button" class="open-form-btn w-full mt-auto btn-neon-green py-3 rounded-xl">ASSINAR AGORA</button>
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class="plan-card rounded-2xl p-6 text-center relative flex flex-col h-full hover:z-10">
-                                <span class="bg-yellow-500 text-black text-[10px] font-bold px-4 py-1 rounded-full uppercase absolute -top-3 left-1/2 transform -translate-x-1/2">WiFi 6</span>
-                                
-                                <h3 class="text-xl font-bold mt-6 mb-2 text-white">Ultra Gold</h3>
-                                <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-4">Alta Performance</p>
-                                
-                                <p class="text-6xl font-black text-white">825<span class="text-2xl font-bold text-gray-400">Mega</span></p>
-                                
-                                <div class="my-6 p-4 bg-white/5 rounded-xl border border-white/5">
-                                    <span class="text-lg align-top text-gray-400">R$</span>
-                                    <span class="text-5xl font-black text-neon-green">119</span>
-                                    <span class="text-2xl text-neon-green">,99</span>
-                                    <div class="text-gray-500 text-xs mt-1">mensais</div>
-                                </div>
-                                
-                                <ul class="text-left mb-8 space-y-3 text-gray-300 text-sm flex-grow px-2">
-                                     <li class="flex items-center"><svg class="w-5 h-5 text-neon-green mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Roteador <strong class="text-white ml-1">WiFi 6</strong></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 text-neon-green mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>App de TV (Canais)</li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 text-neon-blue mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>1 App Premium</li>
-                                </ul>
-                                
-                                <button data-plan="ultra_gold_wifi6" class="open-modal-btn w-full text-center text-neon-blue text-sm font-semibold hover:text-white mb-4 transition">Ver Apps Inclusos</button>
-                                <button type="button" class="open-form-btn w-full mt-auto btn-neon-green py-3 rounded-xl">ASSINAR AGORA</button>
-                            </div>
-                        </div>
-                        
-                        <div class="swiper-slide">
-                            <div class="plan-card rounded-2xl p-6 text-center relative flex flex-col h-full hover:z-10">
-                                <h3 class="text-xl font-bold mt-6 mb-2 text-white">Plano Gold+</h3>
-                                <p class="text-6xl font-black text-white">625<span class="text-2xl font-bold text-gray-400">Mega</span></p>
-                                
-                                <div class="my-6 p-4 bg-white/5 rounded-xl border border-white/5">
-                                    <span class="text-lg align-top text-gray-400">R$</span>
-                                    <span class="text-5xl font-black text-neon-green">109</span>
-                                    <span class="text-2xl text-neon-green">,99</span>
-                                    <div class="text-gray-500 text-xs mt-1">mensais</div>
-                                </div>
-                                
-                                <ul class="text-left mb-8 space-y-3 text-gray-300 text-sm flex-grow px-2">
-                                    <li class="flex items-center"><svg class="w-5 h-5 text-neon-green mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Roteador Comodato</li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 text-neon-green mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>App de TV (Canais)</li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 text-gray-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>1 App Standard</li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 text-gray-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>1 App Advanced</li>
-                                </ul>
-                                
-                                <button data-plan="gold_plus" class="open-modal-btn w-full text-center text-neon-blue text-sm font-semibold hover:text-white mb-4 transition">Ver Apps Inclusos</button>
-                                <button type="button" class="open-form-btn w-full mt-auto btn-neon-green py-3 rounded-xl">ASSINAR AGORA</button>
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class="plan-card rounded-2xl p-6 text-center relative flex flex-col h-full hover:z-10">
-                                <h3 class="text-xl font-bold mt-6 mb-2 text-white">Plano Gold</h3>
-                                <p class="text-6xl font-black text-white">625<span class="text-2xl font-bold text-gray-400">Mega</span></p>
-                                
-                                <div class="my-6 p-4 bg-white/5 rounded-xl border border-white/5">
-                                    <span class="text-lg align-top text-gray-400">R$</span>
-                                    <span class="text-5xl font-black text-neon-green">89</span>
-                                    <span class="text-2xl text-neon-green">,99</span>
-                                    <div class="text-gray-500 text-xs mt-1">mensais</div>
-                                </div>
-                                
-                                <ul class="text-left mb-8 space-y-3 text-gray-300 text-sm flex-grow px-2">
-                                     <li class="flex items-center"><svg class="w-5 h-5 text-neon-green mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Roteador Comodato</li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 text-neon-green mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>App de TV (Canais)</li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 text-gray-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>1 App Advanced</li>
-                                </ul>
-                                
-                                <button data-plan="gold" class="open-modal-btn w-full text-center text-neon-blue text-sm font-semibold hover:text-white mb-4 transition">Ver Apps Inclusos</button>
-                                <button type="button" class="open-form-btn w-full mt-auto btn-neon-green py-3 rounded-xl">ASSINAR AGORA</button>
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class="plan-card rounded-2xl p-6 text-center relative flex flex-col h-full border-neon-blue shadow-neon-card hover:z-10">
-                                <span class="bg-neon-blue text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase absolute -top-3 left-1/2 transform -translate-x-1/2 shadow-lg shadow-blue-500/50">Mais Popular</span>
-                                
-                                <h3 class="text-xl font-bold mt-6 mb-2 text-white">Plano Ultra+</h3>
-                                <p class="text-6xl font-black text-white">425<span class="text-2xl font-bold text-gray-400">Mega</span></p>
-                                
-                                 <div class="my-6 p-4 bg-white/5 rounded-xl border border-white/5">
-                                    <span class="text-lg align-top text-gray-400">R$</span>
-                                    <span class="text-5xl font-black text-neon-green">79</span>
-                                    <span class="text-2xl text-neon-green">,99</span>
-                                    <div class="text-gray-500 text-xs mt-1">mensais</div>
-                                </div>
-                                
-                                <ul class="text-left mb-8 space-y-3 text-gray-300 text-sm flex-grow px-2">
-                                    <li class="flex items-center"><svg class="w-5 h-5 text-neon-green mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Roteador Comodato</li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 text-neon-green mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>App de TV (Canais)</li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 text-gray-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>1 App Standard</li>
-                                </ul>
-                                
-                                 <button data-plan="ultra_plus" class="open-modal-btn w-full text-center text-neon-blue text-sm font-semibold hover:text-white mb-4 transition">Ver Apps Inclusos</button>
-                                <button type="button" class="open-form-btn w-full mt-auto btn-neon-green py-3 rounded-xl">ASSINAR AGORA</button>
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                             <div class="plan-card rounded-2xl p-6 text-center relative flex flex-col h-full hover:z-10">
-                                <h3 class="text-xl font-bold mt-6 mb-2 text-white">Básico Prata</h3>
-                                <p class="text-6xl font-black text-white">275<span class="text-2xl font-bold text-gray-400">Mega</span></p>
-                                
-                                 <div class="my-6 p-4 bg-white/5 rounded-xl border border-white/5">
-                                    <span class="text-lg align-top text-gray-400">R$</span>
-                                    <span class="text-5xl font-black text-neon-green">74</span>
-                                    <span class="text-2xl text-neon-green">,99</span>
-                                    <div class="text-gray-500 text-xs mt-1">mensais</div>
-                                </div>
-                                
-                                <ul class="text-left mb-8 space-y-3 text-gray-300 text-sm flex-grow px-2">
-                                    <li class="flex items-center"><svg class="w-5 h-5 text-neon-green mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Roteador Comodato</li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 text-neon-green mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>App de TV (Canais)</li>
-                                </ul>
-                                
-                                 <button data-plan="basico_prata" class="open-modal-btn w-full text-center text-neon-blue text-sm font-semibold hover:text-white mb-4 transition">Ver Apps Inclusos</button>
-                                <button type="button" class="open-form-btn w-full mt-auto btn-neon-green py-3 rounded-xl">ASSINAR AGORA</button>
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class="plan-card rounded-2xl p-6 text-center relative flex flex-col h-full hover:z-10">
-                                <h3 class="text-xl font-bold mt-6 mb-2 text-white">Básico+</h3>
-                                <p class="text-6xl font-black text-white">225<span class="text-2xl font-bold text-gray-400">Mega</span></p>
-                                
-                                 <div class="my-6 p-4 bg-white/5 rounded-xl border border-white/5">
-                                    <span class="text-lg align-top text-gray-400">R$</span>
-                                    <span class="text-5xl font-black text-neon-green">69</span>
-                                    <span class="text-2xl text-neon-green">,99</span>
-                                    <div class="text-gray-500 text-xs mt-1">mensais</div>
-                                </div>
-                                
-                                <ul class="text-left mb-8 space-y-3 text-gray-300 text-sm flex-grow px-2">
-                                    <li class="flex items-center"><svg class="w-5 h-5 text-neon-green mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Roteador Comodato</li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 text-neon-green mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>App de TV (Canais)</li>
-                                </ul>
-                                
-                                <button data-plan="basico_plus" class="open-modal-btn w-full text-center text-neon-blue text-sm font-semibold hover:text-white mb-4 transition">Ver Apps Inclusos</button>
-                                <button type="button" class="open-form-btn w-full mt-auto btn-neon-green py-3 rounded-xl">ASSINAR AGORA</button>
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class="plan-card rounded-2xl p-6 text-center relative flex flex-col h-full hover:z-10">
-                                <h3 class="text-xl font-bold mt-6 mb-2 text-white">Básico</h3>
-                                <p class="text-6xl font-black text-white">125<span class="text-2xl font-bold text-gray-400">Mega</span></p>
-                                
-                                <div class="my-6 p-4 bg-white/5 rounded-xl border border-white/5">
-                                    <span class="text-lg align-top text-gray-400">R$</span>
-                                    <span class="text-5xl font-black text-neon-green">65</span>
-                                    <span class="text-2xl text-neon-green">,00</span>
-                                    <div class="text-gray-500 text-xs mt-1">mensais</div>
-                                </div>
-                                
-                                <ul class="text-left mb-8 space-y-3 text-gray-300 text-sm flex-grow px-2">
-                                    <li class="flex items-center"><svg class="w-5 h-5 text-neon-green mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Roteador Comodato</li>
-                                </ul>
-                                
-                                <button data-plan="basico" class="open-modal-btn w-full text-center text-gray-500 text-sm font-semibold mb-4 invisible cursor-default">Sem Apps</button> 
-                                <button type="button" class="open-form-btn w-full mt-auto btn-neon-green py-3 rounded-xl">ASSINAR AGORA</button>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="swiper-pagination md:hidden mt-8 !relative"></div>
                     
-                    <div class="swiper-button-next transition-opacity duration-300"></div>
-                    <div class="swiper-button-prev transition-opacity duration-300"></div>
-                </div>
+                    <div class="relative">
+                        <label for="nickname" class="block text-sm font-medium text-slate-700 mb-1">🏷 Apelido</label>
+                        <input type="text" id="nickname" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="Ex: João">
+                    </div>
+
+                    <div class="relative">
+                        <label for="cpf" class="block text-sm font-medium text-slate-700 mb-1">🪪 CPF</label>
+                        <input type="text" id="cpf" required class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="000.000.000-00">
+                    </div>
+
+                    <div class="relative">
+                        <label for="birthDate" class="block text-sm font-medium text-slate-700 mb-1">🎂 Data de nascimento</label>
+                        <input type="date" id="birthDate" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="relative">
+                            <label for="phone" class="block text-sm font-medium text-slate-700 mb-1">📞 Telefone</label>
+                            <input type="tel" id="phone" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="(00) 0000-0000">
+                        </div>
+                        <div class="relative">
+                            <label for="whatsapp" class="block text-sm font-medium text-slate-700 mb-1">💬 WhatsApp</label>
+                            <input type="tel" id="whatsapp" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="(00) 00000-0000">
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <label for="email" class="block text-sm font-medium text-slate-700 mb-1">✉ E-mail</label>
+                        <input type="email" id="email" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="exemplo@email.com">
+                    </div>
+
+                    <div class="relative">
+                        <label for="address" class="block text-sm font-medium text-slate-700 mb-1">🏡 Endereço</label>
+                        <input type="text" id="address" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="Rua, Número, Bairro, Cidade">
+                    </div>
+                    
+                    <div class="relative">
+                        <label for="geolocation" class="flex items-center justify-between text-sm font-medium text-slate-700 mb-1">
+                            <span>📍 Geolocalização</span>
+                            <button type="button" id="get-location-btn" class="text-xs bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-1 px-2 rounded-md">Obter Localização</button>
+                        </label>
+                        <input type="text" id="geolocation" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500 bg-slate-50" placeholder="Clique em 'Obter Localização'">
+                    </div>
+
+                    <div class="relative">
+                        <label for="reference" class="block text-sm font-medium text-slate-700 mb-1">📌 Ponto de referência</label>
+                        <input type="text" id="reference" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="Próximo ao mercado X">
+                    </div>
+
+                    <div class="relative">
+                        <label for="plan" class="block text-sm font-medium text-slate-700 mb-1">📃 Plano escolhido</label>
+                        <select id="plan" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                            <!-- Planos carregados via JS -->
+                        </select>
+                        <input type="text" id="customPlan" class="hidden w-full p-2 border border-slate-300 rounded-md mt-2" placeholder="Digite o nome do plano">
+                        <span id="plan-value" class="text-sm text-slate-500 mt-1 block"></span>
+                    </div>
+                    
+                    <div class="relative">
+                        <label for="devices" class="block text-sm font-medium text-slate-700 mb-1">📱 Quantos aparelhos conectados?</label>
+                        <input type="number" id="devices" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="Ex: 5">
+                    </div>
+                    
+                    <div class="relative">
+                        <label for="freeTrial" class="block text-sm font-medium text-slate-700 mb-1">🎁 Teste grátis</label>
+                        <select id="freeTrial" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                            <option value="nao">Não</option>
+                            <option value="15_dias">15 dias</option>
+                            <option value="1_mes">1 mês</option>
+                            <option value="2_meses">2 meses</option>
+                            <option value="3_meses">3 meses</option>
+                        </select>
+                    </div>
+                    
+                    <div class="relative">
+                        <label for="dueDate" class="block text-sm font-medium text-slate-700 mb-1">🗓️ Data de Vencimento</label>
+                        <select id="dueDate" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                            <option value="">Selecione o dia</option>
+                            <option value="01">Dia 01</option>
+                            <option value="10">Dia 10</option>
+                            <option value="15">Dia 15</option>
+                            <option value="20">Dia 20</option>
+                        </select>
+                    </div>
+
+                    <div class="relative">
+                        <label for="observations" class="block text-sm font-medium text-slate-700 mb-1">📝 OBS.:</label>
+                        <textarea id="observations" class="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" rows="3" placeholder="Observações adicionais sobre o cliente ou instalação..."></textarea>
+                    </div>
+
+                    <div class="relative">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">📸 Foto (Documento/Fachada)</label>
+                        <div class="flex items-center gap-4">
+                            <input type="file" id="photo-input" class="hidden" accept="image/*" capture="environment">
+                            <button type="button" id="take-photo-btn" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-2 px-4 rounded-md">Tirar Foto</button>
+                            <img id="photo-preview" src="" class="w-24 h-24 rounded-md object-cover hidden">
+                            <button type="button" id="remove-photo-btn" class="hidden text-red-500 hover:text-red-700 text-2xl font-bold">&times;</button>
+                        </div>
+                    </div>
+
+
+                    <div class="flex items-center gap-4 pt-4 border-t">
+                        <button type="submit" id="save-btn" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">Salvar Cliente</button>
+                        <button type="button" id="clear-btn" class="w-full bg-slate-200 text-slate-800 font-bold py-2 px-4 rounded-md hover:bg-slate-300 transition-colors">Limpar</button>
+                    </div>
+                </form>
             </div>
-        </section>
 
-        <section id="viabilidade" class="py-16 bg-[#020617] border-t border-white/5 reveal">
-             <div class="container mx-auto px-6 text-center">
-                    <h2 class="text-3xl font-bold mb-6 text-white">Verifique a Viabilidade na sua Localização</h2>
-                    <p class="text-gray-400 mb-8 max-w-xl mx-auto">Clique no botão abaixo para obter suas coordenadas GPS precisas e envie para nossa equipe.</p>
-                    
-                    <button id="locate-me-viability-btn" class="mb-4 btn-neon-green py-3 px-8 rounded-full flex items-center justify-center mx-auto shadow-lg shadow-cyan-500/20">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        Obter Minha Localização
-                    </button>
-                    
-                    <div id="location-display-viability" class="mt-4 p-6 bg-[#0a0f26] border border-white/10 rounded-xl max-w-md mx-auto text-center hidden shadow-neon-blue">
-                          <p class="text-gray-300 font-medium mb-2">Coordenadas:</p>
-                          <div class="flex items-center justify-center mt-2">
-                               <code id="coordinates-viability" class="text-lg font-mono bg-black text-neon-blue p-3 rounded-l-md w-full text-center border border-r-0 border-white/10"></code>
-                               <button id="copy-coords-viability-btn" class="bg-neon-blue text-white p-4 rounded-r-md hover:bg-blue-600 transition" aria-label="Copiar coordenadas" disabled>
-                                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                               </button>
-                          </div>
-                          <p id="copy-feedback-viability" class="text-neon-green text-sm mt-2 hidden font-bold">Copiado!</p>
-                          <button id="send-location-btn" class="mt-6 w-full btn-neon-green py-3 px-6 rounded-lg flex items-center justify-center" disabled>
-                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 16 16">
-                                 <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.626-2.957 6.584-6.591 6.584zm-1.13-4.243c-.225.084-1.295.64-1.492.72-.192.08-.343.12-.478.24-.135.12-.27.24-.27.42s-.012.51.05.59c.06.08.27.31.576.62.308.308.552.53.81.73.26.19.51.3.81.42.3.12.57.1.76.02.19-.08 1.13-0.47 1.29-1.26.16-.8.16-1.48.12-1.62-.04-.14-.12-.22-.24-.3s-.27-.24-.42-.32c-.15-.08-.27-.12-.42-.2-.15-.08-.34-.12-.48-.04s-.42.48-.52.56c-.1.08-.2.12-.28.12s-.16-.04-.24-.08c-.08-.04-.36-.12-.66-.36-.3-.24-.55-.52-.66-.73-.11-.21-.03-.33.04-.42.08-.08.16-.2.24-.28.08-.08.12-.16.16-.24.04-.08.02-.16-.02-.24s-.42-1.02-.56-1.4c-.15-.38-.3-.32-.43-.32-.12 0-.27-.01-.4-.01z"/>
-                             </svg>
-                             Enviar Análise via WhatsApp
-                          </button>
+            <!-- Coluna da Lista de Clientes -->
+            <div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
+                        <h2 class="text-2xl font-semibold">Clientes Cadastrados</h2>
                     </div>
-
-                    <div class="mt-20 relative group max-w-4xl mx-auto animate-float">
-                        <div class="absolute -inset-1 bg-gradient-to-r from-neon-green to-neon-blue rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-                        
-                        <div class="relative bg-[#0a0f26] border border-white/10 rounded-xl p-8 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-10 shadow-2xl">
-                            
-                            <div class="flex flex-col md:flex-row items-center text-center md:text-left gap-6">
-                                <div class="bg-neon-green/10 p-4 rounded-full border border-neon-green/20">
-                                    <i data-lucide="banknote" class="w-10 h-10 text-neon-green"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-2xl md:text-3xl font-black text-white uppercase tracking-tight mb-2">
-                                           Sua Indicação Vale <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-green to-cyan-400">PIX</span>
-                                    </h3>
-                                    <p class="text-gray-300 text-lg leading-relaxed">
-                                        Ganhe indicado direto na sua conta!
-                                    </p>
-                                </div>
-                            </div>
-                    
-                            <a href="https://api.whatsapp.com/send?phone=557531999981&text=Ol%C3%A1!%20Gostaria%20de%20saber%20as%20regras%20da%20indica%C3%A7%C3%A3o%20premiada%20(PIX)." target="_blank" class="btn-outline-blue py-3 px-6 rounded-lg font-bold flex items-center gap-2 hover:bg-neon-blue hover:text-white transition-all whitespace-nowrap group-hover:shadow-neon-blue">
-                                <i data-lucide="info" class="w-5 h-5"></i>
-                                Consultar Regras
-                            </a>
-                        </div>
+                    <div class="relative mb-4">
+                         <span class="form-icon">🔍</span>
+                        <input type="text" id="search" class="form-input w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500" placeholder="Buscar por nome, apelido ou CPF...">
                     </div>
-
-             </div>
-        </section>
-
-        <section id="contato" class="py-20 hidden scroll-mt-20 bg-[#00020a] reveal"> 
-            <h2 class="text-3xl font-bold text-center mb-12 text-white">Cadastro Digital</h2>
-            <div class="max-w-2xl mx-auto px-6"> 
-                <div class="w-full bg-[#0a0f26] border border-white/10 p-8 rounded-2xl shadow-neon-card">
-                        
-                        <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
-                            <h3 class="text-2xl font-bold text-white">Ficha do Cliente</h3>
-                            <div class="flex items-center gap-4">
-                                <button type="button" id="unlock-gift-btn" class="text-3xl hover:scale-110 transition-transform cursor-pointer grayscale hover:grayscale-0" title="Desbloquear Bônus">🎁</button>
-                                <button type="button" id="close-form-btn" class="text-gray-400 hover:text-red-500 transition-colors" title="Fechar Formulário">
-                                    <i data-lucide="x" class="w-8 h-8"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <form id="cadastro-form" class="space-y-4">
-                            
-                            <div>
-                                <label for="full_name" class="block text-neon-blue text-xs font-bold uppercase tracking-wider mb-2">Nome completo</label>
-                                <input type="text" id="full_name" name="full_name" placeholder="Digite seu nome completo" class="w-full px-4 py-3 rounded-lg" required>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="nickname" class="block text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Apelido (Opcional)</label>
-                                    <input type="text" id="nickname" name="nickname" placeholder="Como gostaria de ser chamado" class="w-full px-4 py-3 rounded-lg">
-                                </div>
-                                <div>
-                                    <label for="cpf" class="block text-neon-blue text-xs font-bold uppercase tracking-wider mb-2">CPF</label>
-                                    <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" class="w-full px-4 py-3 rounded-lg" required>
-                                </div>
-                            </div>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="birth_date" class="block text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Data de nascimento</label>
-                                    <input type="date" id="birth_date" name="birth_date" class="w-full px-4 py-3 rounded-lg" required>
-                                </div>
-                                <div>
-                                    <label for="whatsapp" class="block text-neon-green text-xs font-bold uppercase tracking-wider mb-2">WhatsApp</label>
-                                    <input type="tel" id="whatsapp" name="whatsapp" placeholder="(XX) 9XXXX-XXXX" class="w-full px-4 py-3 rounded-lg border-cyan-900 focus:border-cyan-500" required>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label for="email" class="block text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">E-mail</label>
-                                <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com" class="w-full px-4 py-3 rounded-lg" required>
-                            </div>
-
-                            <div>
-                                <label for="address" class="block text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Endereço</label>
-                                <input type="text" id="address" name="address" placeholder="Rua, Nº, Bairro" class="w-full px-4 py-3 rounded-lg" required>
-                            </div>
-
-                            <div>
-                                <label for="geolocation" class="block text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Geolocalização</label>
-                                <div class="flex items-center">
-                                    <input type="text" id="geolocation" name="geolocation" placeholder="Clique no botão ao lado" class="w-full px-4 py-3 rounded-l-lg border-r-0">
-                                    <button type="button" id="locate-me-form-btn" class="bg-neon-blue text-white p-3.5 rounded-r-lg hover:bg-blue-600 transition" aria-label="Obter localização atual">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                             <div>
-                                <label for="reference" class="block text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Ponto de referência</label>
-                                <input type="text" id="reference" name="reference" placeholder="Próximo a..." class="w-full px-4 py-3 rounded-lg">
-                            </div>
-                            
-                             <div>
-                                <label for="plan" class="block text-neon-blue text-xs font-bold uppercase tracking-wider mb-2">Plano escolhido</label>
-                                <select id="plan" name="plan" class="w-full px-4 py-3 rounded-lg" required>
-                                    <option value="" disabled selected>Selecione um plano</option>
-                                    <option value="Plano Ultra Premium WiFi 6 - 825 Mbps">Plano Ultra Premium WiFi 6 - 825 Mbps</option>
-                                    <option value="Plano Ultra Gold WiFi 6 - 825 Mbps">Plano Ultra Gold WiFi 6 - 825 Mbps</option>
-                                    <option value="Plano Gold+ - 625 Mbps">Plano Gold+ - 625 Mbps</option>
-                                    <option value="Plano Gold - 625 Mbps">Plano Gold - 625 Mbps</option>
-                                    <option value="Plano Ultra+ - 425 Mbps">Plano Ultra+ - 425 Mbps</option>
-                                    <option value="Plano Básico Prata - 275 Mbps">Plano Básico Prata - 275 Mbps</option>
-                                    <option value="Plano Básico+ - 225 Mbps">Plano Básico+ - 225 Mbps</option>
-                                    <option value="Plano Básico - 125 Mbps">Plano Básico - 125 Mbps</option>
-                                </select>
-                            </div>
-                            
-                            <div id="included-apps-container" class="hidden space-y-3 p-4 bg-black/30 rounded-lg border border-white/5">
-                                <label class="block text-gray-300 font-bold mb-2">📱 Apps Inclusos (Escolha):</label>
-                                <div id="included-apps-list" class="space-y-3">
-                                    </div>
-                                <input type="hidden" id="included_apps_text" name="included_apps_text">
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="devices" class="block text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Aparelhos conectados</label>
-                                    <input type="number" id="devices" name="devices" placeholder="Ex: 3" class="w-full px-4 py-3 rounded-lg" min="1">
-                                </div>
-
-                                <div>
-                                    <label for="due_date" class="block text-neon-green text-xs font-bold uppercase tracking-wider mb-2">Dia de vencimento</label>
-                                    <select id="due_date" name="due_date" class="w-full px-4 py-3 rounded-lg" required>
-                                        <option value="" disabled selected>Selecionar</option>
-                                        <option value="05">Dia 05</option>
-                                        <option value="10">Dia 10</option>
-                                        <option value="15">Dia 15</option>
-                                        <option value="20">Dia 20</option>
-                                        <option value="25">Dia 25</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div id="free-trial-container" class="hidden p-4 border border-neon-green/30 rounded-lg bg-cyan-900/10">
-                                <label for="free_trial" class="block text-neon-green font-bold mb-2">🎁 BÔNUS ATIVADO: Teste grátis</label>
-                                <select id="free_trial" name="free_trial" class="w-full px-4 py-3 rounded-lg border-neon-green">
-                                    <option value="Não">Não</option>
-                                    <option value="15 dias">15 dias</option>
-                                    <option value="1 mês">1 mês</option>
-                                    <option value="2 meses">2 meses</option>
-                                    <option value="3 meses">3 meses</option>
-                                </select>
-                            </div>
-
-                             <div>
-                                <label for="obs" class="block text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Observações</label>
-                                <textarea id="obs" name="obs" rows="3" placeholder="Alguma observação?" class="w-full px-4 py-3 rounded-lg"></textarea>
-                            </div>
-                            
-                            <button type="submit" class="w-full btn-neon-green py-4 px-6 rounded-lg flex items-center justify-center text-lg mt-4 shadow-neon-green animate-pulse-glow">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.626-2.957 6.584-6.591 6.584zm-1.13-4.243c-.225.084-1.295.64-1.492.72-.192.08-.343.12-.478.24-.135.12-.27.24-.27.42s-.012.51.05.59c.06.08.27.31.576.62.308.308.552.53.81.73.26.19.51.3.81.42.3.12.57.1.76.02.19-.08 1.13-0.47 1.29-1.26.16-.8.16-1.48.12-1.62-.04-.14-.12-.22-.24-.3s-.27-.24-.42-.32c-.15-.08-.27-.12-.42-.2-.15-.08-.34-.12-.48-.04s-.42.48-.52.56c-.1.08-.2.12-.28.12s-.16-.04-.24-.08c-.08-.04-.36-.12-.66-.36-.3-.24-.55-.52-.66-.73-.11-.21-.03-.33.04-.42.08-.08.16-.2.24-.28.08-.08.12-.16.16-.24.04-.08.02-.16-.02-.24s-.42-1.02-.56-1.4c-.15-.38-.3-.32-.43-.32-.12 0-.27-.01-.4-.01z"/>
-                                </svg>
-                                ENVIAR VIA WHATSAPP
-                            </button>
-                        </form>
+                    <div id="customer-list" class="space-y-3 max-h-[70vh] overflow-y-auto pr-2">
+                        <!-- Clientes serão inseridos aqui -->
                     </div>
-                </div>
-                
-                <div class="mt-12 text-center text-gray-400 space-y-4 text-sm flex flex-col items-center">
-                    <p class="text-gray-300"><strong>Endereço:</strong> Rua MAJ. PRAZERES 2-110 - São Felipe/BA</p>
-                    <p class="text-gray-300"><strong>WhatsApp:</strong> (75) 3199-9981</p>
-                    <p class="text-gray-300"><strong>CNPJ:</strong> 36.712.901/0001-53</p>
-                    
-                    <a href="https://www.instagram.com/ultranett_?igsh=MTU3ZDk2MTJ6Y2hwYw==" target="_blank" class="group relative inline-flex items-center justify-center gap-3 px-8 py-3.5 insta-gradient rounded-full text-white font-bold text-lg shadow-lg shadow-pink-500/30 hover:shadow-pink-500/50 hover:scale-105 transition duration-300 overflow-hidden mt-6 w-full max-w-xs border border-white/10">
-                        <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-                        <i data-lucide="instagram" class="w-7 h-7"></i>
-                        <span class="relative z-10">Siga nosso Instagram</span>
-                    </a>
-                    
-                    <a href="https://www.portaldoassinante.com/ultranetfibra/login" target="_blank" class="group relative inline-flex items-center justify-center gap-3 px-8 py-3.5 portal-gradient rounded-full text-white font-bold text-lg shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:scale-105 transition duration-300 overflow-hidden mt-6 w-full max-w-xs border border-white/10">
-                        <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-                        <i data-lucide="log-in" class="w-7 h-7"></i>
-                        <span class="relative z-10">Portal do Assinante (Ativar Apps)</span>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <section class="py-24 bg-[#010414] relative overflow-hidden border-t border-white/5 reveal">
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-neon-blue/10 blur-[100px] rounded-full pointer-events-none"></div>
-            
-            <div class="container mx-auto px-6 relative z-10">
-                <div class="text-center mb-16">
-                    <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tight mb-4">
-                        Por que escolher a <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-blue to-cyan-500 drop-shadow-[0_0_10px_rgba(0,102,255,0.5)]">Ultra Net Fibra?</span>
-                    </h2>
-                    <div class="h-1 w-24 bg-neon-green mx-auto rounded-full shadow-[0_0_10px_#00e1ff]"></div>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
-                    <div class="space-y-12">
-                        <div class="group text-center lg:text-right hover:-translate-y-2 transition duration-300">
-                            <a href="https://www.speedtest.net/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center p-4 bg-[#0a0f26] rounded-2xl mb-4 border border-white/10 group-hover:border-neon-blue shadow-lg shadow-black group-hover:shadow-[0_0_20px_rgba(0,102,255,0.3)] transition-all duration-300 cursor-pointer" title="Testar Velocidade Agora">
-                                <i data-lucide="rocket" class="w-8 h-8 text-neon-blue group-hover:scale-110 transition-transform"></i>
-                            </a>
-                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-neon-blue transition-colors">Ultravelocidade</h3>
-                            <p class="text-gray-400 text-sm leading-relaxed">
-                                Navegação com ultravelocidade e estabilidade que você só encontra aqui. Fibra óptica de ponta a ponta para voar na internet.
-                            </p>
-                        </div>
-                        
-                        <div class="group text-center lg:text-right hover:-translate-y-2 transition duration-300">
-                            <a href="https://api.whatsapp.com/send?phone=557531999981&text=Ol%C3%A1!%20Vim%20pelo%20site%20Ultra%20Fibra%20e%20preciso%20de%20Suporte%20T%C3%A9cnico" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center p-4 bg-[#0a0f26] rounded-2xl mb-4 border border-white/10 group-hover:border-neon-blue shadow-lg shadow-black group-hover:shadow-[0_0_20px_rgba(0,102,255,0.3)] transition-all duration-300 cursor-pointer" title="Falar com Suporte Técnico">
-                                <i data-lucide="headset" class="w-8 h-8 text-neon-blue group-hover:scale-110 transition-transform"></i>
-                            </a>
-                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-neon-blue transition-colors">Suporte Técnico VIP</h3>
-                            <p class="text-gray-400 text-sm leading-relaxed">
-                                Qualidade e agilidade de atendimento com equipe treinada. Aqui você é atendido por especialistas, não robôs.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="relative flex justify-center lg:px-4 order-first lg:order-none mb-12 lg:mb-0">
-                        <div class="relative w-72 h-96 md:w-80 md:h-[450px] group animate-float">
-                            <div class="absolute -inset-1 bg-gradient-to-br from-neon-green via-blue-500 to-neon-blue rounded-[2.5rem] blur opacity-70 group-hover:opacity-100 transition duration-500 animate-pulse"></div>
-                            
-                            <img 
-                                src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1000&auto=format&fit=crop" 
-                                alt="Mosaico de Aplicativos de Streaming e Conteúdo" 
-                                class="relative w-full h-full object-cover rounded-[2.5rem] border-2 border-[#121212] shadow-2xl z-10 filter group-hover:brightness-110 transition duration-700 ease-in-out"
-                            >
-                            
-                            <button id="open-sites-btn" class="open-apps-list-btn absolute -bottom-6 left-1/2 -translate-x-1/2 z-20 bg-black/90 border border-neon-green px-8 py-3 rounded-full shadow-[0_0_20px_rgba(0,225,255,0.4)] hover:scale-110 active:scale-95 transition-all duration-300 group/btn cursor-pointer">
-                                <span class="text-neon-green font-black text-sm tracking-[0.2em] whitespace-nowrap flex items-center gap-2 group-hover/btn:text-white transition-colors">
-                                    <i data-lucide="play-circle" class="w-4 h-4"></i> TEMOS OS MELHORES APPS
-                                </span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="space-y-12">
-                        <div class="group text-center lg:text-left hover:-translate-y-2 transition duration-300">
-                            <a href="https://ninite.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center p-4 bg-[#0a0f26] rounded-2xl mb-4 border border-white/10 group-hover:border-neon-green shadow-lg shadow-black group-hover:shadow-[0_0_20px_rgba(0,225,255,0.3)] transition-all duration-300 cursor-pointer" title="Instalador de Apps (Ninite)">
-                                <i data-lucide="infinity" class="w-8 h-8 text-neon-green group-hover:scale-110 transition-transform"></i>
-                            </a>
-                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-neon-green transition-colors">Sem Limites</h3>
-                            <p class="text-gray-400 text-sm leading-relaxed">
-                                Não existe franquia limitando sua utilização. Baixe, assista e navegue à vontade, 24 horas por dia, sem redução.
-                            </p>
-                        </div>
-                        
-                        <div class="group text-center lg:text-left hover:-translate-y-2 transition duration-300">
-                            <div class="flex gap-3 justify-center lg:justify-start mb-4">
-                                <a href="https://play.google.com/store/apps" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center p-4 bg-[#0a0f26] rounded-2xl border border-white/10 group-hover:border-neon-green shadow-lg shadow-black group-hover:shadow-[0_0_20px_rgba(0,225,255,0.3)] transition-all duration-300 cursor-pointer" title="Baixar na Play Store (Android)">
-                                    <i data-lucide="smartphone" class="w-8 h-8 text-neon-green group-hover:scale-110 transition-transform"></i>
-                                </a>
-                                <a href="https://www.apple.com/br/app-store/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center p-4 bg-[#0a0f26] rounded-2xl border border-white/10 group-hover:border-neon-green shadow-lg shadow-black group-hover:shadow-[0_0_20px_rgba(0,225,255,0.3)] transition-all duration-300 cursor-pointer" title="Baixar na App Store (iOS)">
-                                    <i data-lucide="apple" class="w-8 h-8 text-neon-green group-hover:scale-110 transition-transform"></i>
-                                </a>
-                            </div>
-                            
-                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-neon-green transition-colors">Séries, Filmes e Games</h3>
-                            <p class="text-gray-400 text-sm leading-relaxed">
-                                O melhor serviço para assistir streaming em 4K e jogar online. Ping baixo e zero travamentos para sua diversão.
-                            </p>
-                        </div>
+                    <div class="flex flex-col sm:flex-row items-center gap-2 border-t pt-4 mt-4">
+                        <button id="manage-plans-btn" class="w-full sm:w-auto bg-purple-600 text-white font-bold py-2 px-4 rounded-md hover:bg-purple-700 transition-colors text-sm">Gerenciar Planos</button>
+                        <button id="backup-btn" class="w-full sm:w-auto bg-blue-800 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-900 transition-colors text-sm">Backup</button>
+                        <button id="restore-btn" class="w-full sm:w-auto bg-slate-600 text-white font-bold py-2 px-4 rounded-md hover:bg-slate-700 transition-colors text-sm">Restaurar</button>
+                        <button id="print-all-btn" class="w-full sm:w-auto bg-gray-700 text-white font-bold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors text-sm">Imprimir Tudo</button>
+                        <button id="share-all-btn" class="w-full sm:w-auto bg-green-600 text-white font-bold py-2 px-4 rounded-md hover:bg-green-700 transition-colors text-sm">Compartilhar Relatório</button>
                     </div>
                 </div>
             </div>
-        </section>
+        </main>
+    </div>
 
-    </main>
-
-    <footer class="bg-[#00020a] text-white py-12 border-t border-white/5">
-        <div class="container mx-auto px-6 flex flex-col items-center text-center gap-8">
-            
-            <div class="flex flex-col items-center justify-center animate-fade-in group">
-                <div class="bg-white/5 p-4 rounded-xl border border-white/10 hover:bg-white/10 transition duration-300">
-                    <img 
-                        src="https://lexcom.net.br/wp-content/uploads/anatel.png" 
-                        alt="Homologado pela Anatel" 
-                        class="h-24 md:h-28 object-contain hover:scale-105 transition duration-300 filter drop-shadow-lg opacity-90 group-hover:opacity-100"
-                    >
-                </div>
-                <p class="text-[10px] md:text-xs text-gray-500 mt-4 uppercase tracking-widest font-semibold">Empresa Autorizada</p>
-            </div>
-
-            <div class="w-full h-px bg-white/10 max-w-xs mx-auto"></div>
-
-            <p class="text-gray-500 text-sm">Ultra Fibra &copy; 2024. Todos os direitos reservados.</p>
-        </div>
-    </footer>
-    
-    <div id="apps-modal" class="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 z-[60] hidden">
-        <div class="bg-[#0a0f26] border border-neon-blue rounded-2xl shadow-neon-card w-full max-w-2xl max-h-[80vh] overflow-y-auto p-6 relative">
-            <button id="close-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white" aria-label="Fechar modal">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-            <h3 id="modal-title" class="text-2xl font-bold text-white mb-6 border-b border-white/10 pb-4">Apps Inclusos</h3>
-            <div id="modal-apps-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
+    <!-- Modal de Confirmação de Exclusão -->
+    <div id="delete-modal" class="hidden fixed inset-0 bg-black/50 z-50 items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-xl text-center max-w-sm mx-4">
+            <h3 class="text-xl font-bold mb-4">Confirmar Exclusão</h3>
+            <p class="text-slate-600 mb-6">Você tem certeza que deseja excluir este cliente? Esta ação não pode ser desfeita.</p>
+            <div class="flex gap-4">
+                <button id="confirm-delete-btn" class="w-full bg-red-600 text-white font-bold py-2 px-4 rounded-md hover:bg-red-700 transition-colors">Excluir</button>
+                <button id="cancel-delete-btn" class="w-full bg-slate-200 text-slate-800 font-bold py-2 px-4 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
             </div>
         </div>
     </div>
     
-    <div id="all-apps-modal" class="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 z-[60] hidden">
-        <div class="bg-[#0a0f26] border border-neon-blue rounded-2xl shadow-neon-card w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6 relative">
-            <button id="close-all-apps-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white" aria-label="Fechar modal">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-            <h3 class="text-2xl font-bold text-white mb-6 border-b border-white/10 pb-4">Todos os Aplicativos</h3>
-            <div id="all-apps-grid-content" class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-3 md:gap-4 max-w-4xl mx-auto">
-                 </div>
+    <!-- Modal de Gerenciamento de Planos -->
+    <div id="plans-modal" class="hidden fixed inset-0 bg-black/50 z-50 items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Gerenciar Planos e Valores</h3>
+                <button id="close-plans-modal-btn" class="text-2xl font-bold">&times;</button>
+            </div>
+            <div id="plans-list" class="space-y-2 max-h-64 overflow-y-auto mb-4 pr-2">
+                <!-- Lista de planos será inserida aqui -->
+            </div>
+            <div class="flex justify-between items-center border-t pt-4">
+                 <button id="add-plan-btn" class="bg-green-600 text-white font-bold py-2 px-4 rounded-md hover:bg-green-700 transition-colors">Adicionar Plano</button>
+                 <button id="save-plans-btn" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">Salvar Alterações</button>
+            </div>
         </div>
     </div>
     
-    <div id="app-description-modal" class="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 z-[65] hidden">
-        <div class="bg-[#0a0f26] border border-neon-blue rounded-2xl shadow-neon-card w-full max-w-md max-h-[90vh] overflow-y-auto p-8 relative">
-            <button id="close-app-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white" aria-label="Fechar modal">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-            <div class="text-center">
-                <img id="modal-app-img" src="" alt="Logo do App" class="rounded-xl w-32 h-32 mx-auto mb-6 shadow-md bg-white p-2 object-contain ring-4 ring-neon-blue/20">
-                <h3 id="modal-app-title" class="text-3xl font-bold text-white mb-4"></h3>
-                <p id="modal-app-desc" class="text-gray-300 text-left leading-relaxed"></p>
-            </div>
-        </div>
-    </div>
-
-    <div id="password-modal" class="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 z-[70] hidden">
-        <div class="bg-[#0a0f26] border border-neon-green rounded-2xl shadow-neon-green w-full max-w-sm p-6 relative">
-            <button id="close-password-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white" aria-label="Fechar modal">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-            <h3 class="text-xl font-bold text-neon-green mb-4">Desbloquear Bônus</h3>
-            <p class="text-gray-300 mb-4 text-sm">Insira a senha de vendedor:</p>
-            <form id="password-form" class="space-y-4">
-                <div>
-                    <input type="password" id="password-input" class="w-full px-4 py-2 rounded-lg" required placeholder="Senha">
-                    <p id="password-error-msg" class="text-red-500 text-sm mt-2 hidden font-bold">Senha incorreta!</p>
-                </div>
-                <button type="submit" id="submit-password-btn" class="w-full btn-neon-green py-2 px-4 rounded-lg">
-                    Desbloquear
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <div id="top-sites-modal" class="fixed inset-0 bg-black/95 backdrop-blur-md flex items-center justify-center p-4 z-[80] hidden opacity-0 transition-opacity duration-300">
-        <div class="bg-[#0a0f26] border border-neon-blue rounded-2xl shadow-[0_0_50px_rgba(0,102,255,0.3)] w-full max-w-5xl max-h-[90vh] overflow-y-auto relative flex flex-col">
-            
-            <div class="p-6 border-b border-white/10 flex justify-between items-center sticky top-0 bg-[#0a0f26]/95 backdrop-blur z-10">
-                <div>
-                    <h3 class="text-2xl font-bold text-white flex items-center gap-2">
-                        <i data-lucide="star" class="text-neon-green"></i> TOP APPS ULTRA FIBRA
-                    </h3>
-                    <p class="text-gray-400 text-sm">Clique em qualquer aplicativo para ver a descrição completa.</p>
-                </div>
-                <button id="close-sites-btn" class="text-gray-400 hover:text-red-500 transition-colors p-2 hover:bg-white/5 rounded-full">
-                    <i data-lucide="x" class="w-8 h-8"></i>
-                </button>
-            </div>
-
-            <div id="top-sites-as-apps-grid" class="p-6 grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-4">
-                </div>
-        </div>
-    </div>
-
-
-    <a href="https://api.whatsapp.com/send?phone=557531999981&text=Olá!%20Vim%20pelo%20site%20Ultra%20Fibra%20quero%20Atendimento" target="_blank" rel="noopener noreferrer" class="fixed bottom-6 right-6 z-40 bg-neon-green text-black font-extrabold py-3 px-5 rounded-full shadow-[0_0_20px_rgba(0,225,255,0.6)] flex items-center space-x-2 transform hover:scale-110 transition-transform animate-bounce">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.626-2.957 6.584-6.591 6.584zm-1.13-4.243c-.225.084-1.295.64-1.492.72-.192.08-.343.12-.478.24-.135.12-.27.24-.27.42s-.012.51.05.59c.06.08.27.31.576.62.308.308.552.53.81.73.26.19.51.3.81.42.3.12.57.1.76.02.19-.08 1.13-0.47 1.29-1.26.16-.8.16-1.48.12-1.62-.04-.14-.12-.22-.24-.3s-.27-.24-.42-.32c-.15-.08-.27-.12-.42-.2-.15-.08-.34-.12-.48-.04s-.42.48-.52.56c-.1.08-.2.12-.28.12s-.16-.04-.24-.08c-.08-.04-.36-.12-.66-.36-.3-.24-.55-.52-.66-.73-.11-.21-.03-.33.04-.42.08-.08.16-.2.24-.28.08-.08.12-.16.16-.24.04-.08.02-.16-.02-.24s-.42-1.02-.56-1.4c-.15-.38-.3-.32-.43-.32-.12 0-.27-.01-.4-.01z"/>
-        </svg>
-        <span class="hidden sm:inline">Assinar via WhatsApp</span>
-    </a>
-
-
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <!-- Área de Impressão (invisível) -->
+    <div id="print-area" class="hidden"></div>
+    
     <script>
-        // Variável de controle para saber qual modal de lista estava aberto
-        let activeAppsModalId = null;
+    document.addEventListener('DOMContentLoaded', () => {
+        const customerForm = document.getElementById('customer-form');
+        const formTitle = document.getElementById('form-title');
+        const customerList = document.getElementById('customer-list');
+        const searchInput = document.getElementById('search');
+        const saveBtn = document.getElementById('save-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const customerIdInput = document.getElementById('customer-id');
+        
+        const deleteModal = document.getElementById('delete-modal');
+        const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+        const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
+        
+        const backupBtn = document.getElementById('backup-btn');
+        const restoreBtn = document.getElementById('restore-btn');
+        const printArea = document.getElementById('print-area');
+        
+        const plansModal = document.getElementById('plans-modal');
+        const managePlansBtn = document.getElementById('manage-plans-btn');
+        const closePlansModalBtn = document.getElementById('close-plans-modal-btn');
+        const plansList = document.getElementById('plans-list');
+        const addPlanBtn = document.getElementById('add-plan-btn');
+        const savePlansBtn = document.getElementById('save-plans-btn');
+        const printAllBtn = document.getElementById('print-all-btn');
+        const shareAllBtn = document.getElementById('share-all-btn');
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // Lógica do Menu Mobile (Mantida)
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
+        let customerToDeleteId = null;
 
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
+        const cpfInput = document.getElementById('cpf');
+        const phoneInput = document.getElementById('phone');
+        const whatsappInput = document.getElementById('whatsapp');
+        const planSelect = document.getElementById('plan');
+        const customPlanInput = document.getElementById('customPlan');
+        const planValueSpan = document.getElementById('plan-value');
+        const getLocationBtn = document.getElementById('get-location-btn');
+        const geolocationInput = document.getElementById('geolocation');
+        const takePhotoBtn = document.getElementById('take-photo-btn');
+        const photoInput = document.getElementById('photo-input');
+        const photoPreview = document.getElementById('photo-preview');
+        const removePhotoBtn = document.getElementById('remove-photo-btn');
+        const photoDataInput = document.getElementById('photo-data');
+        const dueDateSelect = document.getElementById('dueDate');
 
-            mobileMenuLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.add('hidden');
-                });
-            });
-            
-            // --- Lógica para Abrir/Fechar o Formulário de Contato --- (Mantida)
-            const contatoSection = document.getElementById('contato');
-            const openFormButtons = document.querySelectorAll('.open-form-btn'); 
-            const closeFormBtn = document.getElementById('close-form-btn'); 
 
-            openFormButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    contatoSection.classList.remove('hidden');
-                    contatoSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                });
-            });
-            
-            if (closeFormBtn) {
-                closeFormBtn.addEventListener('click', () => {
-                    contatoSection.classList.add('hidden');
-                });
+        // --- Máscaras de Input ---
+        const maskCpf = (value) => {
+            return value
+                .replace(/\D/g, '')
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+                .substring(0, 14);
+        };
+        
+        const maskPhone = (value) => {
+            return value
+                .replace(/\D/g, '')
+                .replace(/(\d{2})(\d)/, '($1) $2')
+                .replace(/(\d{4})(\d)/, '$1-$2')
+                .substring(0, 14);
+        };
+        
+        const maskWhatsapp = (value) => {
+             return value
+                .replace(/\D/g, '')
+                .replace(/(\d{2})(\d)/, '($1) $2')
+                .replace(/(\d{5})(\d)/, '$1-$2')
+                .substring(0, 15);
+        };
+        
+        cpfInput.addEventListener('input', (e) => { e.target.value = maskCpf(e.target.value); });
+        phoneInput.addEventListener('input', (e) => { e.target.value = maskPhone(e.target.value); });
+        whatsappInput.addEventListener('input', (e) => { e.target.value = maskWhatsapp(e.target.value); });
+
+        // --- Funções de Dados ---
+        const getCustomers = () => JSON.parse(localStorage.getItem('telecom_customers')) || [];
+        const setCustomers = (customers) => localStorage.setItem('telecom_customers', JSON.stringify(customers));
+        const getPlans = () => {
+            const plans = localStorage.getItem('telecom_plans');
+            if (plans) {
+                return JSON.parse(plans);
+            }
+            // Default plans
+            return [
+                { id: '50_mega', name: 'Fibra 50 Mega', value: 59.90 },
+                { id: '100_mega', name: 'Fibra 100 Mega', value: 79.90 },
+                { id: '300_mega', name: 'Fibra 300 Mega', value: 99.90 },
+                { id: '500_mega', name: 'Fibra 500 Mega', value: 119.90 },
+                { id: '1_giga', name: 'Fibra 1 Giga', value: 149.90 }
+            ];
+        };
+        const setPlans = (plans) => localStorage.setItem('telecom_plans', JSON.stringify(plans));
+
+        const getAppSettings = () => JSON.parse(localStorage.getItem('telecom_settings')) || {
+            title: 'Gestão de Clientes Telecom',
+            slogan: 'Cadastre, visualize e gerencie seus clientes com facilidade.'
+        };
+        const setAppSettings = (settings) => localStorage.setItem('telecom_settings', JSON.stringify(settings));
+
+        const renderCustomers = (filter = '') => {
+            customerList.innerHTML = '';
+            const customers = getCustomers();
+            const filteredCustomers = customers.filter(c =>
+                c.fullName.toLowerCase().includes(filter.toLowerCase()) ||
+                (c.nickname && c.nickname.toLowerCase().includes(filter.toLowerCase())) ||
+                c.cpf.includes(filter)
+            );
+
+            if (filteredCustomers.length === 0) {
+                customerList.innerHTML = `<p class="text-slate-500 text-center py-4">Nenhum cliente encontrado.</p>`;
+                return;
             }
 
-
-            // Lógica de Geolocalização (Viabilidade e Formulário) (Mantida)
-            const locateViabilityButton = document.getElementById('locate-me-viability-btn');
-            const locationDisplayViability = document.getElementById('location-display-viability');
-            const coordinatesViabilityEl = document.getElementById('coordinates-viability');
-            const copyCoordsViabilityBtn = document.getElementById('copy-coords-viability-btn');
-            const copyFeedbackViability = document.getElementById('copy-feedback-viability');
-            const sendLocationBtn = document.getElementById('send-location-btn');
-
-            const locateFormButton = document.getElementById('locate-me-form-btn');
-            const geolocationInput = document.getElementById('geolocation');
-
-            function getGeoLocation(callbackSuccess, callbackError) {
-                 if ('geolocation' in navigator) {
-                    navigator.geolocation.getCurrentPosition(
-                        (position) => {
-                            const coordsText = `${position.coords.latitude.toFixed(5)}, ${position.coords.longitude.toFixed(5)}`;
-                            callbackSuccess(coordsText);
-                        },
-                        (error) => {
-                            console.error("Erro ao obter localização: ", error);
-                            let errorMsg = "Não foi possível obter.";
-                            if(error.code === 1) {
-                                errorMsg = "Permissão negada.";
-                            }
-                            callbackError(errorMsg);
-                        },
-                        {
-                            enableHighAccuracy: true, 
-                            timeout: 10000, 
-                            maximumAge: 0 
-                        }
-                    );
-                } else {
-                    const errorMsg = "Geolocalização não suportada.";
-                    callbackError(errorMsg);
-                }
-            }
-
-            locateViabilityButton.addEventListener('click', () => {
-                coordinatesViabilityEl.textContent = 'Buscando satélites...';
-                coordinatesViabilityEl.classList.remove('text-red-500');
-                locationDisplayViability.classList.remove('hidden');
-                copyCoordsViabilityBtn.disabled = true;
-                sendLocationBtn.disabled = true;
-
-                getGeoLocation(
-                    (coordsText) => {
-                        coordinatesViabilityEl.textContent = coordsText;
-                        copyCoordsViabilityBtn.disabled = false; 
-                        sendLocationBtn.disabled = false; 
-                    },
-                    (errorMsg) => {
-                         coordinatesViabilityEl.textContent = errorMsg;
-                         coordinatesViabilityEl.classList.add('text-red-500');
-                    }
-                );
-            });
-
-             locateFormButton.addEventListener('click', () => {
-                 geolocationInput.value = 'Buscando...'; 
-                 getGeoLocation(
-                    (coordsText) => {
-                        geolocationInput.value = coordsText;
-                    },
-                    (errorMsg) => {
-                        geolocationInput.value = errorMsg; 
-                    }
-                );
-             });
-
-            copyCoordsViabilityBtn.addEventListener('click', () => {
-                const textToCopy = coordinatesViabilityEl.textContent;
-                 if (!textToCopy || textToCopy.includes('Não') || textToCopy.includes('Buscando')) return; 
-
-                try {
-                    navigator.clipboard.writeText(textToCopy).then(() => {
-                        showCopyFeedback(copyFeedbackViability, 'Copiado!', true);
-                    }).catch(() => {
-                         throw new Error('Clipboard API failed');
-                    });
-                } catch (err) {
-                    const textArea = document.createElement("textarea");
-                    textArea.value = textToCopy;
-                    document.body.appendChild(textArea);
-                    textArea.select();
-                    try {
-                        document.execCommand('copy');
-                        showCopyFeedback(copyFeedbackViability, 'Copiado!', true);
-                    } catch (copyErr) {
-                        showCopyFeedback(copyFeedbackViability, 'Erro!', false);
-                    }
-                    document.body.removeChild(textArea);
-                }
-            });
-
-            function showCopyFeedback(element, message, success) {
-                element.textContent = message;
-                element.classList.remove(success ? 'text-red-500' : 'text-neon-green');
-                element.classList.add(success ? 'text-neon-green' : 'text-red-500');
-                element.classList.remove('hidden');
-                setTimeout(() => element.classList.add('hidden'), 2500);
-            }
-
-            sendLocationBtn.addEventListener('click', () => {
-                const coords = coordinatesViabilityEl.textContent;
-                if (!coords || coords.includes('Não') || coords.includes('Buscando')) return;
-                
-                const message = `Olá! Gostaria de verificar a viabilidade da instalação na seguinte localização:\n${coords}`;
-                const phoneNumber = "557531999981"; 
-                const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`; 
-                window.open(whatsappUrl, '_blank').focus();
-            });
-
-            // --- Lógica do Bônus (Modal de Senha) --- (Mantida)
-            const unlockGiftBtn = document.getElementById('unlock-gift-btn');
-            const freeTrialContainer = document.getElementById('free-trial-container');
-            const correctPassword = "#120488Jc#";
-            
-            const passwordModal = document.getElementById('password-modal');
-            const closePasswordModalBtn = document.getElementById('close-password-modal-btn');
-            const passwordForm = document.getElementById('password-form');
-            const passwordInput = document.getElementById('password-input');
-            const passwordErrorMsg = document.getElementById('password-error-msg');
-            
-            unlockGiftBtn.addEventListener('click', () => {
-                passwordModal.classList.remove('hidden');
-                passwordInput.focus();
-            });
-
-            function closePasswordModal() {
-                passwordModal.classList.add('hidden');
-                passwordInput.value = ''; 
-                passwordErrorMsg.classList.add('hidden'); 
-            }
-
-            closePasswordModalBtn.addEventListener('click', closePasswordModal);
-            
-            passwordForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const password = passwordInput.value;
-                if(password === correctPassword) {
-                    freeTrialContainer.classList.remove('hidden');
-                    closePasswordModal(); 
-                } else {
-                    passwordErrorMsg.classList.remove('hidden'); 
-                    passwordInput.value = '';
-                    passwordInput.focus();
-                }
-            });
-
-            // --- Lógica do Modal de Apps (Planos) --- (Mantida)
-            const appsModal = document.getElementById('apps-modal');
-            const closeModalBtn = document.getElementById('close-modal-btn');
-            const openModalBtns = document.querySelectorAll('.open-modal-btn');
-            const modalTitle = document.getElementById('modal-title');
-            const modalGrid = document.getElementById('modal-apps-grid');
-            
-            const planApps = {
-                 basico: { name: "Plano Básico - 125 Mbps", apps: [] },
-                 basico_plus: { name: "Plano Básico+ - 225 Mbps", apps: [ { name: "App TV", img: "https://placehold.co/100x100/10b981/FFFFFF?text=TV" } ] },
-                 basico_prata: { name: "Plano Básico Prata - 275 Mbps", apps: [ { name: "App TV", img: "https://placehold.co/100x100/10b981/FFFFFF?text=TV" } ] },
-                 ultra_plus: { name: "Plano Ultra+ - 425 Mbps", apps: [ { name: "App TV", img: "https://placehold.co/100x100/10b981/FFFFFF?text=TV" }, { name: "Looke", img: "https://logodownload.org/wp-content/uploads/2020/09/looke-logo.png" } ] },
-                 gold: { name: "Plano Gold - 625 Mbps", apps: [ { name: "App TV", img: "https://placehold.co/100x100/10b981/FFFFFF?text=TV" }, { name: "Deezer", img: "https://logodownload.org/wp-content/uploads/2017/04/deezer-logo-1.png" } ] },
-                 gold_plus: { name: "Plano Gold+ - 625 Mbps", apps: [ { name: "App TV", img: "https://placehold.co/100x100/10b981/FFFFFF?text=TV" }, { name: "PlayKids+", img: "https://logospng.org/download/playkids/logo-playkids-2048.png" }, { name: "Deezer", img: "https://logodownload.org/wp-content/uploads/2017/04/deezer-logo-1.png" } ] },
-                 ultra_gold_wifi6: { name: "Plano Ultra Gold WiFi 6 - 825 Mbps", apps: [ { name: "App TV", img: "https://placehold.co/100x100/10b981/FFFFFF?text=TV" }, { name: "Disney+", img: "https://logodownload.org/wp-content/uploads/2020/11/disney-plus-logo-1.png" } ] },
-                 ultra_premium_wifi6: { name: "Plano Ultra Premium WiFi 6 - 825 Mbps", apps: [ { name: "App TV", img: "https://placehold.co/100x100/10b981/FFFFFF?text=TV" }, { name: "Max", img: "https://logodownload.org/wp-content/uploads/2023/05/max-logo-0.png" }, { name: "Looke", img: "https://logodownload.org/wp-content/uploads/2020/09/looke-logo.png" }, { name: "PlayKids+", img: "https://logospng.org/download/playkids/logo-playkids-2048.png" }, { name: "Deezer", img: "https://logodownload.org/wp-content/uploads/2017/04/deezer-logo-1.png" } ] }
-            };
-
-            function openModal(planKey) {
-                const planData = planApps[planKey];
-                if (!planData || !planData.apps) return;
-
-                if (planKey === 'basico_plus' || planKey === 'basico_prata') {
-                      modalTitle.textContent = `Apps Inclusos: ${planData.name}`;
-                      modalGrid.innerHTML = `<div class="text-center"><img src="${planData.apps[0].img}" alt="${planData.apps[0].name}" class="rounded-lg w-20 h-20 mx-auto mb-2 shadow-md bg-white p-1 object-contain"><p class="text-sm text-gray-300 font-medium">${planData.apps[0].name}</p></div>`;
-                      appsModal.classList.remove('hidden');
-                      return;
-                }
-                
-                if (planData.apps.length > 0) {
-                    modalTitle.textContent = `Apps Inclusos: ${planData.name}`;
-                    modalGrid.innerHTML = '';
-                    planData.apps.forEach(app => {
-                        const fallbackImg = `https://placehold.co/100x100/7c3aed/FFFFFF?text=${encodeURIComponent(app.name.substring(0,3))}`;
-                        modalGrid.insertAdjacentHTML('beforeend', 
-                            `<div class="text-center">
-                                <img src="${app.img}" alt="${app.name}" class="rounded-lg w-20 h-20 mx-auto mb-2 shadow-md bg-white p-1 object-contain" onerror="this.onerror=null;this.src='${fallbackImg}';">
-                                <p class="text-sm text-gray-300 font-medium">${app.name}</p>
-                            </div>`
-                        );
-                    });
-                    appsModal.classList.remove('hidden');
-                }
-            }
-            function closeModal() {
-                appsModal.classList.add('hidden');
-            }
-            openModalBtns.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const planKey = e.currentTarget.dataset.plan;
-                    if (planKey !== 'basico') {
-                        openModal(planKey);
-                    }
-                });
-            });
-            closeModalBtn.addEventListener('click', closeModal);
-            appsModal.addEventListener('click', (e) => { if (e.target === appsModal) closeModal(); });
-
-
-            // --- Lógica do Modal de Descrição de Apps E Geração da Grade de Todos os Apps ---
-            const appDescriptionModal = document.getElementById('app-description-modal');
-            const closeAppModalBtn = document.getElementById('close-app-modal-btn');
-            
-            const allAppsModal = document.getElementById('all-apps-modal');
-            const closeAllAppsModalBtn = document.getElementById('close-all-apps-btn');
-            const openAllAppsBtn = document.getElementById('open-all-apps-btn');
-            const allAppsGridContent = document.getElementById('all-apps-grid-content');
-            
-            // Grid para o modal TOP APPS (que substitui o Top Sites)
-            const topSitesAppsGridContent = document.getElementById('top-sites-as-apps-grid');
-
-            // Mapeamento completo de todos os Apps com descrições (baseado na imagem fornecida)
-            const allAppInfo = {
-                // STANDARD
-                'looke': { name: 'Looke', img: 'https://logodownload.org/wp-content/uploads/2020/09/looke-logo.png', desc: 'Plataforma de streaming de filmes e séries para maratonar, com um catálogo diversificado de aventura, romance e clássicos.', category: 'STANDARD' },
-                'sky_light': { name: 'Sky+ Light', img: 'https://logodownload.org/wp-content/uploads/2022/10/sky-logo-1.png', desc: 'Serviço de streaming que oferece acesso a canais ao vivo, filmes, séries e programas sob demanda.', category: 'STANDARD' },
-                'kiddiepass_std': { name: 'Kiddie Pass', img: 'https://placehold.co/64x64/facc15/000000?text=KiddiePass', desc: 'Conteúdo infantil seguro com desenhos, jogos e atividades educativas para crianças pequenas.', category: 'STANDARD' },
-                'nutri': { name: '+Nutri', img: 'https://placehold.co/64x64/22c55e/FFFFFF?text=%2BNutri', desc: 'Sua plataforma de saúde e bem-estar. Oferece receitas saudáveis, dicas de nutrição e planos alimentares.', category: 'STANDARD' },
-                'efit': { name: 'E-fit', img: 'https://placehold.co/64x64/3b82f6/FFFFFF?text=E-Fit', desc: 'Um personal trainer digital com programas de exercícios personalizados para você treinar em qualquer lugar.', category: 'STANDARD' },
-                'playkids': { name: 'PlayKids+', img: 'https://logospng.org/download/playkids/logo-playkids-2048.png', desc: 'Plataforma educativa com desenhos animados, jogos e livros para o desenvolvimento infantil.', category: 'STANDARD' },
-                'hub': { name: 'Hub', img: 'https://placehold.co/64x64/14b8a6/FFFFFF?text=Hub', desc: 'Um centralizador de serviços e facilidades digitais para otimizar seu dia a dia.', category: 'STANDARD' },
-                'ubook': { name: 'UbookPLUS', img: 'https://placehold.co/64x64/a855f7/FFFFFF?text=Ubook', desc: 'Maior plataforma brasileira de audiolivros e ebooks. Milhares de títulos para ouvir e ler onde quiser.', category: 'STANDARD' },
-                'estuda': { name: 'Estuda+', img: 'https://placehold.co/64x64/f97316/FFFFFF?text=Estuda%2B', desc: 'Plataforma de estudos completa com videoaulas e materiais preparatórios para ENEM e vestibulares.', category: 'STANDARD' },
-                'leitores': { name: 'Pequenos Leitores', img: 'https://placehold.co/64x64/ec4899/FFFFFF?text=Leitores', desc: 'Incentivo à leitura para crianças, com um catálogo de livros infantis interativos e divertidos.', category: 'STANDARD' },
-                'fluid': { name: 'Fluid', img: 'https://placehold.co/64x64/6366f1/FFFFFF?text=Fluid', desc: 'Conteúdo de streaming variado, incluindo filmes, séries e documentários de diferentes gêneros.', category: 'STANDARD' },
-                'socialcomics': { name: 'Social Comics', img: 'https://placehold.co/64x64/ef4444/FFFFFF?text=Social', desc: 'Maior serviço de streaming de quadrinhos da América Latina, com milhares de HQs no seu celular.', category: 'STANDARD' },
-                'revistaria': { name: 'Revistaria', img: 'https://placehold.co/64x64/d946ef/FFFFFF?text=Revista', desc: 'Acesso a centenas de revistas digitais de notícias, entretenimento, esportes e muito mais.', category: 'STANDARD' },
-                'playlist': { name: 'Playlist', img: 'https://placehold.co/64x64/8b5cf6/FFFFFF?text=Playlist', desc: 'Aplicativo para criar e ouvir playlists de música selecionadas para todos os momentos.', category: 'STANDARD' },
-                
-                // ADVANCED
-                'sky_globo': { name: 'Sky+ c/ Globo', img: 'https://logodownload.org/wp-content/uploads/2022/10/sky-logo-1.png', desc: 'Sky+ com o canal Globo incluso. Seu entretenimento completo com conteúdo nacional.', category: 'ADVANCED' },
-                'kiddiepass_adv': { name: 'Kiddie Pass Advanced', img: 'https://placehold.co/64x64/facc15/000000?text=KiddiePass', desc: 'Versão Advanced do Kiddie Pass, incluindo licenças e acesso a conteúdo exclusivo.', category: 'ADVANCED' },
-                'deezer': { name: 'Deezer', img: 'https://logodownload.org/wp-content/uploads/2017/04/deezer-logo-1.png', desc: 'Milhões de músicas, podcasts e playlists ao seu alcance. Ouça suas faixas favoritas offline e descubra novos artistas.', category: 'ADVANCED' },
-                'klicencas_adv': { name: 'K Licenças (Advanced)', img: 'https://placehold.co/64x64/6366f1/FFFFFF?text=K', desc: 'Acesso a licenças de software e antivírus para manter seus dispositivos seguros e atualizados.', category: 'ADVANCED' },
-                'hotgo': { name: 'Hotgo', img: 'https://placehold.co/64x64/dc2626/FFFFFF?text=HotGo', desc: 'Conteúdo adulto exclusivo para maiores de 18 anos.', category: 'ADVANCED' },
-                'curtaon': { name: 'CurtaOn', img: 'https://placehold.co/64x64/1f2937/FFFFFF?text=CurtaOn', desc: 'O melhor do cinema e documentários brasileiros. Filmes premiados e séries independentes.', category: 'ADVANCED' },
-                'jornalista': { name: 'O Jornalista', img: 'https://placehold.co/64x64/4b5563/FFFFFF?text=Jornal', desc: 'Acesso digital a jornais e notícias em tempo real. Mantenha-se informado sobre o Brasil e o mundo.', category: 'ADVANCED' },
-                'docway': { name: 'Docway', img: 'https://placehold.co/64x64/10b981/FFFFFF?text=Doc', desc: 'Serviço de telemedicina para você e sua família. Consultas médicas por vídeo, 24h por dia.', category: 'ADVANCED' },
-                
-                // TOP (Mudado para PREMIUM na imagem)
-                'sky_amazon': { name: 'SKY+ c/ Amazon', img: 'https://logodownload.org/wp-content/uploads/2022/10/sky-logo-1.png', desc: 'Sky+ com acesso a conteúdos e benefícios exclusivos da Amazon Prime Video. O melhor dos dois mundos.', category: 'TOP' },
-                'disney_top': { name: 'Disney+', img: 'https://logodownload.org/wp-content/uploads/2020/11/disney-plus-logo-1.png', desc: 'O streaming com o entretenimento da Disney, Pixar, Marvel, Star Wars e National Geographic.', category: 'TOP' },
-                'max_top': { name: 'Max', img: 'https://logodownload.org/wp-content/uploads/2023/05/max-logo-0.png', desc: 'O streaming da HBO, Warner Bros, DC, Discovery e muito mais. Séries, filmes e realities imperdíveis.', category: 'TOP' },
-                'indie': { name: 'Indie', img: 'https://placehold.co/64x64/f59e0b/FFFFFF?text=Indie', desc: 'Plataforma de streaming focada em cinema independente e filmes de arte premiados.', category: 'TOP' },
-                'leitura360': { name: 'Leitura 360', img: 'https://placehold.co/64x64/0891b2/FFFFFF?text=Leitura', desc: 'Uma biblioteca digital completa com livros, audiobooks e revistas para todos os gostos.', category: 'TOP' },
-                
-                // PREMIUM (ADICIONADOS OS APPS FALTANTES)
-                'disney_premium': { name: 'Disney+ (Premium)', img: 'https://logodownload.org/wp-content/uploads/2020/11/disney-plus-logo-1.png', desc: 'Acesso premium ao catálogo Disney+ com benefícios extras, como 4K e mais telas simultâneas.', category: 'PREMIUM' }, // Duplicado no TOP, mas mantido para a lista completa
-                'max_premium': { name: 'HBO Max (Premium)', img: 'https://logodownload.org/wp-content/uploads/2023/05/max-logo-0.png', desc: 'Acesso premium ao catálogo Max (antiga HBO Max) com todos os lançamentos e qualidade máxima de imagem.', category: 'PREMIUM' }, // ADICIONADO
-                'klicencas_prem': { name: 'K Licenças (Premium)', img: 'https://placehold.co/64x64/6366f1/FFFFFF?text=K', desc: 'Acesso à licença K Licenças na versão Premium, garantindo mais dispositivos e recursos avançados de segurança.', category: 'PREMIUM' }, // ADICIONADO
-                'nba': { name: 'NBA League Pass', img: 'https://logodownload.org/wp-content/uploads/2017/04/nba-logo-1.png', desc: 'Assista a todos os jogos da NBA, ao vivo e sob demanda. Acompanhe seu time e jogadores favoritos durante toda a temporada.', category: 'PREMIUM' },
-                'smartcontent': { name: 'SmartContent', img: 'https://placehold.co/64x64/ef4444/FFFFFF?text=Smart', desc: 'Conteúdo inteligente e educacional para toda a família. Cursos, documentários e muito mais.', category: 'PREMIUM' },
-                'queima': { name: 'Queima Diária', img: 'https://seeklogo.com/images/Q/queima-diaria-logo-653593254B-seeklogo.com.png', desc: 'A maior plataforma de exercícios e bem-estar em casa da América Latina. Aulas, programas e desafios.', category: 'PREMIUM' },
-                'zen': { name: 'Zen', img: 'https://logodownload.org/wp-content/uploads/2021/04/zen-logo-0.png', desc: 'Aplicativo de meditação, sono e relaxamento. Encontre sua paz interior e durma melhor.', category: 'PREMIUM' }
-            };
-            
-            // Função para agrupar e ordenar os apps
-            function getGroupedApps() {
-                const grouped = {};
-                for (const id in allAppInfo) {
-                    const app = allAppInfo[id];
-                    const category = app.category || 'Outros';
-                    if (!grouped[category]) {
-                        grouped[category] = [];
-                    }
-                    grouped[category].push({ id, ...app });
-                }
-                
-                // Ordem desejada
-                const orderedCategories = ['STANDARD', 'ADVANCED', 'TOP', 'PREMIUM'];
-                const orderedGrouped = {};
-                orderedCategories.forEach(cat => {
-                    if (grouped[cat]) {
-                        orderedGrouped[cat] = grouped[cat];
-                    }
-                });
-                return orderedGrouped;
-            }
-
-            // Função para gerar o HTML do botão do App
-            function createAppButtonHTML(appId, appData) {
-                const fallbackImg = `https://placehold.co/64x64/FFFFFF/000000?text=${encodeURIComponent(appData.name.substring(0,3))}`;
-                const displayName = appData.name.replace(/\s\(.*\)/, '').split(' ')[0]; // Remove (Standard) ou (Avulso) e pega a primeira palavra
-                
-                return `
-                    <button class="app-icon-btn" data-app-id="${appId}">
-                        <img src="${appData.img}" alt="Logo ${appData.name}" class="w-12 h-12 object-contain" onerror="this.onerror=null;this.src='${fallbackImg}';">
-                        <span class="app-label">${displayName}</span>
-                    </button>
+            filteredCustomers.forEach(customer => {
+                const customerDiv = document.createElement('div');
+                customerDiv.className = 'bg-slate-50 p-4 rounded-lg border border-slate-200 flex flex-col';
+                customerDiv.innerHTML = `
+                    <div class="flex-grow">
+                        <h3 class="font-bold text-lg text-blue-600">${customer.fullName} ${customer.nickname ? `(${customer.nickname})` : ''}</h3>
+                        <p class="text-sm text-slate-600">🪪 ${customer.cpf}</p>
+                        <p class="text-sm text-slate-600">📞 ${customer.phone || 'Não informado'}</p>
+                    </div>
+                    <div class="flex gap-2 justify-end mt-4 pt-4 border-t border-slate-200">
+                         <button class="share-btn text-green-500 hover:text-green-700" data-id="${customer.id}" title="Compartilhar no WhatsApp">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.654 4.502 1.905 6.344l-1.225 4.485 4.653-1.222zM8.053 7.331c-.162-.375-.527-.456-.74-.465-.213-.01-.444-.01-.675-.01-.272 0-.686.095-.994.465-.309.369-1.206 1.176-1.206 2.867 0 1.691 1.237 3.328 1.405 3.554.169.227 2.373 3.659 5.728 5.053 2.879 1.144 3.353 1.054 3.935.955.582-.099 1.834-.75 2.096-1.469.262-.719.262-1.335.183-1.469-.079-.134-.309-.214-.618-.369-.309-.155-1.834-.906-2.115-1.012-.282-.106-.487-.155-.693.155-.205.309-.798.906-.979 1.096-.181.19-.362.219-.618.064-.256-.155-1.076-.395-2.048-1.272-1.524-1.378-1.834-1.666-1.834-1.892.079-.227.182-.369.272-.464.09-.095.205-.24.309-.369.104-.13.155-.213.234-.368.079-.155.039-.282-.019-.418-.058-.134-.693-1.666-.924-2.279z"/></svg>
+                            </button>
+                             <button class="print-btn text-gray-500 hover:text-gray-700" data-id="${customer.id}" title="Imprimir / Salvar PDF">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v6a2 2 0 002 2h12a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zM4 9h12v6H4V9z" clip-rule="evenodd" /></svg>
+                            </button>
+                            <button class="edit-btn text-blue-500 hover:text-blue-700" data-id="${customer.id}" title="Editar">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
+                            </button>
+                            <button class="delete-btn text-red-500 hover:text-red-700" data-id="${customer.id}" title="Excluir">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+                            </button>
+                        </div>
+                    </div>
                 `;
-            }
-
-            // Função para renderizar a grade de todos os apps (Usado em #all-apps-modal)
-            function renderAllAppsGrid() {
-                allAppsGridContent.innerHTML = ''; 
-                let allAppsHtml = '';
-                
-                for (const appId in allAppInfo) {
-                    allAppsHtml += createAppButtonHTML(appId, allAppInfo[appId]);
-                }
-                
-                allAppsGridContent.innerHTML = allAppsHtml;
-                
-                document.querySelectorAll('#all-apps-grid-content .app-icon-btn').forEach(btn => {
-                    btn.addEventListener('click', openAppDescriptionModal);
-                });
-            }
-            
-            // NOVA FUNÇÃO: Renderiza a grade de apps agrupados para o modal TOP APPS
-            function renderTopSitesAsAppsGrid() {
-                topSitesAppsGridContent.innerHTML = '';
-                let groupedApps = getGroupedApps();
-                let appsHtml = '';
-                
-                for (const category in groupedApps) {
-                    appsHtml += `<div class="app-category-title col-span-full">${category}</div>`;
-                    groupedApps[category].forEach(app => {
-                        appsHtml += createAppButtonHTML(app.id, app);
-                    });
-                }
-                
-                topSitesAppsGridContent.innerHTML = appsHtml;
-                
-                // Reatribui o listener de clique para os novos botões
-                document.querySelectorAll('#top-sites-as-apps-grid .app-icon-btn').forEach(btn => {
-                    btn.addEventListener('click', openAppDescriptionModal);
-                });
-            }
-
-
-            // Função para abrir o modal de descrição (ADICIONADA LÓGICA PARA FECHAR OS MODAIS PAIS)
-            function openAppDescriptionModal(event) {
-                const appId = event.currentTarget.dataset.appId;
-                const appData = allAppInfo[appId];
-                if (!appData) return;
-                
-                // 1. Rastreia e fecha o modal de lista que estava aberto
-                activeAppsModalId = null; // Reseta antes de verificar
-
-                const topSitesModal = document.getElementById('top-sites-modal');
-                if (topSitesModal && !topSitesModal.classList.contains('hidden')) {
-                    activeAppsModalId = 'top-sites-modal';
-                    topSitesModal.classList.add('opacity-0');
-                    setTimeout(() => { topSitesModal.classList.add('hidden'); }, 300);
-                }
-
-                const allAppsModal = document.getElementById('all-apps-modal');
-                if (allAppsModal && !allAppsModal.classList.contains('hidden')) {
-                    activeAppsModalId = 'all-apps-modal';
-                    allAppsModal.classList.add('hidden');
-                }
-
-                // 2. Prepara e abre o modal de descrição
-                const fallbackImg = `https://placehold.co/128x128/FFFFFF/000000?text=${encodeURIComponent(appData.name.substring(0,3))}`;
-
-                const modalImg = document.getElementById('modal-app-img');
-                modalImg.src = appData.img;
-                modalImg.onerror = function() { this.onerror = null; this.src = fallbackImg; };
-                
-                document.getElementById('modal-app-title').textContent = appData.name;
-                document.getElementById('modal-app-desc').textContent = appData.desc;
-
-                appDescriptionModal.classList.remove('hidden');
-            }
-            
-            // Funções de controle do modal
-            function closeAppDescriptionModal() {
-                appDescriptionModal.classList.add('hidden');
-                
-                // 3. Verifica qual modal de lista estava ativo e reabre
-                if (activeAppsModalId === 'top-sites-modal') {
-                    const topSitesModal = document.getElementById('top-sites-modal');
-                    // Garante que o modal está visível (hidden é removido) e o efeito de opacidade é desfeito
-                    topSitesModal.classList.remove('hidden');
-                    // Pequeno delay para reverter a opacidade
-                    setTimeout(() => {
-                        topSitesModal.classList.remove('opacity-0');
-                    }, 10); 
-                } else if (activeAppsModalId === 'all-apps-modal') {
-                    const allAppsModal = document.getElementById('all-apps-modal');
-                    allAppsModal.classList.remove('hidden');
-                }
-                
-                activeAppsModalId = null; // Reseta após a reabertura
-            }
-
-            function openAllAppsModal() {
-                renderAllAppsGrid(); // Garante que a grade está atualizada
-                allAppsModal.classList.remove('hidden');
-            }
-            function closeAllAppsModal() {
-                allAppsModal.classList.add('hidden');
-            }
-
-            // Listeners para abrir e fechar o modal de TODOS os Apps
-            openAllAppsBtn.addEventListener('click', openAllAppsModal);
-            closeAllAppsModalBtn.addEventListener('click', closeAllAppsModal);
-            allAppsModal.addEventListener('click', (e) => {
-                if (e.target === allAppsModal) {
-                    closeAllAppsModal();
-                }
+                customerList.appendChild(customerDiv);
             });
-            
-            // Listener para fechar o modal de descrição de app
-            closeAppModalBtn.addEventListener('click', closeAppDescriptionModal);
-            appDescriptionModal.addEventListener('click', (e) => {
-                if (e.target === appDescriptionModal) {
-                    closeAppDescriptionModal();
-                }
+        };
+
+        const clearForm = () => {
+            customerForm.reset();
+            customerIdInput.value = '';
+            formTitle.textContent = 'Cadastrar Novo Cliente';
+            saveBtn.textContent = 'Salvar Cliente';
+            saveBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+            saveBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+            customPlanInput.classList.add('hidden');
+            customPlanInput.value = '';
+            planValueSpan.textContent = '';
+            geolocationInput.value = '';
+            document.getElementById('devices').value = '';
+            document.getElementById('freeTrial').value = 'nao';
+            document.getElementById('observations').value = '';
+            document.getElementById('dueDate').value = '';
+            photoDataInput.value = '';
+            photoPreview.src = '';
+            photoPreview.classList.add('hidden');
+            removePhotoBtn.classList.add('hidden');
+        };
+        
+        const showDeleteModal = (id) => {
+            customerToDeleteId = id;
+            deleteModal.style.display = 'flex';
+        };
+        
+        const hideDeleteModal = () => {
+            customerToDeleteId = null;
+            deleteModal.style.display = 'none';
+        };
+        
+        // --- Funções de Planos ---
+        const populatePlansDropdown = () => {
+            const plans = getPlans();
+            planSelect.innerHTML = `<option value="">Selecione um plano</option>`;
+            plans.forEach(plan => {
+                const option = document.createElement('option');
+                option.value = plan.id;
+                option.textContent = `${plan.name} - R$ ${plan.value.toFixed(2)}`;
+                planSelect.appendChild(option);
             });
+            planSelect.innerHTML += `<option value="outro">Outro (especificar)</option>`;
+        };
 
-            // Adiciona listeners aos ícones de apps do HERO (topo da página)
-            document.querySelectorAll('section.hero-gradient .app-icon-btn').forEach(btn => {
-                btn.addEventListener('click', openAppDescriptionModal);
+        const renderPlansModal = () => {
+            plansList.innerHTML = '';
+            const plans = getPlans();
+            plans.forEach(plan => {
+                const planDiv = document.createElement('div');
+                planDiv.className = 'flex items-center gap-2';
+                planDiv.dataset.id = plan.id;
+                planDiv.innerHTML = `
+                    <input type="text" value="${plan.name}" class="plan-name-input flex-grow p-1 border rounded-md" placeholder="Nome do Plano">
+                    <input type="number" step="0.01" value="${plan.value.toFixed(2)}" class="plan-value-input w-24 p-1 border rounded-md" placeholder="Valor">
+                    <button class="delete-plan-btn text-red-500 hover:text-red-700 font-bold text-xl">&times;</button>
+                `;
+                plansList.appendChild(planDiv);
             });
-            
-            // --- Lógica do Modal TOP APPS (NOVO) ---
-            const topSitesModal = document.getElementById('top-sites-modal');
-            const openSitesBtn = document.querySelector('.open-apps-list-btn'); // Botão na imagem
-            const closeSitesBtn = document.getElementById('close-sites-btn');
+        };
 
-            if (openSitesBtn && topSitesModal) {
-                openSitesBtn.addEventListener('click', () => {
-                    renderTopSitesAsAppsGrid(); // RENDERIZA OS APPS ANTES DE ABRIR
-                    topSitesModal.classList.remove('hidden');
-                    // Pequeno delay para a animação de opacidade funcionar
-                    setTimeout(() => {
-                        topSitesModal.classList.remove('opacity-0');
-                    }, 10);
-                });
-
-                const closeSites = () => {
-                    topSitesModal.classList.add('opacity-0');
-                    setTimeout(() => {
-                        topSitesModal.classList.add('hidden');
-                    }, 300); // Espera a animação terminar
-                };
-
-                closeSitesBtn.addEventListener('click', closeSites);
-                
-                // Fechar ao clicar fora
-                topSitesModal.addEventListener('click', (e) => {
-                    if (e.target === topSitesModal) {
-                        closeSites();
-                    }
-                });
-            }
-
-            // --- Lógica de Apps Dinâmicos no Formulário (Mantida) ---
-
-            const planSelect = document.getElementById('plan');
-            const includedAppsContainer = document.getElementById('included-apps-container');
-            const includedAppsList = document.getElementById('included-apps-list');
-            const includedAppsTextInput = document.getElementById('included_apps_text');
-
-            const standardAppsList = [
-                 { id: 'looke', name: 'Looke' }, { id: 'sky_light', name: 'Sky+ Light' }, { id: 'kiddiepass_std', name: 'Kiddie Pass (Standard)' },
-                 { id: 'nutri', name: '+Nutri' }, { id: 'efit', name: 'E-fit AG' }, { id: 'playkids', name: 'PlayKids+' },
-                 { id: 'hub', name: 'HUB' }, { id: 'ubook', name: 'UbookPLUS' }, { id: 'estuda', name: 'Estuda+' },
-                 { id: 'leitores', name: 'Pequenos Leitores' }, { id: 'fluid', name: 'Fluid' }, { id: 'socialcomics', name: 'Social Comics' },
-                 { id: 'revistaria', name: 'Revistaria' }, { id: 'playlist', name: 'Playlist' }
-            ];
-            const advancedAppsList = [
-                 { id: 'sky_globo', name: 'Sky+ com Globo' }, { id: 'kiddiepass_adv', name: 'Kiddie Pass (Advanced)' }, { id: 'deezer', name: 'Deezer' },
-                 { id: 'klicencas_adv', name: 'K Licenças (Advanced)' }, { id: 'hotgo', name: 'Hotgo' }, { id: 'curtaon', name: 'CurtaOn' },
-                 { id: 'jornalista', name: 'O Jornalista' }, { id: 'docway', name: 'Docway' }
-            ];
-            const premiumAppsList = [
-                 { id: 'sky_amazon', name: 'SKY+ com Amazon' }, { id: 'disney_avulso', name: 'Disney+ (Avulso)' }, { id: 'hbo_avulso', name: 'HBO Max (Avulso)' },
-                 { id: 'indie', name: 'Indie' }, { id: 'leitura360', name: 'Leitura 360' }, { id: 'disney', name: 'Disney+' },
-                 { id: 'max', name: 'Max' }, { id: 'klicencas_prem', name: 'K Licenças (Premium)' }, { id: 'nba', name: 'NBA' },
-                 { id: 'smartcontent', name: 'SmartContent' }, { id: 'queima', name: 'Queima Diária' }, { id: 'zen', name: 'Zen' }
-            ];
-
-            const planRules = {
-                "Plano Ultra Premium WiFi 6 - 825 Mbps": { premium: 1, standard: 2, advanced: 1, appTv: true },
-                "Plano Ultra Gold WiFi 6 - 825 Mbps": { premium: 1, standard: 0, advanced: 0, appTv: true },
-                "Plano Gold+ - 625 Mbps": { premium: 0, standard: 1, advanced: 1, appTv: true },
-                "Plano Gold - 625 Mbps": { premium: 0, standard: 0, advanced: 1, appTv: true },
-                "Plano Ultra+ - 425 Mbps": { premium: 0, standard: 1, advanced: 0, appTv: true },
-                "Plano Básico Prata - 275 Mbps": { appTv: true },
-                "Plano Básico+ - 225 Mbps": { appTv: true },
-                "Plano Básico - 125 Mbps": {}
-            };
-            
-            function createDropdowns(label, count, appArray, categoryName) {
-                for (let i = 0; i < count; i++) {
-                    const labelEl = document.createElement('label');
-                    labelEl.className = 'block text-gray-300 font-medium mb-1 text-sm';
-                    labelEl.textContent = `${label} ${count > 1 ? i + 1 : ''}:`;
-                    
-                    const selectEl = document.createElement('select');
-                    selectEl.name = `${categoryName}_app_${i}`;
-                    selectEl.className = 'app-select w-full px-4 py-2 rounded-lg';
-                    
-                    selectEl.innerHTML = `<option value="">Selecione 1 App ${label}</option>`;
-                    
-                    appArray.forEach(app => {
-                        selectEl.innerHTML += `<option value="${app.name}">${app.name}</option>`;
-                    });
-                    
-                    selectEl.addEventListener('change', updateHiddenAppInput);
-
-                    includedAppsList.appendChild(labelEl);
-                    includedAppsList.appendChild(selectEl);
+        // --- Event Listeners ---
+        planSelect.addEventListener('change', () => {
+            if (planSelect.value === 'outro') {
+                customPlanInput.classList.remove('hidden');
+                planValueSpan.textContent = '';
+            } else {
+                customPlanInput.classList.add('hidden');
+                const selectedPlan = getPlans().find(p => p.id === planSelect.value);
+                if (selectedPlan) {
+                    planValueSpan.textContent = `Valor: R$ ${selectedPlan.value.toFixed(2)}`;
+                } else {
+                    planValueSpan.textContent = '';
                 }
             }
-            
-            function updateHiddenAppInput() {
-                const selects = includedAppsList.querySelectorAll('.app-select');
-                let appNames = [];
-                
-                const tvTag = includedAppsList.querySelector('.app-tv-tag');
-                if (tvTag) {
-                    appNames.push("App de TV (Canais Abertos)");
-                }
-
-                selects.forEach(select => {
-                    if (select.value) {
-                        appNames.push(select.value);
-                    }
-                });
-                includedAppsTextInput.value = appNames.join(', ');
-            }
-
-            planSelect.addEventListener('change', () => {
-                const rules = planRules[planSelect.value];
-                includedAppsList.innerHTML = ''; 
-                includedAppsTextInput.value = ''; 
-
-                if (!rules || (rules.standard === 0 && rules.advanced === 0 && rules.premium === 0 && !rules.appTv)) {
-                    includedAppsContainer.classList.add('hidden'); 
-                    return;
-                }
-                
-                if(rules.appTv) {
-                    const tvTag = `<span class="app-tv-tag bg-neon-blue/20 text-neon-blue border border-neon-blue text-xs font-bold px-3 py-1 rounded-full inline-block mb-3">App de TV (Canais Abertos)</span>`;
-                    includedAppsList.insertAdjacentHTML('beforeend', tvTag);
-                }
-                
-                createDropdowns('Premium', rules.premium || 0, premiumAppsList, 'premium');
-                createDropdowns('Advanced', rules.advanced || 0, advancedAppsList, 'advanced');
-                createDropdowns('Standard', rules.standard || 0, standardAppsList, 'standard');
-
-                updateHiddenAppInput(); 
-                includedAppsContainer.classList.remove('hidden'); 
-            });
-
-            // Lógica para enviar formulário COMPLETO para o WhatsApp (Mantida)
-            const cadastroForm = document.getElementById('cadastro-form');
-            cadastroForm.addEventListener('submit', function(event) {
-                event.preventDefault();
-                const formData = new FormData(cadastroForm);
-                const planSelect = document.getElementById('plan');
-                const selectedPlanText = planSelect.options[planSelect.selectedIndex].text;
-                
-                const freeTrialSelect = document.getElementById('free_trial');
-                const selectedFreeTrialText = freeTrialSelect.options[freeTrialSelect.selectedIndex].text;
-
-                const getValue = (key) => formData.get(key) || '';
-
-                let messageParts = [
-                    '*Ficha do Cliente (Neon)*', '', 
-                    `🆔 *Nome:* ${getValue('full_name')}`,
-                    `🏷️ *Apelido:* ${getValue('nickname') || 'N/A'}`,
-                    `🪪 *CPF:* ${getValue('cpf')}`,
-                    `🎂 *Nascimento:* ${getValue('birth_date') ? new Date(getValue('birth_date') + 'T00:00:00').toLocaleDateString('pt-BR') : 'N/A'}`, 
-                    `💬 *WhatsApp:* ${getValue('whatsapp')}`,
-                    `✉️ *E-mail:* ${getValue('email')}`,
-                    `🏡 *Endereço:* ${getValue('address')}`,
-                    `📍 *Geo:* ${getValue('geolocation') || 'N/A'}`,
-                    `📌 *Ref:* ${getValue('reference') || 'N/A'}`,
-                    `📃 *Plano:* ${selectedPlanText || 'N/A'}`, 
-                ];
-
-                const appsText = getValue('included_apps_text');
-                if (appsText) {
-                    messageParts.push(`📱 *Apps:* ${appsText}`);
-                }
-
-                messageParts.push(`📱 *Aparelhos:* ${getValue('devices') || 'N/A'}`);
-                messageParts.push(`🗓️ *Vencimento:* Dia ${getValue('due_date') || 'N/A'}`);
-
-                if (!freeTrialContainer.classList.contains('hidden') && getValue('free_trial') !== 'Não') {
-                      messageParts.push(`🎁 *Teste grátis:* ${selectedFreeTrialText}`);
-                }
-
-                messageParts.push(`📝 *OBS:* ${getValue('obs') || 'N/A'}`);
-
-                const message = messageParts.join('\n'); 
-
-                const phoneNumber = "557531999981"; 
-                const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`; 
-                window.open(whatsappUrl, '_blank').focus();
-            });
-
-
-            // --- Inicialização do Swiper Responsiva --- (Mantida)
-            const swiper = new Swiper('.swiper-container', {
-                loop: false, 
-                spaceBetween: 16,
-                slidesPerView: 1.2,
-                centeredSlides: true,
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-                
-                breakpoints: {
-                    640: {
-                        slidesPerView: 2.2,
-                        centeredSlides: false,
-                        pagination: { 
-                            el: '.swiper-pagination',
-                            clickable: true,
-                        },
-                    },
-                    768: {
-                        slidesPerView: 3,
-                        centeredSlides: false,
-                        pagination: false, 
-                        navigation: {
-                            nextEl: '.swiper-button-next',
-                            prevEl: '.swiper-button-prev',
-                        },
-                    },
-                    1024: {
-                        slidesPerView: 4,
-                        centeredSlides: false,
-                        pagination: false,
-                        navigation: {
-                            nextEl: '.swiper-button-next',
-                            prevEl: '.swiper-button-prev',
-                        },
-                    }
-                }
-            });
-
-            // Inicializa os ícones Lucide
-            lucide.createIcons();
-
-            // Scroll Reveal Animation Script (Mantido)
-            function reveal() {
-                var reveals = document.querySelectorAll(".reveal");
-                for (var i = 0; i < reveals.length; i++) {
-                    var windowHeight = window.innerHeight;
-                    var elementTop = reveals[i].getBoundingClientRect().top;
-                    var elementVisible = 150;
-                    if (elementTop < windowHeight - elementVisible) {
-                        reveals[i].classList.add("active");
-                    }
-                }
-            }
-            window.addEventListener("scroll", reveal);
-            // Trigger once on load
-            reveal();
-
-            // Renderiza a grade de todos os apps na inicialização
-            renderAllAppsGrid();
-            // Renderiza a grade de apps para o modal TOP APPS na inicialização (prepara o conteúdo)
-            renderTopSitesAsAppsGrid();
         });
+
+        customerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = customerIdInput.value;
+            const customers = getCustomers();
+            
+            const selectedPlan = getPlans().find(p => p.id === planSelect.value);
+            let planText = '';
+            let planValue = 0;
+
+            if (planSelect.value === 'outro') {
+                planText = customPlanInput.value;
+            } else if (selectedPlan) {
+                planText = selectedPlan.name;
+                planValue = selectedPlan.value;
+            }
+
+            const newCustomer = {
+                id: id ? id : Date.now().toString(),
+                fullName: document.getElementById('fullName').value,
+                nickname: document.getElementById('nickname').value,
+                cpf: document.getElementById('cpf').value,
+                birthDate: document.getElementById('birthDate').value,
+                phone: document.getElementById('phone').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                email: document.getElementById('email').value,
+                address: document.getElementById('address').value,
+                geolocation: document.getElementById('geolocation').value,
+                reference: document.getElementById('reference').value,
+                plan: planSelect.value,
+                planText: planText,
+                planValue: planValue,
+                devices: document.getElementById('devices').value,
+                freeTrial: document.getElementById('freeTrial').value,
+                dueDate: document.getElementById('dueDate').value,
+                observations: document.getElementById('observations').value,
+                photo: photoDataInput.value
+            };
+
+            if (id) {
+                const index = customers.findIndex(c => c.id === id);
+                customers[index] = newCustomer;
+            } else {
+                customers.push(newCustomer);
+            }
+            setCustomers(customers);
+            renderCustomers(searchInput.value);
+            clearForm();
+        });
+
+        clearBtn.addEventListener('click', clearForm);
+
+        searchInput.addEventListener('input', (e) => renderCustomers(e.target.value));
+
+        customerList.addEventListener('click', (e) => {
+            const editBtn = e.target.closest('.edit-btn');
+            const deleteBtn = e.target.closest('.delete-btn');
+            const shareBtn = e.target.closest('.share-btn');
+            const printBtn = e.target.closest('.print-btn');
+
+            if (editBtn) {
+                const id = editBtn.dataset.id;
+                const customer = getCustomers().find(c => c.id === id);
+                
+                customerIdInput.value = customer.id;
+                document.getElementById('fullName').value = customer.fullName;
+                document.getElementById('nickname').value = customer.nickname;
+                document.getElementById('cpf').value = customer.cpf;
+                document.getElementById('birthDate').value = customer.birthDate;
+                document.getElementById('phone').value = customer.phone;
+                document.getElementById('whatsapp').value = customer.whatsapp;
+                document.getElementById('email').value = customer.email;
+                document.getElementById('address').value = customer.address;
+                document.getElementById('geolocation').value = customer.geolocation || '';
+                document.getElementById('reference').value = customer.reference;
+                planSelect.value = customer.plan;
+                document.getElementById('devices').value = customer.devices || '';
+                document.getElementById('freeTrial').value = customer.freeTrial || 'nao';
+                document.getElementById('dueDate').value = customer.dueDate || '';
+                document.getElementById('observations').value = customer.observations || '';
+                photoDataInput.value = customer.photo || '';
+                
+                if(customer.photo) {
+                    photoPreview.src = customer.photo;
+                    photoPreview.classList.remove('hidden');
+                    removePhotoBtn.classList.remove('hidden');
+                } else {
+                    photoPreview.src = '';
+                    photoPreview.classList.add('hidden');
+                    removePhotoBtn.classList.add('hidden');
+                }
+
+                planSelect.dispatchEvent(new Event('change'));
+
+                if (customer.plan === 'outro') {
+                    customPlanInput.value = customer.planText;
+                }
+                
+                formTitle.textContent = 'Editar Cliente';
+                saveBtn.textContent = 'Atualizar Cliente';
+                saveBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+                
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            if (deleteBtn) {
+                const id = deleteBtn.dataset.id;
+                showDeleteModal(id);
+            }
+            
+            if (shareBtn) {
+                const id = shareBtn.dataset.id;
+                const customer = getCustomers().find(c => c.id === id);
+                const planInfo = customer.plan === 'outro' 
+                    ? customer.planText 
+                    : `${customer.planText} - R$ ${customer.planValue.toFixed(2)}`;
+                const freeTrialText = customer.freeTrial && customer.freeTrial !== 'nao' ? document.querySelector(`#freeTrial option[value="${customer.freeTrial}"]`).textContent : 'Não';
+                const settings = getAppSettings();
+
+                const message = `*${settings.title}*%0A%0A` +
+                                `*Ficha do Cliente*%0A%0A` +
+                                `🆔 *Nome completo:* ${customer.fullName}%0A` +
+                                `🏷 *Apelido:* ${customer.nickname || 'N/A'}%0A` +
+                                `🪪 *CPF:* ${customer.cpf}%0A` +
+                                `🎂 *Data de nascimento:* ${customer.birthDate ? new Date(customer.birthDate + 'T00:00:00').toLocaleDateString('pt-BR') : 'N/A'}%0A` +
+                                `📞 *Telefone:* ${customer.phone || 'N/A'}%0A` +
+                                `💬 *WhatsApp:* ${customer.whatsapp || 'N/A'}%0A` +
+                                `✉ *E-mail:* ${customer.email || 'N/A'}%0A` +
+                                `🏡 *Endereço:* ${customer.address || 'N/A'}%0A` +
+                                `📍 *Geolocalização:* ${customer.geolocation || 'N/A'}%0A` +
+                                `📌 *Ponto de referência:* ${customer.reference || 'N/A'}%0A` +
+                                `📃 *Plano escolhido:* ${planInfo || 'N/A'}%0A` +
+                                `📱 *Aparelhos conectados:* ${customer.devices || 'N/A'}%0A` +
+                                `🎁 *Teste grátis:* ${freeTrialText}%0A` +
+                                `🗓️ *Vencimento:* Dia ${customer.dueDate || 'N/A'}%0A` +
+                                `📝 *OBS.:* ${customer.observations || 'N/A'}` +
+                                `${customer.photo ? '%0A📸 *Foto Anexada:* Sim' : ''}`;
+                
+                window.open(`https://api.whatsapp.com/send?text=${message}`, '_blank');
+            }
+            
+            if (printBtn) {
+                const id = printBtn.dataset.id;
+                const customer = getCustomers().find(c => c.id === id);
+                printArea.innerHTML = generateCustomerSheetHTML(customer);
+                document.body.classList.add('printing-customer-sheet');
+                window.print();
+                document.body.classList.remove('printing-customer-sheet');
+            }
+        });
+        
+        confirmDeleteBtn.addEventListener('click', () => {
+            let customers = getCustomers();
+            customers = customers.filter(c => c.id !== customerToDeleteId);
+            setCustomers(customers);
+            renderCustomers(searchInput.value);
+            hideDeleteModal();
+        });
+        
+        cancelDeleteBtn.addEventListener('click', hideDeleteModal);
+
+        backupBtn.addEventListener('click', () => {
+            const customers = getCustomers();
+            if (customers.length === 0) {
+                alert('Não há clientes para fazer backup.');
+                return;
+            }
+            const dataToBackup = {
+                customers: customers,
+                plans: getPlans(),
+                settings: getAppSettings()
+            };
+            const dataStr = JSON.stringify(dataToBackup, null, 2);
+            const blob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'backup_clientes_telecom.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        restoreBtn.addEventListener('click', () => {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = '.json';
+            fileInput.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const restoredData = JSON.parse(event.target.result);
+                        if (confirm('Isso substituirá todos os dados atuais. Deseja continuar?')) {
+                            if (Array.isArray(restoredData.customers)) {
+                                setCustomers(restoredData.customers);
+                            }
+                            if (Array.isArray(restoredData.plans)) {
+                                setPlans(restoredData.plans);
+                                populatePlansDropdown();
+                            }
+                            if (restoredData.settings) {
+                                setAppSettings(restoredData.settings);
+                                document.getElementById('app-title').textContent = restoredData.settings.title;
+                                document.getElementById('app-slogan').textContent = restoredData.settings.slogan;
+                            }
+                            renderCustomers();
+                            alert('Dados restaurados com sucesso!');
+                        }
+                    } catch (err) {
+                        alert('Erro ao ler o arquivo de backup.');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            fileInput.click();
+        });
+
+        // --- Event Listeners dos Planos ---
+        managePlansBtn.addEventListener('click', () => {
+            renderPlansModal();
+            plansModal.style.display = 'flex';
+        });
+
+        closePlansModalBtn.addEventListener('click', () => {
+            plansModal.style.display = 'none';
+        });
+
+        addPlanBtn.addEventListener('click', () => {
+            const planDiv = document.createElement('div');
+            planDiv.className = 'flex items-center gap-2';
+            planDiv.dataset.id = `new_${Date.now()}`;
+            planDiv.innerHTML = `
+                <input type="text" class="plan-name-input flex-grow p-1 border rounded-md" placeholder="Nome do Plano">
+                <input type="number" step="0.01" class="plan-value-input w-24 p-1 border rounded-md" placeholder="Valor">
+                <button class="delete-plan-btn text-red-500 hover:text-red-700 font-bold text-xl">&times;</button>
+            `;
+            plansList.appendChild(planDiv);
+        });
+
+        plansList.addEventListener('click', (e) => {
+            if (e.target.closest('.delete-plan-btn')) {
+                e.target.closest('.flex').remove();
+            }
+        });
+        
+        savePlansBtn.addEventListener('click', () => {
+            const newPlans = [];
+            const planRows = plansList.querySelectorAll('.flex');
+            planRows.forEach(row => {
+                const nameInput = row.querySelector('.plan-name-input');
+                const valueInput = row.querySelector('.plan-value-input');
+                if (nameInput.value && valueInput.value) {
+                    newPlans.push({
+                        id: row.dataset.id.startsWith('new_') ? nameInput.value.toLowerCase().replace(/\s+/g, '_') : row.dataset.id,
+                        name: nameInput.value,
+                        value: parseFloat(valueInput.value)
+                    });
+                }
+            });
+            setPlans(newPlans);
+            populatePlansDropdown();
+            alert('Planos salvos com sucesso!');
+            plansModal.style.display = 'none';
+        });
+        
+        // --- Geolocalização ---
+        getLocationBtn.addEventListener('click', () => {
+            if ("geolocation" in navigator) {
+                geolocationInput.value = "Obtendo localização...";
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        const mapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                        geolocationInput.value = mapsLink;
+                    },
+                    (error) => {
+                        let errorMessage = "Não foi possível obter a localização.";
+                        switch(error.code) {
+                            case error.PERMISSION_DENIED:
+                                errorMessage = "Permissão de localização negada.";
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                errorMessage = "Informação de localização indisponível.";
+                                break;
+                            case error.TIMEOUT:
+                                errorMessage = "Tempo esgotado para obter localização.";
+                                break;
+                        }
+                        geolocationInput.value = errorMessage;
+                    }
+                );
+            } else {
+                geolocationInput.value = "Geolocalização não suportada neste navegador.";
+            }
+        });
+        
+        const generateCustomerSheetHTML = (customer) => {
+            const planInfo = customer.plan === 'outro' 
+                ? customer.planText 
+                : `${customer.planText} - R$ ${customer.planValue.toFixed(2)}`;
+            const freeTrialText = customer.freeTrial && customer.freeTrial !== 'nao' ? document.querySelector(`#freeTrial option[value="${customer.freeTrial}"]`).textContent : 'Não';
+            const settings = getAppSettings();
+
+            return `
+                <div class="printable-sheet p-8">
+                    <h1 class="text-3xl font-bold mb-6 border-b pb-4">${settings.title}</h1>
+                    <div class="space-y-3 text-lg">
+                        <p><strong>🆔 Nome completo:</strong> ${customer.fullName}</p>
+                        <p><strong>🏷 Apelido:</strong> ${customer.nickname || 'N/A'}</p>
+                        <p><strong>🪪 CPF:</strong> ${customer.cpf}</p>
+                        <p><strong>🎂 Data de nascimento:</strong> ${customer.birthDate ? new Date(customer.birthDate + 'T00:00:00').toLocaleDateString('pt-BR') : 'N/A'}</p>
+                        <p><strong>📞 Telefone:</strong> ${customer.phone || 'N/A'}</p>
+                        <p><strong>💬 WhatsApp:</strong> ${customer.whatsapp || 'N/A'}</p>
+                        <p><strong>✉ E-mail:</strong> ${customer.email || 'N/A'}</p>
+                        <p><strong>🏡 Endereço:</strong> ${customer.address || 'N/A'}</p>
+                        <p><strong>📍 Geolocalização:</strong> <a href="${customer.geolocation}" target="_blank">${customer.geolocation || 'N/A'}</a></p>
+                        <p><strong>📌 Ponto de referência:</strong> ${customer.reference || 'N/A'}</p>
+                        <p><strong>📃 Plano escolhido:</strong> ${planInfo || 'N/A'}</p>
+                        <p><strong>📱 Aparelhos conectados:</strong> ${customer.devices || 'N/A'}</p>
+                        <p><strong>🎁 Teste grátis:</strong> ${freeTrialText}</p>
+                        <p><strong>🗓️ Vencimento:</strong> Dia ${customer.dueDate || 'N/A'}</p>
+                        <p><strong>📝 OBS.:</strong> ${customer.observations || 'N/A'}</p>
+                        ${customer.photo ? `<div class="mt-4"><p><strong>📸 Foto:</strong></p><img src="${customer.photo}" class="w-full max-w-sm mx-auto mt-2 rounded-md border"></div>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+        
+        printAllBtn.addEventListener('click', () => {
+            const customers = getCustomers();
+            if (customers.length === 0) {
+                alert('Não há clientes para imprimir.');
+                return;
+            }
+            
+            let allCustomersHTML = '';
+            customers.forEach(customer => {
+                allCustomersHTML += generateCustomerSheetHTML(customer);
+            });
+
+            printArea.innerHTML = allCustomersHTML;
+            document.body.classList.add('printing-customer-sheet');
+            window.print();
+            document.body.classList.remove('printing-customer-sheet');
+        });
+
+        shareAllBtn.addEventListener('click', () => {
+            const customers = getCustomers();
+            if (customers.length === 0) {
+                alert('Não há clientes para compartilhar.');
+                return;
+            }
+            
+            const settings = getAppSettings();
+            let reportText = `*${settings.title.toUpperCase()}*%0A%0A`;
+            customers.forEach((customer, index) => {
+                const planInfo = customer.plan === 'outro' 
+                    ? customer.planText 
+                    : `${customer.planText} - R$ ${customer.planValue.toFixed(2)}`;
+                const freeTrialText = customer.freeTrial && customer.freeTrial !== 'nao' ? document.querySelector(`#freeTrial option[value="${customer.freeTrial}"]`).textContent : 'Não';
+
+                reportText += `*Cliente ${index + 1}*%0A` +
+                                `🆔 *Nome completo:* ${customer.fullName}%0A` +
+                                `🏷 *Apelido:* ${customer.nickname || 'N/A'}%0A` +
+                                `🪪 *CPF:* ${customer.cpf}%0A` +
+                                `🎂 *Data de nascimento:* ${customer.birthDate ? new Date(customer.birthDate + 'T00:00:00').toLocaleDateString('pt-BR') : 'N/A'}%0A` +
+                                `📞 *Telefone:* ${customer.phone || 'N/A'}%0A` +
+                                `💬 *WhatsApp:* ${customer.whatsapp || 'N/A'}%0A` +
+                                `✉ *E-mail:* ${customer.email || 'N/A'}%0A` +
+                                `🏡 *Endereço:* ${customer.address || 'N/A'}%0A` +
+                                `📍 *Geolocalização:* ${customer.geolocation || 'N/A'}%0A` +
+                                `📌 *Ponto de referência:* ${customer.reference || 'N/A'}%0A` +
+                                `📃 *Plano escolhido:* ${planInfo || 'N/A'}%0A` +
+                                `📱 *Aparelhos conectados:* ${customer.devices || 'N/A'}%0A` +
+                                `🎁 *Teste grátis:* ${freeTrialText}%0A` +
+                                `🗓️ *Vencimento:* Dia ${customer.dueDate || 'N/A'}%0A` +
+                                `📝 *OBS.:* ${customer.observations || 'N/A'}%0A` +
+                                `--------------------%0A%0A`;
+            });
+            
+            window.open(`https://api.whatsapp.com/send?text=${reportText}`, '_blank');
+        });
+
+
+        // Initial setup
+        const appTitleEl = document.getElementById('app-title');
+        const appSloganEl = document.getElementById('app-slogan');
+        const settings = getAppSettings();
+        appTitleEl.textContent = settings.title;
+        appSloganEl.textContent = settings.slogan;
+
+        appTitleEl.addEventListener('blur', () => {
+            const currentSettings = getAppSettings();
+            currentSettings.title = appTitleEl.textContent;
+            setAppSettings(currentSettings);
+        });
+        appSloganEl.addEventListener('blur', () => {
+            const currentSettings = getAppSettings();
+            currentSettings.slogan = appSloganEl.textContent;
+            setAppSettings(currentSettings);
+        });
+
+        // Photo functionality
+        takePhotoBtn.addEventListener('click', () => photoInput.click());
+        removePhotoBtn.addEventListener('click', () => {
+            photoInput.value = '';
+            photoDataInput.value = '';
+            photoPreview.src = '';
+            photoPreview.classList.add('hidden');
+            removePhotoBtn.classList.add('hidden');
+        });
+
+        photoInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    photoDataInput.value = event.target.result;
+                    photoPreview.src = event.target.result;
+                    photoPreview.classList.remove('hidden');
+                    removePhotoBtn.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        populatePlansDropdown();
+        renderCustomers();
+    });
     </script>
 </body>
 </html>
+
